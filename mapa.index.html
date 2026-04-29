@@ -8,7 +8,7 @@
 <style>
 :root{--bg:#f5f0e8;--surface:#faf7f2;--dark:#1a1208;--border:#c8b89a;--accent:#8b3a0f;--gold:#b8860b;--text:#2a1f0e;--muted:#7a6a52}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#1a1208;color:var(--text);font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body{background:#1a1208;color:var(--text);font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column}
 header{background:#0f0c06;padding:.9rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-bottom:2px solid var(--gold);flex-shrink:0}
 .hl h1{font-family:'Playfair Display',serif;font-size:clamp(.95rem,2vw,1.4rem);font-weight:900;color:#f5f0e8;line-height:1.2}
 .hl h1 em{color:var(--gold);font-style:normal}
@@ -17,12 +17,11 @@ header{background:#0f0c06;padding:.9rem 1.6rem;display:flex;align-items:center;j
 .leg-item{display:flex;align-items:center;gap:.35rem;font-family:'IBM Plex Mono',monospace;font-size:.56rem;color:#8a7a62;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:color .2s}
 .leg-item:hover{color:#f5f0e8}
 .leg-sw{width:13px;height:13px;border-radius:2px;flex-shrink:0}
-.layout{display:flex;flex:1;overflow:hidden;min-height:0}
-.map-wrap{flex:1;overflow:auto;background:#1a2a3a;display:flex;align-items:flex-start;justify-content:center;position:relative}
-.map-container{position:relative;display:inline-block}
+.layout{display:flex;flex:1;overflow:hidden;min-height:0;flex-direction:row}
+.map-wrap{flex:1;overflow:auto;background:#1a2a3a;display:flex;align-items:flex-start;justify-content:center;position:relative;padding:20px}
+.map-container{position:relative;display:inline-block;max-width:100%}
 .map-img{display:block;max-width:100%;height:auto;cursor:pointer}
-.click-overlay{position:absolute;top:0;left:0;width:100%;height:100%;cursor:pointer}
-.panel{width:360px;flex-shrink:0;background:var(--surface);border-left:2px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.panel{width:380px;flex-shrink:0;background:var(--surface);border-left:2px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .p-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;gap:.7rem;color:var(--muted)}
 .p-empty .d{font-size:2.8rem;opacity:.12}
 .p-empty h3{font-family:'Playfair Display',serif;font-size:1rem;color:var(--muted);font-weight:400}
@@ -66,6 +65,7 @@ header{background:#0f0c06;padding:.9rem 1.6rem;display:flex;align-items:center;j
 #tord-info strong{color:var(--gold)}
 .tord-btn{display:flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;background:transparent;border:1.5px solid var(--gold);color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:600;letter-spacing:.1em;cursor:pointer;text-transform:uppercase;transition:all .25s;white-space:nowrap}
 .tord-btn:hover,.tord-btn.active{background:var(--gold);color:#0f0c06}
+.coord-helper{position:fixed;bottom:10px;right:10px;background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:5px 8px;border-radius:4px;z-index:9999;display:none}
 @media(max-width:900px){.layout{flex-direction:column}.panel{width:100%;border-left:none;border-top:2px solid var(--border);max-height:50vh}}
 </style>
 </head>
@@ -96,24 +96,60 @@ header{background:#0f0c06;padding:.9rem 1.6rem;display:flex;align-items:center;j
 <div class="layout">
 <div class="map-wrap">
   <div class="map-container" id="mapContainer">
-    <img src="mapa_brasil.png" alt="Mapa histórico de expansão territorial do Brasil" class="map-img" id="mapImg" usemap="#brasilMap" style="max-width:100%;height:auto">
+    <img src="mapa_brasil.png" alt="Mapa histórico de expansão territorial do Brasil" class="map-img" id="mapImg" style="max-width:100%;height:auto" usemap="#brasilMap">
     
-    <!-- Image Map com coordenadas aproximadas baseadas na imagem de referência -->
+    <!-- MAPA DE IMAGEM - VOCÊ PRECISA AJUSTAR AS COORDENADAS -->
     <map name="brasilMap" id="brasilMap">
-      <!-- Estas coordenadas são aproximadas. Ajuste conforme sua imagem real -->
-      <area shape="poly" coords="600,50,750,30,900,50,1000,100,1050,200,1080,350,1050,500,1000,650,900,750,800,780,700,760,600,700,500,650,400,600" alt="original" data-region="original" title="Território Original Português">
-      <area shape="poly" coords="500,120,550,100,600,80,600,150,580,200,550,250,520,300,500,350,480,400,460,450,450,500,450,550,460,600,480,650,500,680,520,700,550,720,580,730,600,740,600,780,580,800,550,810,510,820,480,828,450,830,420,820,400,800,390,770,385,730,390,680,400,630,420,580,440,530,460,480,470,420,480,360,490,300,500,240,505,180" alt="espanha1494" data-region="espanha1494" title="Cedido pela Espanha (1494)">
-      <area shape="poly" coords="400,200,450,180,500,160,500,220,490,280,480,340,470,400,460,460,440,520,430,580,420,630,410,680,400,720,390,760,380,800,370,830,350,850,330,860,300,865,270,860,250,840,240,810,235,780,240,740,250,700,260,660,280,620,300,580,320,540,340,500,360,460,380,420,390,380,400,340,405,300,410,250" alt="peru1600" data-region="peru1600" title="Cedido pelo Peru/Espanha (1600)">
-      <area shape="poly" coords="150,150,250,120,350,100,400,100,420,150,430,200,440,250,450,300,450,350,440,400,420,450,400,500,380,550,360,600,340,650,320,700,300,750,280,800,260,830,240,850,220,860,200,855,180,840,165,810,155,780,150,740,148,700,150,660,155,620,160,580,165,540,170,500,175,460,180,420,185,380,190,340,195,300,200,260,210,220,220,190,240,170,270,155,300,145,330,140,360,138" alt="peru1650" data-region="peru1650" title="Cedido pelo Peru/Espanha (1650)">
-      <area shape="poly" coords="100,50,180,30,260,20,340,15,400,20,450,35,480,60,490,90,480,120,450,130,400,135,350,138,300,140,250,145,200,155,160,165,130,170,110,160,100,130,95,100,98,70" alt="colombia1750" data-region="colombia1750" title="Cedido pela Colômbia/Espanha (1750)">
-      <area shape="poly" coords="50,150,90,140,130,145,150,160,145,200,135,240,125,280,115,320,110,360,105,400,100,430,95,460,90,490,85,520,80,540,75,550,65,545,55,530,50,500,48,460,50,420,55,380,60,340,65,300,68,260,70,220,72,185" alt="colombia1860" data-region="colombia1860" title="Cedido pela Colômbia (1860)">
-      <area shape="poly" coords="70,380,100,370,130,365,150,370,160,400,165,440,168,480,170,520,168,560,162,600,150,630,130,650,110,650,95,640,85,620,78,590,75,560,72,530,70,500,68,470,67,440,68,410" alt="bolivia1860" data-region="bolivia1860" title="Cedido pela Bolívia (1860)">
-      <area shape="poly" coords="20,360,45,350,65,345,75,360,78,390,80,420,82,450,80,480,78,510,72,535,65,545,55,540,48,520,45,490,43,460,42,430,40,400,38,380" alt="bolivia1903" data-region="bolivia1903" title="Cedido pela Bolívia (1903) - Acre">
-      <area shape="poly" coords="250,650,280,640,310,645,340,655,360,670,370,695,365,720,350,740,330,750,305,755,280,750,260,735,250,715,248,690,250,670" alt="paraguai1870" data-region="paraguai1870" title="Cedido pelo Paraguai (1870)">
-      <area shape="poly" coords="180,860,210,850,240,855,260,870,270,890,265,910,250,925,230,930,210,925,195,910,185,890,182,870" alt="argentina1801" data-region="argentina1801" title="Cedido pela Argentina/Espanha (1801)">
-      <area shape="poly" coords="230,920,260,910,290,910,320,918,345,935,355,958,350,978,335,992,310,998,285,995,262,982,245,965,235,945,230,930" alt="argentina1816" data-region="argentina1816" title="Cedido pela Argentina (1816)">
-      <area shape="poly" coords="520,25,560,15,600,8,640,5,680,10,715,22,740,42,755,65,755,90,745,110,725,120,700,122,675,115,650,100,625,82,600,65,575,50,550,38" alt="franca1816" data-region="franca1816" title="Cedido pela França (1816)">
+      <!-- 
+        === INSTRUÇÕES PARA AJUSTAR AS COORDENADAS ===
+        
+        1. Abra a imagem no navegador
+        2. Pressione F12 para abrir as ferramentas do desenvolvedor
+        3. Passe o mouse sobre cada região e anote as coordenadas (x,y)
+        4. Substitua os valores abaixo pelos corretos
+        
+        Formato: coords="x1,y1,x2,y2,x3,y3,..."
+      -->
+      
+      <!-- Território Original (leste - região costeira) -->
+      <area shape="poly" coords="" data-region="original" title="Território Original Português" class="clickable-area">
+      
+      <!-- Cedido pela Espanha 1494 (faixa central-leste) -->
+      <area shape="poly" coords="" data-region="espanha1494" title="Cedido pela Espanha (1494)" class="clickable-area">
+      
+      <!-- Cedido pelo Peru/Espanha 1600 -->
+      <area shape="poly" coords="" data-region="peru1600" title="Cedido pelo Peru/Espanha (1600)" class="clickable-area">
+      
+      <!-- Cedido pelo Peru/Espanha 1650 -->
+      <area shape="poly" coords="" data-region="peru1650" title="Cedido pelo Peru/Espanha (1650)" class="clickable-area">
+      
+      <!-- Cedido pela Colômbia/Espanha 1750 -->
+      <area shape="poly" coords="" data-region="colombia1750" title="Cedido pela Colômbia/Espanha (1750)" class="clickable-area">
+      
+      <!-- Cedido pela Colômbia 1860 -->
+      <area shape="poly" coords="" data-region="colombia1860" title="Cedido pela Colômbia (1860)" class="clickable-area">
+      
+      <!-- Cedido pela Bolívia 1860 -->
+      <area shape="poly" coords="" data-region="bolivia1860" title="Cedido pela Bolívia (1860)" class="clickable-area">
+      
+      <!-- Cedido pela Bolívia 1903 (Acre) -->
+      <area shape="poly" coords="" data-region="bolivia1903" title="Cedido pela Bolívia/Acre (1903)" class="clickable-area">
+      
+      <!-- Cedido pelo Paraguai 1870 -->
+      <area shape="poly" coords="" data-region="paraguai1870" title="Cedido pelo Paraguai (1870)" class="clickable-area">
+      
+      <!-- Cedido pela Argentina/Espanha 1801 -->
+      <area shape="poly" coords="" data-region="argentina1801" title="Cedido pela Argentina/Espanha (1801)" class="clickable-area">
+      
+      <!-- Cedido pela Argentina 1816 -->
+      <area shape="poly" coords="" data-region="argentina1816" title="Cedido pela Argentina (1816)" class="clickable-area">
+      
+      <!-- Cedido pela França 1816 -->
+      <area shape="poly" coords="" data-region="franca1816" title="Cedido pela França (1816)" class="clickable-area">
     </map>
+    
+    <!-- Overlay de depuração para mostrar coordenadas -->
+    <div id="coordHelper" class="coord-helper">Clique no mapa - Coord: </div>
   </div>
 </div>
 
@@ -140,56 +176,53 @@ header{background:#0f0c06;padding:.9rem 1.6rem;display:flex;align-items:center;j
 </div>
 
 <script>
-// Dados das regiões (mesmo conteúdo do código anterior)
+// DADOS DAS REGIÕES
 const REGIONS = {
   original:{name:"Território Original Português",sub:"A leste da Linha de Tordesilhas · A partir de 1494",color:"#c8685a",events:[
-    {n:"Tratado de Tordesilhas",b:"bt",bl:"Tratado",d:"7 de junho de 1494",l:[{f:"🇵🇹",r:"Rei de Portugal",n:"D. João II"},{f:"🇪🇸",r:"Reis de Castela",n:"Fernando II e Isabel I"}],re:"Divisão papal do mundo entre Portugal e Espanha a 370 léguas a oeste de Cabo Verde.",mo:"Resolver a disputa sobre as terras descobertas por Colombo (1492).",co:"Portugal reivindicou legitimidade sobre o Brasil.",le:"Nunca foi efetivamente respeitada.",rp:"Fundamento do direito colonial português."},
-    {n:"Chegada de Pedro Álvares Cabral",b:"br",bl:"Evento Histórico",d:"22 de abril de 1500",l:[{f:"🇵🇹",r:"Rei de Portugal",n:"D. Manuel I"},{f:"🌿",r:"Liderança Tupi",n:"Caciques locais"}],re:"Cabral chega ao atual Porto Seguro (BA) e reivindica o território para Portugal.",mo:"Expedição rumo à Índia desvia-se para o oeste.",co:"Início da colonização portuguesa.",le:"Fundamento jurídico da soberania brasileira.",rp:"Definiu o Brasil como possessão lusitana."}
+    {n:"Tratado de Tordesilhas",b:"bt",bl:"Tratado",d:"7 de junho de 1494",l:[{f:"🇵🇹",r:"Rei de Portugal",n:"D. João II"},{f:"🇪🇸",r:"Reis de Castela",n:"Fernando II e Isabel I"}],re:"Divisão papal do mundo entre Portugal e Espanha a 370 léguas a oeste de Cabo Verde. Apenas o atual litoral nordeste/leste do Brasil ficava do lado português.",mo:"Resolver a disputa sobre as terras descobertas por Colombo (1492). O papa Alexandre VI mediou.",co:"Portugal reivindicou legitimidade sobre o Brasil. A expansão bandeirante posterior ignorou progressivamente a fronteira.",le:"Nunca foi efetivamente respeitada. O Tratado de Madri (1750) a substituiu definitivamente.",rp:"Fundamento do direito colonial português. Influenciou todas as negociações de fronteira até o séc. XIX."},
+    {n:"Chegada de Pedro Álvares Cabral",b:"br",bl:"Evento Histórico",d:"22 de abril de 1500",l:[{f:"🇵🇹",r:"Rei de Portugal",n:"D. Manuel I"},{f:"🌿",r:"Liderança Tupi local",n:"Caciques (sem registro nominal)"}],re:"Cabral chega ao atual Porto Seguro (BA) e reivindica o território para Portugal — única parte do Brasil a leste de Tordesilhas.",mo:"Expedição rumo à Índia desvia-se para o oeste. Debate histórico: acidente ou manobra deliberada?",co:"Início da colonização portuguesa. Posse formal do território costeiro.",le:"Fundamento jurídico e histórico da soberania brasileira.",rp:"Definiu o Brasil como possessão lusitana. Abriu o ciclo de exploração do pau-brasil."}
   ]},
   espanha1494:{name:"Cedido pela Espanha (1494)",sub:"Faixa entre Tordesilhas e a fronteira colonial efetiva",color:"#d4956a",events:[
-    {n:"Expansão Bandeirante Além de Tordesilhas",b:"br",bl:"Expansão Territorial",d:"Sécs. XVII–XVIII",l:[{f:"🇧🇷",r:"Bandeirantes",n:"Borba Gato, Anhanguera"},{f:"🇪🇸",r:"Vice-reinado do Peru",n:"Administradores espanhóis"}],re:"Entradas e bandeiras avançam ignorando Tordesilhas.",mo:"Busca por escravos indígenas, ouro e pedras preciosas.",co:"Criou o uti possidetis.",le:"Brasil conquistou ~4 milhões de km² além de Tordesilhas.",rp:"Alexandre de Gusmão usou o uti possidetis no Tratado de Madri (1750)."},
-    {n:"Tratado de Madri",b:"bt",bl:"Tratado",d:"13 de janeiro de 1750",l:[{f:"🇧🇷",r:"Rei de Portugal",n:"D. João V / A. Gusmão"},{f:"🇪🇸",r:"Rei da Espanha",n:"Fernando VI"}],re:"Substitui Tordesilhas e consagra o uti possidetis.",mo:"Tordesilhas era impossível de medir e foi ultrapassada.",co:"Brasil ganhou legalmente milhões de km².",le:"Maior ganho territorial na história do Brasil.",rp:"Uti possidetis tornou-se pedra angular do direito internacional."}
+    {n:"Expansão Bandeirante Além de Tordesilhas",b:"br",bl:"Expansão Territorial",d:"Sécs. XVII–XVIII (c. 1620–1750)",l:[{f:"🇧🇷",r:"Capitania-Geral / Bandeirantes",n:"Borba Gato, Anhanguera e outros"},{f:"🇪🇸",r:"Vice-reinado do Peru",n:"Administradores espanhóis"}],re:"As entradas e bandeiras paulistas avançam centenas de léguas para o interior ignorando a linha de Tordesilhas, capturando indígenas e prospectando metais.",mo:"Busca por escravos indígenas, ouro e pedras preciosas. A vastidão do interior e a ausência espanhola facilitaram a ocupação.",co:"Criou o princípio do uti possidetis — quem ocupa, possui — dando ao Brasil sua atual forma geográfica.",le:"O Brasil colonial conquistou ~4 milhões de km² além de Tordesilhas, moldando as fronteiras negociadas em 1750.",rp:"Alexandre de Gusmão usou o uti possidetis no Tratado de Madri (1750). A doutrina tornou-se pilar do direito internacional."},
+    {n:"Tratado de Madri",b:"bt",bl:"Tratado",d:"13 de janeiro de 1750",l:[{f:"🇧🇷",r:"Rei de Portugal / Negociador",n:"D. João V / Alexandre de Gusmão"},{f:"🇪🇸",r:"Rei da Espanha",n:"Fernando VI"}],re:"Primeiro grande acordo de limites entre Portugal e Espanha. Substitui Tordesilhas e consagra o uti possidetis.",mo:"Tordesilhas era impossível de medir e havia sido vastamente ultrapassada. Ambas as coroas queriam paz.",co:"Brasil ganhou legalmente milhões de km² já ocupados pelos bandeirantes. Espanha reconheceu as posses de fato lusitanas.",le:"Considerado o maior ganho territorial na história do Brasil. Alexandre de Gusmão: pai das fronteiras brasileiras.",rp:"O uti possidetis tornou-se pedra angular do direito internacional de fronteiras."}
   ]},
   peru1600:{name:"Cedido pelo Peru/Espanha (1600)",sub:"Expansão precoce no Amazonas central",color:"#e8a850",events:[
-    {n:"Expedição de Pedro Teixeira",b:"br",bl:"Expansão Territorial",d:"1637–1638",l:[{f:"🇧🇷",r:"Capitão",n:"Pedro Teixeira"},{f:"🇪🇸",r:"Rei",n:"Filipe IV"}],re:"Navegou todo o Amazonas até Quito.",mo:"Afirmar posse portuguesa durante a União Ibérica.",co:"Precedente de controle lusitano sobre o Amazonas.",le:"Primeira demarcação efetiva do Amazonas.",rp:"Afastou Peru/Espanha da bacia amazônica central."},
-    {n:"Tratado Brasil-Peru (1851)",b:"bt",bl:"Tratado",d:"23 de outubro de 1851",l:[{f:"🇧🇷",r:"Imperador",n:"D. Pedro II"},{f:"🇵🇪",r:"Presidente",n:"Ramón Castilla"}],re:"Primeiro tratado formal de limites.",mo:"Necessidade de fronteiras claras na Amazônia.",co:"Peru renunciou ao Solimões.",le:"Base da relação bilateral pacífica.",rp:"Reforçou o Brasil como potência amazônica."}
+    {n:"Expedição de Pedro Teixeira — Posse do Amazonas",b:"br",bl:"Expansão Territorial",d:"1637–1638",l:[{f:"🇧🇷",r:"Capitão / Explorador",n:"Pedro Teixeira"},{f:"🇪🇸",r:"Rei de Espanha/Portugal (Ibérica)",n:"Filipe IV"}],re:"Pedro Teixeira navegou todo o Amazonas até Quito, plantando um marco de fronteira de facto. Na volta, demarcou o rio Madeira como limite.",mo:"Afirmar posse portuguesa do Amazonas durante a União Ibérica, quando formalmente era território espanhol.",co:"Precedente de controle lusitano sobre o Amazonas. Região passou a ser administrada de Belém, não de Lima.",le:"Primeira demarcação efetiva do Amazonas como território português.",rp:"Afastou definitivamente Peru/Espanha da bacia amazônica central."}
   ]},
   peru1650:{name:"Cedido pelo Peru/Espanha (1650)",sub:"Grande expansão central e norte — Amazônia",color:"#d4c060",events:[
-    {n:"Missões Jesuíticas e Controle do Amazonas",b:"br",bl:"Expansão Territorial",d:"Séc. XVII–XVIII",l:[{f:"🇧🇷",r:"Governadores",n:"Mendonça Furtado"},{f:"🇪🇸",r:"Vice-reinado",n:"Espanhóis"}],re:"Portugal estabeleceu missões e fortes ao longo dos afluentes.",mo:"Afastar a penetração espanhola.",co:"AM, PA, RR tornaram-se lusitanos.",le:"Fundamento da fronteira norte.",rp:"Padrão de fortes como marcos de posse."}
+    {n:"Missões Jesuíticas e Controle do Amazonas",b:"br",bl:"Expansão Territorial",d:"Séc. XVII–XVIII",l:[{f:"🇧🇷",r:"Governadores do Grão-Pará",n:"Francisco Xavier de Mendonça Furtado e outros"},{f:"🇪🇸",r:"Vice-reinado do Peru/Nova Granada",n:"Administradores espanhóis"}],re:"Portugal estabeleceu missões e fortes ao longo dos afluentes do Amazonas. O Forte São Joaquim (1775) garantiu o Rio Branco (Roraima).",mo:"Afastar a penetração espanhola e garantir a bacia amazônica.",co:"AM, PA, RR tornaram-se incontroversamente lusitanos.",le:"Fundamento da fronteira norte e oeste do Brasil.",rp:"O padrão de fortes como marcos de posse continuou no Brasil independente."}
   ]},
   colombia1750:{name:"Cedido pela Colômbia/Espanha (1750)",sub:"Alto Rio Negro / Noroeste Amazônico",color:"#88c858",events:[
-    {n:"Tratado de Madri — Fronteira Noroeste",b:"bt",bl:"Tratado",d:"1750",l:[{f:"🇧🇷",r:"Rei",n:"D. João V"},{f:"🇪🇸",r:"Rei",n:"Fernando VI"}],re:"Cedeu ao Brasil o Alto Rio Negro.",mo:"Uti possidetis.",co:"Colômbia perdeu acesso ao Alto Amazonas.",le:"Definiu o corredor noroeste.",rp:"Colômbia independente nunca contestou."}
+    {n:"Tratado de Madri — Fronteira Noroeste",b:"bt",bl:"Tratado",d:"13 de janeiro de 1750",l:[{f:"🇧🇷",r:"Rei de Portugal / Negociador",n:"D. João V / Alexandre de Gusmão"},{f:"🇪🇸",r:"Rei da Espanha",n:"Fernando VI"}],re:"O Tratado de Madri cedeu ao Brasil o Alto Rio Negro, então reclamado pelo Vice-reinado da Nova Granada (atual Colômbia).",mo:"Uti possidetis: missões e postos militares portugueses justificavam a posse.",co:"Nova Granada/Colômbia perdeu o acesso ao Alto Amazonas. Brasil assegurou a bacia do Rio Negro.",le:"Definiu o corredor noroeste que hoje faz fronteira com Colômbia e Venezuela.",rp:"A Colômbia independente (1819) jamais contestou formalmente essa fronteira."}
   ]},
   colombia1860:{name:"Cedido pela Colômbia (1860)",sub:"Região do Javari / Fronteira Oeste",color:"#5aaa38",events:[
-    {n:"Acordos de Navegação Brasil-Colômbia",b:"be",bl:"Cooperação",d:"1853/1907",l:[{f:"🇧🇷",r:"Imperador",n:"D. Pedro II"},{f:"🇨🇴",r:"Presidente",n:"José Hilario López"}],re:"Colômbia acessa o Amazonas.",mo:"Colômbia precisava de saída fluvial.",co:"Brasil consolidou fronteira ocidental.",le:"Base para cooperação amazônica.",rp:"Controle brasileiro da Amazônia incontestável."}
+    {n:"Acordos de Navegação e Fronteira Brasil-Colômbia",b:"be",bl:"Cooperação",d:"1853 / reafirmado 1907",l:[{f:"🇧🇷",r:"Imperador do Brasil",n:"D. Pedro II"},{f:"🇨🇴",r:"Presidente da Colômbia",n:"José Hilario López"}],re:"Brasil e Colômbia negociaram acesso colombiano ao Amazonas para navegação em troca de reconhecimento das fronteiras brasileiras.",mo:"A Colômbia precisava de saída fluvial ao Atlântico. O Brasil queria estabilidade no noroeste.",co:"Colômbia obteve direitos de navegação; Brasil consolidou fronteira ocidental.",le:"Criou base para cooperação amazônica futura (Tratado de Cooperação Amazônica, 1978).",rp:"Estabeleceu que o controle brasileiro da Amazônia era incontestável."}
   ]},
   bolivia1860:{name:"Cedido pela Bolívia (1860)",sub:"Alto Madeira / Guaporé / Fronteira MT",color:"#78b468",events:[
-    {n:"Tratado de Ayacucho",b:"bt",bl:"Tratado",d:"27 de março de 1867",l:[{f:"🇧🇷",r:"Imperador",n:"D. Pedro II"},{f:"🇧🇴",r:"Presidente",n:"Mariano Melgarejo"}],re:"Fixou fronteira pelo paralelo 10°20'.",mo:"Demarcação após independência boliviana.",co:"Acre ficou em zona ambígua.",le:"Semente da crise de 1903.",rp:"Exemplo de como acordos vagos criam conflitos."}
+    {n:"Tratado de Ayacucho — Limites com a Bolívia",b:"bt",bl:"Tratado de Fronteira",d:"27 de março de 1867",l:[{f:"🇧🇷",r:"Imperador do Brasil",n:"D. Pedro II"},{f:"🇧🇴",r:"Presidente da Bolívia",n:"Mariano Melgarejo"}],re:"Fixou a fronteira norte entre Brasil e Bolívia pelo paralelo 10°20' e o rio Madeira. A Bolívia cedeu território mas recebeu direitos de navegação.",mo:"Demarcação necessária após a independência boliviana e conflitos de garimpeiros.",co:"Fronteira parcialmente delimitada. O Acre ficou em zona ambígua — semente da crise de 1903.",le:"A imprecisão gerou décadas de tensão. Após o Acre (1903), a fronteira foi finalmente fixada.",rp:"Exemplo clássico de como acordos vagos criam conflitos futuros."}
   ]},
   bolivia1903:{name:"Cedido pela Bolívia (1903) — Acre",sub:"Tratado de Petrópolis · Revolução Acreana",color:"#b888c8",events:[
-    {n:"Revolução Acreana e Tratado de Petrópolis",b:"bc",bl:"Conflito/Tratado",d:"1899–1903",l:[{f:"🇧🇷",r:"Presidente",n:"Rodrigues Alves/Rio Branco"},{f:"🇧🇴",r:"Presidente",n:"José Manuel Pando"}],re:"Seringueiros se rebelaram. Brasil interveio.",mo:"Riqueza da borracha. 60.000 brasileiros viviam no Acre.",co:"Brasil obteve 191.000 km².",le:"Símbolo máximo da diplomacia Rio Branco.",rp:"Causou ressentimento duradouro na Bolívia."},
-    {n:"Estrada de Ferro Madeira-Mamoré",b:"be",bl:"Obra",d:"1903–1912",l:[{f:"🇧🇷",r:"Presidentes",n:"Rodrigues Alves/Hermes"},{f:"🇧🇴",r:"Presidente",n:"Ismael Montes"}],re:"Compensação pelo Acre.",mo:"Cumprir o Tratado de Petrópolis.",co:"Concluída em 1912, mas o boom da borracha acabou.",le:"Símbolo trágico dos megaprojetos amazônicos.",rp:"Frustração boliviana persiste."}
+    {n:"Revolução Acreana e Tratado de Petrópolis",b:"bc",bl:"Conflito Armado / Tratado",d:"1899–1903",l:[{f:"🇧🇷",r:"Presidente / Min. Rel. Ext.",n:"Rodrigues Alves / Barão do Rio Branco"},{f:"🇧🇴",r:"Presidente da Bolívia",n:"José Manuel Pando"}],re:"Seringueiros brasileiros no Acre boliviano se rebelaram. Após o risco do Bolivian Syndicate (consórcio privado anglo-americano) arrendar o território, o Brasil interveio militarmente. O Tratado de Petrópolis (17/11/1903) cedeu o Acre ao Brasil.",mo:"Riqueza da borracha. ~60.000 brasileiros viviam no Acre boliviano. O Bolivian Syndicate era inadmissível para a soberania amazônica.",co:"Brasil obteve 191.000 km². Bolívia recebeu £2 milhões, direitos de navegação e a Estrada de Ferro Madeira-Mamoré.",le:"Símbolo máximo da diplomacia Rio Branco. Plácido de Castro é herói nacional do Acre.",rp:"Causou ressentimento duradouro na Bolívia, que já havia perdido o Pacífico para o Chile em 1879."}
   ]},
-  paraguai1870:{name:"Cedido pelo Paraguai (1870)",sub:"Guerra da Tríplice Aliança",color:"#8ab4d8",events:[
-    {n:"Guerra do Paraguai",b:"bc",bl:"Guerra",d:"1864–1870",l:[{f:"🇧🇷",r:"Imperador",n:"D. Pedro II"},{f:"🇵🇾",r:"Ditador",n:"Francisco Solano López"}],re:"Maior guerra da América do Sul.",mo:"Solano López buscava hegemonia.",co:"Paraguai perdeu 140.000 km².",le:"Brasil emergiu como potência militar.",rp:"Acelerou a Proclamação da República (1889)."},
-    {n:"Usina de Itaipu",b:"be",bl:"Cooperação",d:"1973–1984",l:[{f:"🇧🇷",r:"Presidente",n:"Ernesto Geisel"},{f:"🇵🇾",r:"Ditador",n:"Alfredo Stroessner"}],re:"Maior usina hidrelétrica do mundo.",mo:"Brasil precisava de energia.",co:"Paraguai vende 80% de sua cota ao Brasil.",le:"Maior projeto de integração bilateral.",rp:"Paraguai debate renegociar o Tratado."}
+  paraguai1870:{name:"Cedido pelo Paraguai (1870)",sub:"Guerra da Tríplice Aliança · Ganhos Territoriais",color:"#8ab4d8",events:[
+    {n:"Guerra do Paraguai (Tríplice Aliança)",b:"bc",bl:"Guerra",d:"1864–1870",l:[{f:"🇧🇷",r:"Imperador do Brasil",n:"D. Pedro II"},{f:"🇵🇾",r:"Presidente-Ditador do Paraguai",n:"Francisco Solano López"}],re:"A maior guerra da história da América do Sul. O Paraguai invadiu RS e Mato Grosso. Brasil, Argentina e Uruguai formaram a Tríplice Aliança. Após 6 anos, o Paraguai foi destruído — perdeu 60–70% da população masculina.",mo:"Solano López buscava saída ao mar e hegemonia regional. O Brasil reagiu à invasão de seu território.",co:"Paraguai perdeu 140.000 km² para Brasil e Argentina. Brasil adquiriu a região entre os rios Apa e Branco. O Paraguai foi devastado.",le:"Guerra mais mortífera da história americana. O Brasil emergiu como potência militar regional dominante.",rp:"O imenso custo humano acelerou a crise do Império e contribuiu para a Proclamação da República (1889)."}
   ]},
-  argentina1801:{name:"Cedido pela Argentina/Espanha (1801)",sub:"Missões Orientais — Noroeste do RS",color:"#90b878",events:[
-    {n:"Tomada das Missões Orientais",b:"bc",bl:"Conflito",d:"1801",l:[{f:"🇧🇷",r:"Capitania do RS",n:"Borges do Canto"},{f:"🇪🇸",r:"Vice-reinado",n:"Joaquín del Pino"}],re:"Tomada dos Sete Povos das Missões em 10 dias.",mo:"Guerra das Laranjas na Europa.",co:"Brasil incorporou NW do RS.",le:"Definiu extremo noroeste do RS.",rp:"Argentina reconheceu em 1857."},
-    {n:"Questão de Palmas — Arbitragem Cleveland",b:"bd",bl:"Arbitragem",d:"1893–1895",l:[{f:"🇧🇷",r:"Presidente",n:"Floriano Peixoto"},{f:"🇦🇷",r:"Presidente",n:"Luis Sáenz Peña"}],re:"EUA arbitrou a favor do Brasil.",mo:"Região rica em erva-mate.",co:"Brasil ganhou 30.621 km² (SW do Paraná).",le:"Primeira grande vitória de Rio Branco.",rp:"Consagrou a arbitragem internacional."}
+  argentina1801:{name:"Cedido pela Argentina/Espanha (1801)",sub:"Missões Orientais · Noroeste do Rio Grande do Sul",color:"#90b878",events:[
+    {n:"Tomada das Missões Orientais",b:"bc",bl:"Conflito Armado",d:"1801",l:[{f:"🇧🇷",r:"Capitania do RS (Portugal)",n:"Borges do Canto (Comandante)"},{f:"🇪🇸",r:"Vice-reinado do Rio da Prata",n:"Joaquín del Pino"}],re:"Aproveitando a Guerra das Laranjas (Portugal × Espanha na Europa), tropas luso-brasileiras tomaram os Sete Povos das Missões Orientais em apenas 10 dias.",mo:"Guerra europeia criou oportunidade geopolítica para resolver a pendência territorial no Sul.",co:"Brasil incorporou as Missões (atual NW do RS). A Espanha nunca mais contestou militarmente.",le:"Definiu o extremo noroeste do RS. As ruínas jesuíticas são hoje Patrimônio da UNESCO.",rp:"A Argentina independente (1816) assinou o Tratado de 1857 reconhecendo a posse brasileira."},
+    {n:"Questão de Palmas / Misiones — Arbitragem Cleveland",b:"bd",bl:"Arbitragem Internacional",d:"1893–1895",l:[{f:"🇧🇷",r:"Presidente / Defensor",n:"Floriano Peixoto / Barão do Rio Branco"},{f:"🇦🇷",r:"Presidente da Argentina",n:"Luis Sáenz Peña"}],re:"Argentina e Brasil disputavam 30.621 km² entre os rios Peperi-Guaçu e Santo Antônio (atual SW do Paraná). O presidente dos EUA Grover Cleveland arbitrou em favor do Brasil em 5/2/1895.",mo:"Região rica em erva-mate e madeira. Argentina baseava-se no Tratado de 1857; Brasil, em títulos coloniais anteriores.",co:"Brasil ganhou os 30.621 km² — o atual sudoeste do Paraná. Primeira grande vitória diplomática do Barão do Rio Branco.",le:"Revelou o talento do Barão e lançou sua carreira como o maior diplomata brasileiro.",rp:"Confirmou a arbitragem internacional como mecanismo preferido do Brasil para resolver disputas."}
   ]},
-  argentina1816:{name:"Cedido pela Argentina (1816)",sub:"Cisplatina · Uruguai · MERCOSUL",color:"#58c888",events:[
-    {n:"Província Cisplatina",b:"bc",bl:"Conflito",d:"1816–1821",l:[{f:"🇧🇷",r:"Rei",n:"D. João VI"},{f:"🇺🇾",r:"Revolucionário",n:"José Artigas"}],re:"Banda Oriental incorporada como Cisplatina.",mo:"Conter a revolução artiguista.",co:"Artigas exilado no Paraguai.",le:"Gerou nacionalismo uruguaio.",rp:"Contribuiu para instabilidade do Império."},
-    {n:"Independência do Uruguai",b:"bc",bl:"Guerra",d:"1825–1828",l:[{f:"🇧🇷",r:"Imperador",n:"D. Pedro I"},{f:"🇺🇾",r:"Líderes",n:"Lavalleja/Rivera"}],re:"Criação do Uruguai como Estado-tampão.",mo:"Grã-Bretanha não queria hegemonia no Prata.",co:"Brasil perdeu a Cisplatina.",le:"Uruguai nasceu por interesse britânico.",rp:"Contribuiu para abdicação de D. Pedro I (1831)."},
-    {n:"Criação do MERCOSUL",b:"be",bl:"Cooperação",d:"26 de março de 1991",l:[{f:"🇧🇷",r:"Presidente",n:"Fernando Collor"},{f:"🇦🇷",r:"Presidente",n:"Carlos Menem"}],re:"Maior bloco econômico da América do Sul.",mo:"Integrar economias pós-ditadura.",co:"Comércio cresceu de US$4 bi para US$88 bi.",le:"Rivalidade histórica em parceria.",rp:"Principal plataforma de política externa do Brasil."}
+  argentina1816:{name:"Cedido pela Argentina (1816) — Cisplatina",sub:"Banda Oriental · Uruguai",color:"#58c888",events:[
+    {n:"Invasão da Banda Oriental — Província Cisplatina",b:"bc",bl:"Conflito Armado",d:"1816–1821",l:[{f:"🇧🇷",r:"Rei de Portugal (no Brasil)",n:"D. João VI"},{f:"🇺🇾",r:"Líder revolucionário",n:"José Gervasio Artigas"}],re:"Tropas lusitanas invadiram a Banda Oriental para sufocar a revolução artiguista. Em 1821 a região foi incorporada ao Reino do Brasil como Província Cisplatina.",mo:"Conter a influência revolucionária de Artigas, garantir a margem norte do Prata.",co:"Banda Oriental virou Cisplatina. Artigas foi exilado no Paraguai.",le:"Gerou o nacionalismo uruguaio e as sementes da resistência que culminou na independência.",rp:"A incorporação foi impopular e custosa — contribuiu para a instabilidade do Império."},
+    {n:"Guerra Cisplatina e Independência do Uruguai",b:"bc",bl:"Guerra / Independência",d:"1825–1828",l:[{f:"🇧🇷",r:"Imperador do Brasil",n:"D. Pedro I"},{f:"🇺🇾",r:"Líderes revolucionários",n:"Juan Antonio Lavalleja / Fructuoso Rivera"}],re:"Os '33 Orientais' invadiram a Cisplatina (1825). A guerra Brasil × Argentina (1825–1828) terminou em empate. A mediação britânica criou o Uruguai como Estado-tampão independente.",mo:"A Grã-Bretanha não queria que nenhuma grande potência dominasse o estuário do Prata.",co:"Brasil perdeu a Cisplatina. Uruguai tornou-se independente (1830).",le:"O Uruguai nasceu como Estado-tampão por interesse britânico.",rp:"A perda contribuiu para a abdicação de D. Pedro I (1831). Criou a longa relação de influência brasileira sobre o Uruguai."}
   ]},
-  franca1816:{name:"Cedido pela França (1816)",sub:"Guiana Francesa / Amapá",color:"#78c8d8",events:[
-    {n:"Ocupação da Guiana Francesa",b:"bc",bl:"Conflito",d:"1809–1817",l:[{f:"🇧🇷",r:"Príncipe Regente",n:"D. João VI"},{f:"🇫🇷",r:"Imperador",n:"Napoleão"}],re:"D. João VI ordenou a tomada de Caiena.",mo:"Retaliação pela invasão napoleônica.",co:"Portugal ocupou a Guiana Francesa.",le:"Deixou pendente a questão do Amapá.",rp:"Criou décadas de ambiguidade."},
-    {n:"Questão do Amapá — Arbitragem de Berna",b:"bd",bl:"Arbitragem",d:"1895–1900",l:[{f:"🇧🇷",r:"Presidente",n:"Prudente de Morais"},{f:"🇫🇷",r:"Presidente",n:"Félix Faure"}],re:"Suíça decidiu a favor do Brasil.",mo:"Descoberta de ouro na região.",co:"Brasil garantiu o Amapá.",le:"Primeira grande vitória de Rio Branco.",rp:"Lançou Rio Branco à cena nacional."}
+  franca1816:{name:"Cedido pela França (1816)",sub:"Amapá / Rio Oiapoque",color:"#78c8d8",events:[
+    {n:"Ocupação Portuguesa da Guiana Francesa",b:"bc",bl:"Conflito Armado",d:"1809–1817",l:[{f:"🇧🇷",r:"Príncipe Regente (no Brasil)",n:"D. João VI"},{f:"🇫🇷",r:"Imperador da França",n:"Napoleão Bonaparte"}],re:"Após a invasão francesa de Portugal (1807), D. João VI ordenou a tomada da Guiana Francesa como represália. Tropas luso-brasileiras ocuparam Caiena.",mo:"Retaliação pela invasão napoleônica da Península Ibérica. Interesse estratégico no norte da América do Sul.",co:"Portugal ocupou a Guiana Francesa de 1809 a 1817. Devolvida à França pelo Tratado de Paris.",le:"Deixou pendente a questão do limite norte do Brasil. O rio Oiapoque só foi confirmado como fronteira em 1900.",rp:"Criou décadas de ambiguidade sobre o Amapá, que a França continuou a disputar."},
+    {n:"Questão do Amapá — Arbitragem de Berna",b:"bd",bl:"Arbitragem Internacional",d:"1895–1900",l:[{f:"🇧🇷",r:"Presidente do Brasil",n:"Prudente de Morais"},{f:"🇫🇷",r:"Presidente da França",n:"Félix Faure"}],re:"A França reivindicava o Amapá (~260.000 km²). O Brasil levou ao Conselho Federal Suíço. O árbitro decidiu em favor do Brasil em 1° de dezembro de 1900.",mo:"Descoberta de ouro na região e interesse francês em expandir a Guiana.",co:"Brasil garantiu o Amapá. Fronteira fixada no rio Oiapoque e Cabo Orange.",le:"Primeira grande vitória diplomática do Barão do Rio Branco. Consagrou o uso da arbitragem internacional.",rp:"Lançou o Barão do Rio Branco à cena nacional e abriu seu ciclo de consolidação das fronteiras (1902–1912)."}
   ]}
 };
 
 let currentRegion = null;
+let coordHelperOn = false;
 
 function openRegion(regionId) {
   const r = REGIONS[regionId];
@@ -229,26 +262,11 @@ function renderCard(e, id) {
           <div class="ev-l">Líderes</div>
           <div class="ldrs">${leadersHtml}</div>
         </div>
-        <div class="ev-s">
-          <div class="ev-l">Resumo</div>
-          <p class="ev-t">${e.re}</p>
-        </div>
-        <div class="ev-s">
-          <div class="ev-l">Motivação</div>
-          <p class="ev-t">${e.mo}</p>
-        </div>
-        <div class="ev-s">
-          <div class="ev-l">Consequências</div>
-          <p class="ev-t">${e.co}</p>
-        </div>
-        <div class="ev-s">
-          <div class="ev-l">Legado</div>
-          <p class="ev-t">${e.le}</p>
-        </div>
-        <div class="ev-s">
-          <div class="ev-l">Repercussão na Política Externa</div>
-          <p class="ev-t">${e.rp}</p>
-        </div>
+        ${e.re ? `<div class="ev-s"><div class="ev-l">Resumo</div><p class="ev-t">${e.re}</p></div>` : ''}
+        ${e.mo ? `<div class="ev-s"><div class="ev-l">Motivação</div><p class="ev-t">${e.mo}</p></div>` : ''}
+        ${e.co ? `<div class="ev-s"><div class="ev-l">Consequências</div><p class="ev-t">${e.co}</p></div>` : ''}
+        ${e.le ? `<div class="ev-s"><div class="ev-l">Legado</div><p class="ev-t">${e.le}</p></div>` : ''}
+        ${e.rp ? `<div class="ev-s"><div class="ev-l">Repercussão na Política Externa</div><p class="ev-t">${e.rp}</p></div>` : ''}
       </div>
     </div>
   `;
@@ -257,6 +275,7 @@ function renderCard(e, id) {
 function toggleCard(id) {
   const card = document.getElementById('c' + id);
   const body = document.getElementById('b' + id);
+  if (!card || !body) return;
   const isOpen = card.classList.contains('open');
   card.classList.toggle('open', !isOpen);
   body.classList.toggle('open', !isOpen);
@@ -275,14 +294,58 @@ function toggleTord() {
   document.getElementById('tord-info').classList.toggle('on', tordesilhasOn);
 }
 
-// Configurar os cliques das áreas do mapa
+// Ativar modo de depuração de coordenadas (pressione Ctrl+Shift+C)
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+    coordHelperOn = !coordHelperOn;
+    const helper = document.getElementById('coordHelper');
+    if (helper) {
+      helper.style.display = coordHelperOn ? 'block' : 'none';
+      console.log('Modo coordenadas:', coordHelperOn ? 'ATIVADO' : 'DESATIVADO');
+    }
+  }
+});
+
+// Mostrar coordenadas ao clicar no mapa (modo debug)
+document.getElementById('mapImg')?.addEventListener('click', (e) => {
+  if (!coordHelperOn) return;
+  const rect = e.target.getBoundingClientRect();
+  const scaleX = e.target.naturalWidth / rect.width;
+  const scaleY = e.target.naturalHeight / rect.height;
+  const x = Math.round((e.clientX - rect.left) * scaleX);
+  const y = Math.round((e.clientY - rect.top) * scaleY);
+  document.getElementById('coordHelper').innerHTML = `Coordenada: (${x}, ${y}) | Ctrl+C para copiar`;
+  console.log(`Coordenada clicada: ${x},${y}`);
+  
+  // Copiar para clipboard com Ctrl+C
+  const copyHandler = (ke) => {
+    if (ke.ctrlKey && ke.key === 'c') {
+      ke.preventDefault();
+      navigator.clipboard.writeText(`${x},${y}`);
+      document.getElementById('coordHelper').innerHTML = `Copiado! (${x},${y})`;
+      document.removeEventListener('keydown', copyHandler);
+      setTimeout(() => {
+        if (document.getElementById('coordHelper')) {
+          document.getElementById('coordHelper').innerHTML = 'Modo coordenadas ativo - Clique no mapa';
+        }
+      }, 1500);
+    }
+  };
+  document.addEventListener('keydown', copyHandler, { once: true });
+});
+
+// Configurar cliques das áreas do mapa
 document.querySelectorAll('area').forEach(area => {
   area.addEventListener('click', (e) => {
     e.preventDefault();
     const region = area.getAttribute('data-region');
-    if (region) openRegion(region);
+    if (region && REGIONS[region]) {
+      openRegion(region);
+    }
   });
 });
+
+console.log('Página carregada! Use Ctrl+Shift+C para ativar modo de coordenadas.');
 </script>
 </body>
 </html>
