@@ -124,8 +124,62 @@ const eraColors={colonial:'#d4a017',imperio:'#c0852b','rep-velha':'#3498db',varg
 const map=L.map('map',{center:[-15,-53],zoom:4,minZoom:3,maxZoom:9,zoomControl:true});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:20}).addTo(map);
 
+// Siglas e centroides dos 27 estados
+const estados = [
+  {sig:'AC',ll:[-9.02,-70.81]},{sig:'AL',ll:[-9.57,-36.78]},{sig:'AP',ll:[1.41,-51.77]},
+  {sig:'AM',ll:[-3.47,-65.10]},{sig:'BA',ll:[-12.96,-41.70]},{sig:'CE',ll:[-5.20,-39.53]},
+  {sig:'DF',ll:[-15.83,-47.86]},{sig:'ES',ll:[-19.19,-40.34]},{sig:'GO',ll:[-15.98,-49.86]},
+  {sig:'MA',ll:[-5.42,-45.44]},{sig:'MT',ll:[-12.64,-55.42]},{sig:'MS',ll:[-20.51,-54.54]},
+  {sig:'MG',ll:[-18.10,-44.38]},{sig:'PA',ll:[-3.79,-52.48]},{sig:'PB',ll:[-7.28,-36.72]},
+  {sig:'PR',ll:[-24.89,-51.55]},{sig:'PE',ll:[-8.81,-36.95]},{sig:'PI',ll:[-7.72,-42.73]},
+  {sig:'RJ',ll:[-22.25,-42.66]},{sig:'RN',ll:[-5.81,-36.59]},{sig:'RS',ll:[-30.03,-53.20]},
+  {sig:'RO',ll:[-11.22,-62.80]},{sig:'RR',ll:[1.99,-61.33]},{sig:'SC',ll:[-27.45,-50.95]},
+  {sig:'SP',ll:[-22.25,-48.65]},{sig:'SE',ll:[-10.57,-37.45]},{sig:'TO',ll:[-10.18,-48.33]}
+];
+
+// Estilo dos labels — injetado uma vez
+const labelStyle = document.createElement('style');
+labelStyle.textContent = `
+  .state-label {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: rgba(201,168,76,0.55);
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+  }
+`;
+document.head.appendChild(labelStyle);
+
 fetch('https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF')
-  .then(r=>r.json()).then(g=>{L.geoJSON(g,{style:{fillColor:'#1a2e1e',fillOpacity:.75,color:'#3d6645',weight:.8,opacity:.9}}).addTo(map);}).catch(()=>{});
+  .then(r=>r.json()).then(g=>{
+    L.geoJSON(g,{style:{fillColor:'#1a2e1e',fillOpacity:.75,color:'#3d6645',weight:.8,opacity:.9}}).addTo(map);
+    // Adicionar siglas após o GeoJSON carregar
+    addStateLabels();
+  }).catch(()=>{
+    // Mesmo sem GeoJSON, mostrar as siglas
+    addStateLabels();
+  });
+
+function addStateLabels() {
+  estados.forEach(({sig, ll}) => {
+    L.marker(ll, {
+      icon: L.divIcon({
+        className: 'state-label',
+        html: sig,
+        iconSize: null,
+        iconAnchor: [12, 8]
+      }),
+      interactive: false,
+      zIndexOffset: -1000
+    }).addTo(map);
+  });
+}
 
 const markers={};
 function makeIcon(era){const c=eraColors[era]||'#c9a84c';return L.divIcon({className:'',html:`<div style="width:16px;height:16px;border-radius:50%;background:${c};border:2px solid rgba(255,255,255,.15);box-shadow:0 0 0 3px ${c}44,0 0 14px ${c}99;cursor:pointer;"></div>`,iconSize:[16,16],iconAnchor:[8,8]});}
