@@ -56,7 +56,7 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
 .produto-list{list-style:none;padding:0;margin:0}
 .produto-list li{font-size:14px;color:var(--gold-light);margin-bottom:8px;line-height:1.5}
 .footer-note{position:fixed;bottom:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);background:rgba(10,9,6,.85);padding:8px 14px;border-radius:20px;z-index:1000;pointer-events:none;max-width:400px;line-height:1.45;border-left:3px solid var(--gold);backdrop-filter:blur(5px)}
-.port-marker{transition:transform 0.1s;background:rgba(0,0,0,0.3);border-radius:50%;padding:2px}
+.port-marker{transition:transform 0.1s}
 .port-marker:hover{transform:scale(1.08)}
 @media(max-width:700px){.sidebar{display:none}.popup-grid{grid-template-columns:1fr}.footer-note{font-size:7px;max-width:260px;bottom:8px;left:8px}.filters{max-width:100%;margin-top:8px}}
 </style>
@@ -142,18 +142,18 @@ const dadosEconomicos = {
 };
 
 // ==============================================================
-// PORTOS COM COORDENADAS NO OCEANO (BEM AFASTADOS DA COSTA)
+// PORTOS - COORDENADAS BEM LONGE DA COSTA (no meio do Atlântico)
 // ==============================================================
 const portos = [
-    { nome: "Porto de São Luís", cidade: "São Luís", estado: "MA", coords: [-1.8, -46.0], produtos: "Algodão, Arroz, Couro", descricao: "Principal porto escoador do algodão maranhense para a Inglaterra. Com a Abertura dos Portos (1808), São Luís passou a negociar diretamente com Liverpool.", importancia: "Centro da Companhia de Comércio do Grão-Pará e Maranhão. O porto foi modernizado no período joanino para atender à demanda europeia por algodão." },
-    { nome: "Porto do Recife", cidade: "Recife", estado: "PE", coords: [-7.0, -36.5], produtos: "Açúcar, Tabaco, Algodão", descricao: "Um dos portos mais movimentados do Império. Escoava açúcar dos novos engenhos pernambucanos, tabaco de corda e algodão. Foi palco da Revolução Pernambucana de 1817.", importancia: "Polo comercial do Nordeste. O porto conectava o Brasil ao mercado europeu e africano. A influência britânica era forte na região." },
-    { nome: "Porto de Salvador", cidade: "Salvador", estado: "BA", coords: [-12.0, -40.2], produtos: "Açúcar, Tabaco, Azeite de dendê", descricao: "O maior e mais importante porto do Brasil colonial. Salvador manteve sua relevância comercial durante o período joanino, apesar de não ser mais a capital.", importancia: "Estratégico para o tráfico de escravizados com a África. A pressão inglesa pelo fim do tráfico impactou diretamente sua economia." },
-    { nome: "Porto do Rio de Janeiro", cidade: "Rio de Janeiro", estado: "RJ", coords: [-22.5, -44.7], produtos: "Açúcar, Café (início), Manufaturas", descricao: "Com a transferência da Corte portuguesa em 1808, o Rio tornou-se o centro político e comercial do Império. A Abertura dos Portos revolucionou sua economia.", importancia: "O porto mais dinâmico da América do Sul. Ali funcionavam a Alfândega Real, o Banco do Brasil e a Imprensa Régia." },
-    { nome: "Porto de Santos", cidade: "Santos", estado: "SP", coords: [-23.8, -47.8], produtos: "Açúcar (Piracicaba), Algodão, Couro", descricao: "Principal via de escoamento da produção paulista. O açúcar produzido em Piracicaba descia a serra para ser exportado.", importancia: "Conexão vital entre o planalto paulista e o mercado internacional. O porto cresceu com a expansão dos engenhos de açúcar no oeste paulista." },
-    { nome: "Porto de Paranaguá", cidade: "Paranaguá", estado: "PR", coords: [-25.5, -50.2], produtos: "Erva-mate, Madeira", descricao: "Principal porto escoador da erva-mate paranaense, chamada de 'ouro verde'. O mate era exportado para o Prata.", importancia: "O porto conectava as plantações de erva-mate do interior aos mercados platinos. A região era zona de influência disputada entre Brasil e Espanha." },
-    { nome: "Porto de Desterro", cidade: "Florianópolis", estado: "SC", coords: [-27.8, -50.2], produtos: "Óleo de Baleia, Pescado", descricao: "Base da Real Armação da Baleia. O óleo de baleia era enviado ao Rio de Janeiro para iluminação pública.", importancia: "Centro da caça à baleia no sul do Brasil. O porto também servia como ponto de apoio para navegação entre o Rio de Janeiro e o Prata." },
-    { nome: "Porto de Rio Grande", cidade: "Rio Grande", estado: "RS", coords: [-32.5, -54.0], produtos: "Charque, Couro, Trigo, Sebo", descricao: "Principal porto da região sul. Escoava a produção das charqueadas gaúchas, que abasteciam o Sudeste e a Corte.", importancia: "Estratégico para o comércio com o Prata e para a defesa da fronteira sul. O porto estava no centro das disputas territoriais com a Espanha." },
-    { nome: "Porto de Belém", cidade: "Belém", estado: "PA", coords: [-0.2, -49.8], produtos: "Drogas do Sertão, Cacau", descricao: "Principal porto da Amazônia oriental. Escoava as 'drogas do sertão' coletadas ao longo do rio Amazonas.", importancia: "Centro da presença portuguesa na Amazônia. O porto guarnecia a região contra cobiça internacional." }
+    { nome: "Porto de São Luís", cidade: "São Luís", estado: "MA", coords: [-2.0, -55.0], produtos: "Algodão, Arroz, Couro", descricao: "Principal porto escoador do algodão maranhense para a Inglaterra. Com a Abertura dos Portos (1808), São Luís passou a negociar diretamente com Liverpool.", importancia: "Centro da Companhia de Comércio do Grão-Pará e Maranhão." },
+    { nome: "Porto do Recife", cidade: "Recife", estado: "PE", coords: [-7.5, -54.0], produtos: "Açúcar, Tabaco, Algodão", descricao: "Um dos portos mais movimentados do Império. Escoava açúcar dos novos engenhos pernambucanos, tabaco de corda e algodão. Foi palco da Revolução Pernambucana de 1817.", importancia: "Polo comercial do Nordeste. O porto conectava o Brasil ao mercado europeu e africano." },
+    { nome: "Porto de Salvador", cidade: "Salvador", estado: "BA", coords: [-12.5, -56.0], produtos: "Açúcar, Tabaco, Azeite de dendê", descricao: "O maior e mais importante porto do Brasil colonial. Salvador manteve sua relevância comercial durante o período joanino.", importancia: "Estratégico para o tráfico de escravizados com a África. A pressão inglesa pelo fim do tráfico impactou diretamente sua economia." },
+    { nome: "Porto do Rio de Janeiro", cidade: "Rio de Janeiro", estado: "RJ", coords: [-22.5, -58.0], produtos: "Açúcar, Café (início), Manufaturas", descricao: "Com a transferência da Corte portuguesa em 1808, o Rio tornou-se o centro político e comercial do Império. A Abertura dos Portos revolucionou sua economia.", importancia: "O porto mais dinâmico da América do Sul. Ali funcionavam a Alfândega Real, o Banco do Brasil e a Imprensa Régia." },
+    { nome: "Porto de Santos", cidade: "Santos", estado: "SP", coords: [-24.0, -60.0], produtos: "Açúcar (Piracicaba), Algodão, Couro", descricao: "Principal via de escoamento da produção paulista. O açúcar produzido em Piracicaba descia a serra para ser exportado.", importancia: "Conexão vital entre o planalto paulista e o mercado internacional." },
+    { nome: "Porto de Paranaguá", cidade: "Paranaguá", estado: "PR", coords: [-25.5, -61.0], produtos: "Erva-mate, Madeira", descricao: "Principal porto escoador da erva-mate paranaense, chamada de 'ouro verde'. O mate era exportado para o Prata.", importancia: "O porto conectava as plantações de erva-mate do interior aos mercados platinos." },
+    { nome: "Porto de Desterro", cidade: "Florianópolis", estado: "SC", coords: [-27.5, -60.5], produtos: "Óleo de Baleia, Pescado", descricao: "Base da Real Armação da Baleia. O óleo de baleia era enviado ao Rio de Janeiro para iluminação pública.", importancia: "Centro da caça à baleia no sul do Brasil." },
+    { nome: "Porto de Rio Grande", cidade: "Rio Grande", estado: "RS", coords: [-32.5, -62.0], produtos: "Charque, Couro, Trigo, Sebo", descricao: "Principal porto da região sul. Escoava a produção das charqueadas gaúchas, que abasteciam o Sudeste e a Corte.", importancia: "Estratégico para o comércio com o Prata e para a defesa da fronteira sul." },
+    { nome: "Porto de Belém", cidade: "Belém", estado: "PA", coords: [-0.5, -58.0], produtos: "Drogas do Sertão, Cacau", descricao: "Principal porto da Amazônia oriental. Escoava as 'drogas do sertão' coletadas ao longo do rio Amazonas.", importancia: "Centro da presença portuguesa na Amazônia." }
 ];
 
 const coordsEstados = {
@@ -167,10 +167,9 @@ const coordsEstados = {
 let map = null;
 let stateMarkers = {};
 let portMarkers = [];
-let currentFilter = 'all';
 
 function initMap() {
-    map = L.map('map', {center: [-14.2, -45.0], zoom: 4.2, minZoom: 3, maxZoom: 9});
+    map = L.map('map', {center: [-14.2, -53.0], zoom: 4.2, minZoom: 3, maxZoom: 9});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {subdomains: 'abcd'}).addTo(map);
 }
 
@@ -183,10 +182,12 @@ function loadBaseMap() {
             }).addTo(map);
             addEmojiMarkers();
             addPortMarkers();
+            filter('all');
         })
         .catch(() => {
             addEmojiMarkers();
             addPortMarkers();
+            filter('all');
         });
 }
 
@@ -215,16 +216,12 @@ function addEmojiMarkers() {
 }
 
 function addPortMarkers() {
-    portMarkers.forEach(m => { if(m.remove) m.remove(); });
-    portMarkers = [];
-    
     portos.forEach(porto => {
-        // Barco menor (24px) e afastado no oceano
         const portIcon = L.divIcon({
             className: 'port-marker',
-            html: `<div style="font-size: 20px; cursor: pointer; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); text-align: center; background: rgba(26,30,58,0.4); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold);">🚢</div>`,
-            iconSize: [32, 32],
-            iconAnchor: [16, 16],
+            html: `<div style="font-size: 20px; cursor: pointer; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); text-align: center; background: rgba(26,30,58,0.35); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold);">🚢</div>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
             popupAnchor: [0, -12]
         });
         
@@ -295,7 +292,6 @@ function filterPorts() {
     document.querySelectorAll('.produto-btn').forEach(b => b.classList.remove('active'));
     const btn = document.getElementById('btn-portos');
     if(btn) btn.classList.add('active');
-    currentFilter = 'portos';
     
     // Esconder todos os marcadores de estado
     Object.values(stateMarkers).forEach(m => { if(m.remove) m.remove(); });
@@ -305,23 +301,25 @@ function filterPorts() {
     document.querySelectorAll('.si').forEach(el => { el.classList.add('hidden'); });
     document.getElementById('count').textContent = portMarkers.length;
     
-    // Ajustar zoom para ver os portos no oceano
-    map.setView([-15, -42], 4.5);
+    map.setView([-15, -50], 4);
 }
 
 function filter(grupo) {
     document.querySelectorAll('.produto-btn').forEach(b => b.classList.remove('active'));
     const btn = document.getElementById(`btn-${grupo === 'all' ? 'all' : grupo}`);
     if(btn) btn.classList.add('active');
-    currentFilter = grupo;
     
-    // Mostrar/Esconder marcadores de estado
+    // Mostrar/Esconder marcadores de estado conforme filtro
     Object.entries(stateMarkers).forEach(([uf, m]) => {
         const dados = dadosEconomicos[uf];
         const show = grupo === 'all' || dados.grupo === grupo;
-        if(show) { m.addTo(map); } else { m.remove(); }
+        if(show) { 
+            m.addTo(map); 
+        } else { 
+            m.remove(); 
+        }
     });
-    // Esconder todos os portos
+    // Esconder todos os portos quando NÃO estiver no filtro de portos
     portMarkers.forEach(m => { if(m.remove) m.remove(); });
     
     document.querySelectorAll('.si').forEach(el => {
