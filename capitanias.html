@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Capitanias Hereditárias (1534-1536) - Mapa Histórico Interativo</title>
+    <!-- Leaflet CSS e JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a2a32;
+            color: #e0e0e0;
+        }
+        .header {
+            background: #0d1c24;
+            padding: 1rem 2rem;
+            border-bottom: 3px solid #c9a03d;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+        }
+        .header h1 span {
+            color: #c9a03d;
+        }
+        .header p {
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            height: calc(100vh - 110px);
+        }
+        /* Painel do Mapa */
+        .map-panel {
+            flex: 2;
+            min-width: 60%;
+            position: relative;
+            background: #2c3e2f;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+            background-color: #d4e6f1;
+        }
+        /* Painel de Informações (estilo "pop-up fixo") */
+        .info-panel {
+            flex: 1;
+            min-width: 280px;
+            background: #0f1a1f;
+            border-left: 2px solid #c9a03d;
+            overflow-y: auto;
+            padding: 1.2rem;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        .info-panel h2 {
+            color: #c9a03d;
+            border-bottom: 1px solid #3a5a6e;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+        }
+        .info-panel h3 {
+            color: #ddb76b;
+            margin: 1rem 0 0.5rem;
+            font-size: 1.3rem;
+        }
+        .info-panel p, .info-panel li {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+        .info-panel ul {
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .info-panel .capital {
+            font-weight: bold;
+            color: #f3c26b;
+        }
+        .badge {
+            background: #2c4c3b;
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            color: #ddd;
+        }
+        .btn-voltar {
+            background: #2c3e50;
+            border: none;
+            color: #c9a03d;
+            padding: 5px 12px;
+            margin-top: 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .btn-voltar:hover {
+            background: #c9a03d;
+            color: #0f1a1f;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 0.5rem;
+            background: #0d1c24;
+            border-top: 1px solid #2a3b44;
+        }
+        @media (max-width: 700px) {
+            .container { flex-direction: column; height: auto; }
+            .map-panel { height: 400px; min-width: auto; }
+            .info-panel { height: auto; max-height: 400px; }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>📜 <span>Capitanias Hereditárias</span> (1534–1536)</h1>
+    <p>Mapa reconstruído por Jorge Pimentel Cintra (USP) • Limites segundo meridianos, paralelos e rumo noroeste</p>
+</div>
+<div class="container">
+    <div class="map-panel">
+        <div id="map"></div>
+    </div>
+    <div class="info-panel" id="infoPanel">
+        <h2><i class="fas fa-info-circle"></i> Sobre as Capitanias</h2>
+        <p>Clique em qualquer capitania no mapa para ver detalhes históricos: economia, política, líderes, relação com Portugal e legado.</p>
+        <p><span class="badge">📌</span> Base cartográfica: <strong>Figura 10</strong> do artigo <em>"Reconstruindo o mapa das capitanias hereditárias"</em> (2013).</p>
+        <p><span class="badge">🗺️</span> As linhas divisórias seguem as regras originais das Cartas de Doação: ao Norte usam <strong>meridianos</strong>; ao Centro <strong>paralelos</strong>; ao Sul direção <strong>noroeste</strong>.</p>
+        <div style="margin-top: 25px; border-top: 1px solid #2a4b5e; padding-top: 12px;">
+            <i class="fas fa-globe-americas"></i> <strong>Linha de Tordesilhas</strong> (meridiano 48,7° W) — limite oeste teórico.<br>
+            <i class="fas fa-water"></i> Terras não distribuídas ao norte (atual litoral do Pará).
+        </div>
+        <button class="btn-voltar" onclick="resetHighlight()"><i class="fas fa-undo-alt"></i> Limpar seleção</button>
+    </div>
+</div>
+<footer>
+    Fonte: CINTRA, Jorge Pimentel. Reconstruindo o mapa das capitanias hereditárias. Anais do Museu Paulista, 2013. | Mapa interativo para fins educacionais.
+</footer>
+
+<script>
+    // ============================================================
+    // 1. DEFINIÇÃO DOS POLÍGONOS (baseado na Tabela 9 e Figura 10)
+    // Regras:
+    // - Norte (MA, PI, CE, RN, IT): divisórias são MERIDIANOS.
+    // - Centro (PE, BA, IL, PS, ES, ST): divisórias são PARALELOS.
+    // - Sul (SV1, SA, SV2, ST2): rumo NW até paralelo e depois oeste.
+    // Por simplicidade didática, os polígonos foram ajustados ao mapa do artigo.
+    // As coordenadas seguem a Tabela 9 (pontos de limite) e a morfologia da Figura 10.
+    // ============================================================
+    
+    const capitaniasGeoJSON = {
+        "type": "FeatureCollection",
+        "features": [
+            { // 1. Maranhão 1 (Aires da Cunha)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Maranhão (1º lote)",
+                    "donatario": "Aires da Cunha",
+                    "leguas": "50 (total 100 com João de Barros)",
+                    "economia": "Extrativismo vegetal (drogas do sertão), pouca agricultura. Tentativa falha de povoamento.",
+                    "politica": "Capitania do Norte com limites por meridiano. Não prosperou devido a conflitos com indígenas e naufrágio da frota.",
+                    "capital": "São Luís (fundada depois, em 1612 pelos franceses)",
+                    "relacao_portugal": "Coroa cedeu mas não deu suporte eficaz. Donatário morreu na viagem ao Brasil.",
+                    "lideres": "Aires da Cunha (donatário), depois herdeiros.",
+                    "legado": "Terras posteriormente incorporadas à Coroa e ao Estado do Maranhão."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-45.25,1.64], [-44.36,1.64], [-44.36,3.0], [-45.25,3.0], [-45.25,1.64]]] }
+            },
+            { // 2. Maranhão 2 (João de Barros)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Maranhão (2º lote)",
+                    "donatario": "João de Barros",
+                    "leguas": "50 (parceiro de Aires da Cunha)",
+                    "economia": "Idêntica ao lote vizinho. Fraca colonização inicial.",
+                    "politica": "Divisão interna não demarcada fisicamente; união para exploração de minérios (Carta de Mineração).",
+                    "capital": "Aldeamento indígena; depois Alcântara.",
+                    "relacao_portugal": "João de Barros era cronista e não veio ao Brasil; delegou a terceiros.",
+                    "lideres": "João de Barros, Fernando Álvares de Andrade (parceiro).",
+                    "legado": "Região de grandes conflitos (franceses, tupinambás) no século XVII."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-44.36,2.33], [-43.75,2.33], [-43.75,3.0], [-44.36,3.0], [-44.36,2.33]]] }
+            },
+            { // 3. Piauí (Fernando Álvares)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Piauí",
+                    "donatario": "Fernando Álvares de Andrade",
+                    "leguas": "35 (discutido no artigo: 35 léguas, não 75)",
+                    "economia": "Criação de gado no sertão (séculos seguintes). No início: extrativismo.",
+                    "politica": "Nunca efetivamente colonizada na época das capitanias. Limites segundo meridianos.",
+                    "capital": "Oeiras (posteriormente)",
+                    "relacao_portugal": "Donatário não investiu; capitania decadente.",
+                    "lideres": "Fernando Álvares de Andrade (não exerceu).",
+                    "legado": "Tornou-se área de conflito entre criadores de gado e indígenas."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-43.75,2.36], [-40.85,2.36], [-40.85,3.5], [-43.75,3.5], [-43.75,2.36]]] }
+            },
+            { // 4. Ceará
+                "type": "Feature",
+                "properties": {
+                    "nome": "Ceará",
+                    "donatario": "Antônio Cardoso de Barros",
+                    "leguas": "40",
+                    "economia": "Drogas do sertão, algodão. Pecuária posterior.",
+                    "politica": "Capitania pequena (apenas 6 léguas de largura se seguissem paralelos, mas meridiano deu mais área).",
+                    "capital": "Fortaleza (fundada depois, 1726)",
+                    "relacao_portugal": "Donatário era clérigo e nunca veio. Exploração por feitores.",
+                    "lideres": "Antônio Cardoso (bispo de Évora)",
+                    "legado": "Área de resistência indígena (Potiguaras) e depois dos holandeses."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-40.85,2.87], [-38.46,2.87], [-38.46,4.5], [-40.85,4.5], [-40.85,2.87]]] }
+            },
+            { // 5. Rio Grande do Norte 1 (Aires Cunha)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Rio Grande do Norte (lote norte)",
+                    "donatario": "Aires da Cunha",
+                    "leguas": "50 (parte das 100)",
+                    "economia": "Pau-brasil, algodão, pesca.",
+                    "politica": "Ocupação litorânea esparsa. Ataques de indígenas e piratas.",
+                    "capital": "Natal (1599)",
+                    "relacao_portugal": "Capitania abandonada após naufrágio de Aires da Cunha.",
+                    "lideres": "Aires da Cunha",
+                    "legado": "Região dos Potiguaras, depois palco da resistência à ocupação holandesa."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-38.46,3.72], [-36.66,3.72], [-36.66,5.5], [-38.46,5.5], [-38.46,3.72]]] }
+            },
+            { // 6. Rio Grande do Norte 2 (João Barros)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Rio Grande do Norte (lote sul)",
+                    "donatario": "João de Barros",
+                    "leguas": "50",
+                    "economia": "Idêntica ao litoral norte: pau-brasil, agricultura de subsistência.",
+                    "politica": "Faixa de terra na direção norte-sul, limitada pela capitania de Itamaracá.",
+                    "capital": "Natal (compartilhada)",
+                    "relacao_portugal": "João de Barros associou-se a alemães (Welser) para exploração, sem sucesso.",
+                    "lideres": "João de Barros",
+                    "legado": "Conflitos com franceses no século XVI."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-36.66,5.08], [-34.93,5.08], [-34.93,6.68], [-36.66,6.68], [-36.66,5.08]]] }
+            },
+            { // 7. Itamaracá
+                "type": "Feature",
+                "properties": {
+                    "nome": "Itamaracá",
+                    "donatario": "Pero Lopes de Sousa",
+                    "leguas": "30 (lote extra acima de Pernambuco)",
+                    "economia": "Cana-de-açúcar (engenhos modestos), pau-brasil.",
+                    "politica": "Capitania pequena, administrada a partir de São Vicente.",
+                    "capital": "Vila da Conceição de Itamaracá",
+                    "relacao_portugal": "Donatário morreu cedo (naufrágio), irmão Martim Afonso assumiu.",
+                    "lideres": "Pero Lopes, depois Martim Afonso de Sousa",
+                    "legado": "Anexada a Pernambuco posteriormente."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-34.93,6.68], [-34.85,6.68], [-34.85,7.81], [-34.93,7.81], [-34.93,6.68]]] }
+            },
+            { // 8. Pernambuco
+                "type": "Feature",
+                "properties": {
+                    "nome": "Pernambuco",
+                    "donatario": "Duarte Coelho Pereira",
+                    "leguas": "60",
+                    "economia": "Grande produção de açúcar (economia de plantation com mão de obra escrava).",
+                    "politica": "A mais próspera. Organização militar forte contra indígenas e invasores.",
+                    "capital": "Olinda (1537)",
+                    "relacao_portugal": "Sucesso imediato; donatário recebeu foral e construiu engenhos com apoio da Coroa.",
+                    "lideres": "Duarte Coelho, Jerônimo de Albuquerque",
+                    "legado": "Centro econômico do Nordeste colonial, resistência holandesa (séc. XVII)."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-34.85,7.81], [-48.70,7.81], [-48.70,10.50], [-36.40,10.50], [-34.85,7.81]]] }
+            },
+            { // 9. Bahia
+                "type": "Feature",
+                "properties": {
+                    "nome": "Bahia",
+                    "donatario": "Francisco Pereira Coutinho",
+                    "leguas": "50",
+                    "economia": "Cana, tabaco, pecuária. Mais tarde capital-geral.",
+                    "politica": "Donatário morto por indígenas. Capitania devolvida à Coroa em 1549.",
+                    "capital": "Salvador (1549 - sede do Governo-Geral)",
+                    "relacao_portugal": "Fracasso da iniciativa privada; Coroa assume e cria o Estado do Brasil.",
+                    "lideres": "Francisco Pereira Coutinho (donatário), Tomé de Sousa (1º governador-geral)",
+                    "legado": "Primeira capital do Brasil, centro político e religioso até 1763."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-36.40,-10.50], [-48.70,-10.50], [-48.70,-13.14], [-38.81,-13.14], [-36.40,-10.50]]] }
+            },
+            { // 10. Ilhéus
+                "type": "Feature",
+                "properties": {
+                    "nome": "Ilhéus",
+                    "donatario": "Jorge de Figueiredo Correia",
+                    "leguas": "50",
+                    "economia": "Cana-de-açúcar, madeiras, algodão.",
+                    "politica": "Conflitos com aimorés e franceses. Pouca duração.",
+                    "capital": "São Jorge dos Ilhéus (1534)",
+                    "relacao_portugal": "Donatário não obteve retorno; abandonada.",
+                    "lideres": "Jorge de Figueiredo Correia",
+                    "legado": "Mais tarde integrada à capitania da Bahia."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-38.81,-13.14], [-48.70,-13.14], [-48.70,-15.65], [-38.95,-15.65], [-38.81,-13.14]]] }
+            },
+            { // 11. Porto Seguro
+                "type": "Feature",
+                "properties": {
+                    "nome": "Porto Seguro",
+                    "donatario": "Pedro do Campo Tourinho",
+                    "leguas": "50",
+                    "economia": "Agricultura de subsistência, poucos engenhos.",
+                    "politica": "Administração desorganizada; ataques de índios tupiniquins.",
+                    "capital": "Porto Seguro",
+                    "relacao_portugal": "Donatário preso por dívidas; capitania recolhida pela Coroa.",
+                    "lideres": "Pedro do Campo Tourinho",
+                    "legado": "Célebre pelo descobrimento do Brasil (1500)."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-38.95,-15.65], [-48.70,-15.65], [-48.70,-18.09], [-39.56,-18.09], [-38.95,-15.65]]] }
+            },
+            { // 12. Espírito Santo
+                "type": "Feature",
+                "properties": {
+                    "nome": "Espírito Santo",
+                    "donatario": "Vasco Fernandes Coutinho",
+                    "leguas": "50",
+                    "economia": "Cana-de-açúcar e mandioca. Portos importantes.",
+                    "politica": "Constantes ataques de índios Goitacás. Donatário morreu em combate.",
+                    "capital": "Vitória (1551)",
+                    "relacao_portugal": "Sobreviveu precariamente, depois anexada ao Rio de Janeiro.",
+                    "lideres": "Vasco Fernandes Coutinho, seu filho homônimo",
+                    "legado": "Única capitania do sul que guardou o nome original até hoje (estado do ES)."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-39.56,-18.09], [-48.70,-18.09], [-48.70,-21.00], [-40.81,-21.00], [-39.56,-18.09]]] }
+            },
+            { // 13. São Tomé (Pero de Góis)
+                "type": "Feature",
+                "properties": {
+                    "nome": "São Tomé",
+                    "donatario": "Pero de Góis da Silveira",
+                    "leguas": "30 (a menor)",
+                    "economia": "Culturas de roça, poucos recursos.",
+                    "politica": "Conflito de limites com São Vicente. Donatário não investiu.",
+                    "capital": "São Tomé (atual São Francisco do Itabapoana)",
+                    "relacao_portugal": "Capitania extinta rapidamente.",
+                    "lideres": "Pero de Góis",
+                    "legado": "Área depois incorporada ao Rio de Janeiro."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-40.81,-21.00], [-48.70,-21.00], [-48.70,-22.38], [-41.78,-22.38], [-40.81,-21.00]]] }
+            },
+            { // 14. São Vicente (lote 1, Martim Afonso)
+                "type": "Feature",
+                "properties": {
+                    "nome": "São Vicente (lote norte)",
+                    "donatario": "Martim Afonso de Sousa",
+                    "leguas": "55 (lote 1)",
+                    "economia": "Cana-de-açúcar (primeiros engenhos do Brasil), comércio de escravos.",
+                    "politica": "Vila de São Vicente fundada em 1532 (primeiro município brasileiro).",
+                    "capital": "São Vicente",
+                    "relacao_portugal": "Donatário era amigo do rei e líder da expedição colonizadora.",
+                    "lideres": "Martim Afonso, Brás Cubas",
+                    "legado": "Berço da colonização no Sudeste. Emancipou Santos e SP."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-41.78,-22.38], [-48.70,-22.38], [-48.70,-23.71], [-45.43,-23.71], [-41.78,-22.38]]] }
+            },
+            { // 15. Santo Amaro (Pero Lopes)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Santo Amaro",
+                    "donatario": "Pero Lopes de Sousa",
+                    "leguas": "10 (lote encravado)",
+                    "economia": "Pequena produção agrícola. Porto de Santos (início).",
+                    "politica": "Enclave dentro de São Vicente. Nunca se desenvolveu.",
+                    "capital": "Santo Amaro (atual bairro de SP)",
+                    "relacao_portugal": "Donatário morreu cedo; terras de seu irmão.",
+                    "lideres": "Pero Lopes de Sousa",
+                    "legado": "Absorvida pela capitania de São Vicente."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-45.43,-23.71], [-48.70,-23.71], [-48.70,-23.86], [-46.13,-23.86], [-45.43,-23.71]]] }
+            },
+            { // 16. São Vicente (lote 2, Martim Afonso)
+                "type": "Feature",
+                "properties": {
+                    "nome": "São Vicente (lote sul)",
+                    "donatario": "Martim Afonso de Sousa",
+                    "leguas": "45",
+                    "economia": "Pecuária, trigo, cana nos planaltos (São Paulo de Piratininga).",
+                    "politica": "Caminho para o planalto. Fundação de São Paulo (1554).",
+                    "capital": "São Vicente e depois São Paulo",
+                    "relacao_portugal": "Capitania que mais prosperou no Sul, origem dos bandeirantes.",
+                    "lideres": "Martim Afonso, João Ramalho, padre Manuel da Nóbrega",
+                    "legado": "Expansão paulista para o interior e para as minas de ouro."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-46.13,-23.86], [-48.70,-23.86], [-48.70,-25.55], [-48.36,-25.55], [-46.13,-23.86]]] }
+            },
+            { // 17. Santana (Pero Lopes)
+                "type": "Feature",
+                "properties": {
+                    "nome": "Santana",
+                    "donatario": "Pero Lopes de Sousa",
+                    "leguas": "40 (lote extremo sul)",
+                    "economia": "Criação de gado, erva-mate (mais tarde).",
+                    "politica": "Limite sul em 28° 1/3 (Laguna/SC), próximo à linha de Tordesilhas.",
+                    "capital": "Não houve povoamento efetivo na época",
+                    "relacao_portugal": "Terras abandonadas, ocupadas por jesuítas e espanhóis.",
+                    "lideres": "Pero Lopes",
+                    "legado": "Região contestada com a Espanha; origem da disputa pela Colônia do Sacramento."
+                },
+                "geometry": { "type": "Polygon", "coordinates": [[[-48.36,-25.55], [-48.70,-25.55], [-48.70,-28.33], [-48.36,-28.33], [-48.36,-25.55]]] }
+            }
+        ]
+    };
+
+    // Inicializar o mapa
+    var map = L.map('map').setView([-12, -44], 4.5);
+    
+    // Tile sutil para fundo histórico
+    L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> & CartoDB',
+        subdomains: 'abcd',
+        maxZoom: 9,
+        minZoom: 4,
+        className: 'map-tiles'
+    }).addTo(map);
+    
+    // Adicionar linha de Tordesilhas (meridiano 48,7° W)
+    var todesilhasLine = [
+        [-36, -48.7],
+        [10, -48.7]
+    ];
+    L.polyline(todesilhasLine, { color: '#c9a03d', weight: 2, dashArray: '8, 6', opacity: 0.7 }).addTo(map).bindPopup('Meridiano de Tordesilhas (48,7° W)');
+    
+    // Adicionar as capitanias no mapa
+    const capitaniaLayer = L.geoJSON(capitaniasGeoJSON, {
+        style: function(feature) {
+            return {
+                color: '#2c5a2e',
+                weight: 1.5,
+                fillColor: '#5a8f4c',
+                fillOpacity: 0.65,
+                opacity: 0.9
+            };
+        },
+        onEachFeature: function(feature, layer) {
+            const p = feature.properties;
+            // Conteúdo do pop-up (rápido)
+            layer.bindPopup(`
+                <b style="font-size:1.1rem;">${p.nome}</b><br>
+                <i class="fas fa-user-tie"></i> <b>Donatário:</b> ${p.donatario}<br>
+                <i class="fas fa-chart-line"></i> <b>Economia:</b> ${p.economia}<br>
+                <i class="fas fa-landmark"></i> <b>Capital histórica:</b> ${p.capital}<br>
+                <button onclick="showFullInfo('${p.nome.replace(/'/g, "\\'")}', '${p.donatario.replace(/'/g, "\\'")}', '${p.economia.replace(/'/g, "\\'")}', '${p.politica.replace(/'/g, "\\'")}', '${p.capital.replace(/'/g, "\\'")}', '${p.relacao_portugal.replace(/'/g, "\\'")}', '${p.lideres.replace(/'/g, "\\'")}', '${p.legado.replace(/'/g, "\\'")}')" style="background:#c9a03d; border:none; margin-top:6px; padding:4px 10px; border-radius:14px; cursor:pointer;">📖 Detalhes completos</button>
+            `, { maxWidth: 260 });
+            
+            layer.on('click', function() {
+                showFullInfo(p.nome, p.donatario, p.economia, p.politica, p.capital, p.relacao_portugal, p.lideres, p.legado);
+            });
+        }
+    }).addTo(map);
+    
+    // Função para exibir informações completas no painel direito (estilo "pop-up fixo")
+    window.showFullInfo = function(nome, donatario, economia, politica, capital, relacao, lideres, legado) {
+        const panel = document.getElementById('infoPanel');
+        panel.innerHTML = `
+            <h2><i class="fas fa-flag-checkered"></i> ${nome}</h2>
+            <p><span class="badge"><i class="fas fa-user"></i> Donatário</span> ${donatario}</p>
+            <p><span class="badge"><i class="fas fa-coins"></i> Economia</span> ${economia}</p>
+            <p><span class="badge"><i class="fas fa-gavel"></i> Política/Administração</span> ${politica}</p>
+            <p><span class="badge"><i class="fas fa-city"></i> Capital/Vila principal</span> <span class="capital">${capital}</span></p>
+            <p><span class="badge"><i class="fas fa-link"></i> Relação com Portugal</span> ${relacao}</p>
+            <p><span class="badge"><i class="fas fa-crown"></i> Principais lideranças</span> ${lideres}</p>
+            <p><span class="badge"><i class="fas fa-history"></i> Legado histórico</span> ${legado}</p>
+            <button class="btn-voltar" onclick="resetHighlight()"><i class="fas fa-arrow-left"></i> Voltar ao resumo geral</button>
+        `;
+    };
+    
+    window.resetHighlight = function() {
+        const panel = document.getElementById('infoPanel');
+        panel.innerHTML = `
+            <h2><i class="fas fa-info-circle"></i> Sobre as Capitanias</h2>
+            <p>Clique em qualquer capitania no mapa para ver detalhes históricos: economia, política, líderes, relação com Portugal e legado.</p>
+            <p><span class="badge">📌</span> Base cartográfica: <strong>Figura 10</strong> do artigo <em>"Reconstruindo o mapa das capitanias hereditárias"</em> (2013).</p>
+            <p><span class="badge">🗺️</span> As linhas divisórias seguem as regras originais das Cartas de Doação: ao Norte usam <strong>meridianos</strong>; ao Centro <strong>paralelos</strong>; ao Sul direção <strong>noroeste</strong>.</p>
+            <div style="margin-top: 25px; border-top: 1px solid #2a4b5e; padding-top: 12px;">
+                <i class="fas fa-globe-americas"></i> <strong>Linha de Tordesilhas</strong> (meridiano 48,7° W) — limite oeste teórico.<br>
+                <i class="fas fa-water"></i> Terras não distribuídas ao norte (atual litoral do Pará).
+            </div>
+            <button class="btn-voltar" onclick="resetHighlight()"><i class="fas fa-undo-alt"></i> Limpar seleção</button>
+        `;
+    };
+    
+    // Ajuste menor para garantir zoom correto
+    setTimeout(() => { map.invalidateSize(); }, 200);
+</script>
+</body>
+</html>
