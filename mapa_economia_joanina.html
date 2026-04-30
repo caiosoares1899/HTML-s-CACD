@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Mapa interativo da economia no Brasil Joanino (1808-1821) — Abertura dos Portos, produção regional e transformações econômicas. Material de estudo para o CACD.">
-<meta name="keywords" content="CACD, Brasil Joanino, economia, D. João VI, período joanino, abertura dos portos, algodão, açúcar, mineração, história do Brasil">
-<meta name="author" content="CACD Study">
-<meta property="og:title" content="Brasil Joanino — Mapa da Economia (1808-1821) — CACD">
-<meta property="og:description" content="Mapa interativo da economia no período da Corte Portuguesa no Rio de Janeiro. Clique nas capitanias para ver produtos, contexto histórico e repercussões.">
+<meta name="description" content="Mapa interativo da economia no Brasil Joanino (1808-1821) — cada estado colorido conforme sua produção principal.">
 <title>Brasil Joanino — Mapa da Economia (1808-1821)</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,15 +12,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
-:root{--bg:#0a0906;--surface:#141210;--surface2:#1a1814;--border:#2e2a22;--gold:#c9a84c;--gold-light:#e8c97a;--cream:#f0e8d8;--muted:#8a7f6e;--text:#d8cfc0;--text-sm:#b0a898}
-*{box-sizing:border-box;margin:0;padding:0}
-html{height:100%}
+:root{--bg:#0a0906;--surface:#141210;--surface2:#1a1814;--border:#2e2a22;--gold:#c9a84c;--gold-light:#e8c97a;--cream:#f0e8d8;--muted:#8a7f6e;--text:#d8cfc0}
+*{margin:0;padding:0;box-sizing:border-box}
 body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans',sans-serif;font-weight:300;color:var(--text);background:var(--bg);overflow:hidden}
 .header{flex-shrink:0;padding:11px 22px 9px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .header-left .tag{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.25em;color:var(--gold);text-transform:uppercase}
 .header-left h1{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--cream);margin-top:1px}
+.disclaimer{font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--muted);background:rgba(0,0,0,.4);padding:4px 10px;border-radius:20px;margin-left:10px}
 .filters{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
-.filter-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-right:2px}
+.filter-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
 .produto-btn{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:2px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s}
 .produto-btn.active{background:rgba(201,168,76,.12);border-color:var(--gold);color:var(--gold)}
 .main{flex:1;display:flex;min-height:0}
@@ -32,35 +28,34 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
 .leaflet-container{background:#0d1520!important}
 .leaflet-control-zoom a{background:var(--surface)!important;color:var(--gold)!important;border-color:var(--border)!important}
 .leaflet-control-attribution{display:none!important}
-.sidebar{width:260px;flex-shrink:0;background:var(--surface2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar{width:280px;flex-shrink:0;background:var(--surface2);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .sidebar-head{padding:9px 14px;border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);flex-shrink:0}
-.sidebar-count{font-size:9px;color:var(--muted);float:right;letter-spacing:0}
+.sidebar-count{font-size:9px;color:var(--muted);float:right}
 .sidebar-list{overflow-y:auto;flex:1}
 .si{padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s;display:flex;align-items:flex-start;gap:8px}
 .si:hover{background:rgba(201,168,76,.05)}
-.si.hidden{display:none}
 .si-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.si-name{font-size:11.5px;color:var(--cream);font-weight:500;line-height:1.3}
-.si-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.si-name{font-size:11.5px;color:var(--cream);font-weight:500}
+.si-sub{font-size:9px;color:var(--muted);margin-top:2px}
 .overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
-.popup{background:var(--surface);border:1px solid var(--border);border-radius:3px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 40px 100px rgba(0,0,0,.8);animation:popIn .18s ease}
-@keyframes popIn{from{opacity:0;transform:scale(.95) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.popup-close{position:absolute;top:13px;right:14px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:17px;line-height:1;z-index:2}
+.popup{background:var(--surface);border:1px solid var(--border);border-radius:3px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto;position:relative;animation:popIn .18s ease}
+@keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
+.popup-close{position:absolute;top:13px;right:14px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:17px}
 .popup-close:hover{color:var(--cream)}
 .popup-top{padding:18px 44px 14px 20px;border-bottom:1px solid var(--border)}
 .p-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:2px 7px;border-radius:2px;display:inline-block;margin-bottom:9px}
-.p-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--cream);line-height:1.2;margin-bottom:5px}
-.p-meta{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.p-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--cream)}
+.p-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:14px}
 .p-meta span{color:var(--gold-light)}
 .popup-grid{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pbox{border:1px solid var(--border);border-radius:2px;padding:11px 13px;background:rgba(255,255,255,.015)}
+.pbox{border:1px solid var(--border);border-radius:2px;padding:11px 13px}
 .pbox.full{grid-column:1/-1}
 .pbox h3{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.pbox p{font-size:12px;line-height:1.65;color:var(--text);margin:0}
-.produto-list{list-style:none;margin:0;padding:0}
+.pbox p{font-size:12px;line-height:1.65;color:var(--text)}
+.produto-list{list-style:none;padding:0;margin:0}
 .produto-list li{font-size:12px;color:var(--gold-light);margin-bottom:3px}
-.cacd-tooltip{background:#1a1814!important;border:1px solid #2e2a22!important;color:#f0e8d8!important;font-family:'IBM Plex Sans',sans-serif!important;border-radius:2px!important;box-shadow:0 4px 20px rgba(0,0,0,.6)!important;padding:7px 12px!important;font-size:14px!important}
+.footer-note{position:fixed;bottom:8px;left:8px;right:8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--muted);background:rgba(10,9,6,.7);padding:4px 8px;border-radius:12px;z-index:1000;pointer-events:none}
 @media(max-width:700px){.sidebar{display:none}.popup-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -72,13 +67,13 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
     <h1>🇧🇷 Brasil Joanino — Economia & Produção (1808–1821)</h1>
   </div>
   <div class="filters">
-    <span class="filter-label">Produto:</span>
+    <span class="filter-label">Filtrar:</span>
     <button class="produto-btn active" id="btn-all" onclick="filter('all')">Todos</button>
     <button class="produto-btn" id="btn-algodao" style="color:#e0ac69;border-color:#e0ac6955">🧶 Algodão</button>
     <button class="produto-btn" id="btn-acucar" style="color:#b3863c;border-color:#b3863c55">🍬 Açúcar/Tabaco</button>
-    <button class="produto-btn" id="btn-pecuaria" style="color:#a57047;border-color:#a5704755">🐂 Pecuária/Charque</button>
+    <button class="produto-btn" id="btn-pecuaria" style="color:#a57047;border-color:#a5704755">🐂 Pecuária</button>
     <button class="produto-btn" id="btn-mineracao" style="color:#cfb27c;border-color:#cfb27c55">⛏️ Mineração</button>
-    <button class="produto-btn" id="btn-extrativo" style="color:#76b852;border-color:#76b85255">🌿 Drogas do Sertão</button>
+    <button class="produto-btn" id="btn-extrativo" style="color:#76b852;border-color:#76b85255">🌿 Extrativismo</button>
     <button class="produto-btn" id="btn-mate" style="color:#82b366;border-color:#82b36655">🧉 Erva-mate</button>
     <button class="produto-btn" id="btn-baleia" style="color:#5f9ea0;border-color:#5f9ea055">🐋 Caça à Baleia</button>
   </div>
@@ -98,7 +93,7 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
     <div class="popup-top">
       <div class="p-tag" id="p-tag"></div>
       <div class="p-title" id="p-title"></div>
-      <div class="p-meta"><div>📅 <span id="p-periodo">1808–1821</span></div><div>📍 <span id="p-loc"></span></div></div>
+      <div class="p-meta"><div>📅 <span>1808–1821</span></div><div>📍 <span id="p-loc"></span></div></div>
     </div>
     <div class="popup-grid">
       <div class="pbox full"><h3>🏭 Produtos principais</h3><ul class="produto-list" id="p-produtos"></ul></div>
@@ -109,186 +104,121 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
   </div>
 </div>
 
+<div class="footer-note">
+  ⚠️ Nota histórica: O mapa utiliza as divisas atuais dos estados brasileiros como ferramenta de representação. No período Joanino (1808-1821), a organização territorial era baseada nas Capitanias Hereditárias e Capitanias Gerais, com fronteiras diferentes das atuais.
+</div>
+
 <script>
 // ==============================================================
-// DADOS ECONÔMICOS DO BRASIL JOANINO
+// DADOS ECONÔMICOS COM CORES PARA CADA ESTADO
 // ==============================================================
 const dadosEconomicos = {
-    "AM": { 
-        nome: "Capitania do Rio Negro / Amazonas", 
-        produtos: ["Drogas do Sertão (cacau, cravo, canela)", "Salsaparrilha", "Guaraná"], 
-        grupo: "extrativo", cor: "#76b852", 
-        descricao: "As 'drogas do sertão' entraram em declínio devido à concorrência asiática, mas o extrativismo ainda abastecia o mercado interno e a farmacopeia colonial. A Coroa incentivou expedições científicas e a navegação pelo Rio Amazonas para consolidar fronteiras.", 
-        extra: "Viajantes naturalistas como Alexandre Rodrigues Ferreira documentaram a riqueza botânica. A abertura dos portos facilitou o escoamento de alguns produtos para a Europa.",
-        pext: "A Amazônia despertava cobiça internacional. Portugal temia que potências estrangeiras (Inglaterra, França) estabelecessem bases na região. A presença da Corte no Rio reforçou a necessidade de ocupação efetiva da Amazônia."
-    },
-    "MA": { 
-        nome: "Maranhão", 
-        produtos: ["Algodão (Rei Algodão)", "Arroz", "Couro"], 
-        grupo: "algodao", cor: "#e0ac69", 
-        descricao: "O 'Rei Algodão' reinava absoluto: algodão de fibra longa exportado para a Inglaterra e teares britânicos. Arroz também se destacava como cultura complementar. A Companhia de Comércio do Grão-Pará e Maranhão estimulou a produção.", 
-        extra: "Com a Abertura dos Portos (1808), o escoamento direto para a Europa explodiu, modernizando a elite agrária maranhense.",
-        pext: "O algodão maranhense abastecia diretamente a Revolução Industrial inglesa. A abertura dos portos beneficiou enormemente a região, que passou a negociar diretamente com Liverpool, gerando atritos com comerciantes portugueses."
-    },
-    "CE": { 
-        nome: "Ceará", 
-        produtos: ["Pecuária", "Couro", "Charque"], 
-        grupo: "pecuaria", cor: "#c49a6c", 
-        descricao: "A economia baseava-se na criação extensiva de gado, fornecendo couro, carne-seca e animais de tração para as minas do Sudeste e para o abastecimento interno. As charqueadas cearenses abasteciam principalmente o mercado nordestino.", 
-        extra: "Grandes fazendas de gado no sertão e no litoral; o sal também teve relevância para conservação de alimentos.",
-        pext: "O charque cearense competia com o produto platino (Argentina e Uruguai). As relações com o Prata eram tensas, e D. João VI usou tarifas para proteger a produção nacional."
-    },
-    "RN": { 
-        nome: "Rio Grande do Norte", 
-        produtos: ["Sal marinho", "Pecuária", "Algodão"], 
-        grupo: "algodao", cor: "#d9b48b", 
-        descricao: "Salinas naturais produziam sal para conservação de carnes e pescado. O algodão ganhou espaço, e a pecuária caprina/ovina complementava a economia. Importante fornecedor de charque para outras regiões.", 
-        extra: "Com a corte no Rio, a demanda por sal e carne seca aumentou consideravelmente.",
-        pext: "O sal do RN era essencial para a indústria da pesca e conservação — produto estratégico para o abastecimento da Corte."
-    },
-    "PB": { 
-        nome: "Paraíba", 
-        produtos: ["Algodão", "Cana-de-açúcar", "Mandioca"], 
-        grupo: "algodao", cor: "#e0ac69", 
-        descricao: "Zona da Mata com pequenos engenhos de açúcar e tabaco; o algodão tornou-se cada vez mais expressivo no início do século XIX. Mandioca para farinha de subsistência.", 
-        extra: "Região de transição entre canaviais pernambucanos e sertão paraibano.",
-        pext: "A Paraíba se beneficiou da alta dos preços do algodão no mercado internacional, intensificando o comércio com a Inglaterra."
-    },
-    "PE": { 
-        nome: "Pernambuco", 
-        produtos: ["Cana-de-açúcar (novos engenhos)", "Tabaco", "Algodão"], 
-        grupo: "acucar", cor: "#b3863c", 
-        descricao: "Após crise do açúcar, novos engenhos (com tecnologia mais eficiente) renovaram a lavoura canavieira. Tabaco de corda e algodão complementavam. Recife tornou-se um dos maiores portos do Império, escoando açúcar e algodão.", 
-        extra: "Revolução Pernambucana de 1817 refletiu o descontentamento com os impostos e a influência britânica, mas também a força econômica local.",
-        pext: "O porto do Recife era estratégico para os interesses britânicos no Atlântico Sul. A Revolução de 1817 alarmou a Inglaterra, que temia perder influência na região."
-    },
-    "BA": { 
-        nome: "Bahia", 
-        produtos: ["Cana-de-açúcar", "Tabaco (fumo de corda)", "Mandioca", "Azeite de dendê"], 
-        grupo: "acucar", cor: "#b3863c", 
-        descricao: "Principal região produtora de açúcar e tabaco do período colonial tardio. Salvador era um dos maiores centros urbanos e porto atlântico vital. O cultivo de dendê e algodão também se destacava, com forte presença de mão de obra escravizada.", 
-        extra: "Casa da moeda e fundição instaladas; relação comercial intensa com a África.",
-        pext: "Salvador era o elo comercial com a África (tráfico de escravizados). A pressão inglesa pelo fim do tráfico afetou diretamente a economia baiana, gerando atritos diplomáticos."
-    },
-    "MG": { 
-        nome: "Minas Gerais", 
-        produtos: ["Mineração (ouro e diamantes declinantes)", "Agricultura de subsistência", "Pecuária", "Manufaturas"], 
-        grupo: "mineracao", cor: "#cfb27c", 
-        descricao: "Capitania mais populosa do Brasil Joanino. A mineração ainda produzia, mas em franco declínio. O governo joanino estimulou manufaturas (Fábrica de Ferro Patriótica, tecelagem) e a diversificação agrícola. A pecuária e a produção de gêneros alimentícios supríam as vilas mineradoras.", 
-        extra: "Vila Rica (atual Ouro Preto) foi centro cultural e intelectual; várias tentativas de fomento industrial surgiram com a Corte.",
-        pext: "Minas era o coração econômico da colônia. A decadência da mineração preocupava Portugal, que via diminuir sua principal fonte de riqueza. D. João VI tentou reverter o quadro com incentivos industriais."
-    },
-    "SP": { 
-        nome: "São Paulo", 
-        produtos: ["Açúcar (Piracicaba e oeste)", "Tropeirismo", "Algodão"], 
-        grupo: "acucar", cor: "#b3863c", 
-        descricao: "Após o colapso da produção no planalto (antigos engenhos como São Domingos), Piracicaba consolidou-se como hub de tropeiros e novos engenhos de açúcar. A região tornou-se elo entre o sul, as minas e o porto de Santos. O comércio de mulas e tropas impulsionou a economia paulista.", 
-        extra: "Caminho para o sul e para o mercado platino; foco na logística e abastecimento.",
-        pext: "A posição geográfica de SP conectava o Prata ao Sudeste. A importância do tropeirismo na integração econômica regional era crucial para a coesão do território."
-    },
-    "PR": { 
-        nome: "Paraná (parte da Capitania de São Paulo até 1853)", 
-        produtos: ["Erva-mate", "Madeira", "Pecuária"], 
-        grupo: "mate", cor: "#82b366", 
-        descricao: "A erva-mate era o grande motor econômico do interior paranaense, utilizada como moeda de troca e consumida extensivamente no sul do Brasil e nas Províncias do Prata. O mate era escoado pelos portos de Paranaguá e Antonina.", 
-        extra: "O tropeirismo de erva-mate conectava o sul à Corte; a planta era chamada de 'ouro verde'.",
-        pext: "O comércio de erva-mate com o Prata era intenso, mas sujeito a disputas fronteiriças. A região era zona de influência disputada entre Brasil e Espanha."
-    },
-    "SC": { 
-        nome: "Santa Catarina", 
-        produtos: ["Óleo de Baleia", "Pescado", "Farinha de mandioca"], 
-        grupo: "baleia", cor: "#5f9ea0", 
-        descricao: "Caça à baleia era a principal atividade econômica do litoral catarinense, com armações na Ilha de Santa Catarina. O óleo de baleia era enviado ao Rio de Janeiro para iluminação pública e lubrificação de equipamentos. Pesca e farinha de mandioca complementavam.", 
-        extra: "A Real Armação da Baleia era concessionada pela Coroa e garantia receita significativa.",
-        pext: "O óleo de baleia era estratégico para a iluminação pública da Corte. O controle luso-brasileiro da caça à baleia no Atlântico Sul era parte da política marítima de D. João VI."
-    },
-    "RS": { 
-        nome: "Rio Grande de São Pedro (Rio Grande do Sul)", 
-        produtos: ["Charque", "Couro", "Trigo", "Graxa", "Sebo", "Velas"], 
-        grupo: "pecuaria", cor: "#a57047", 
-        descricao: "Pecuária extensiva nas campinas gaúchas gerava charque (carne seca) abastecendo as regiões Sudeste, inclusive a Corte. Couro, graxa, sebo e velas eram subprodutos valiosos. O cultivo de trigo começava a ensaiar uma produção incipiente no sul.", 
-        extra: "Charqueadas utilizavam mão de obra escravizada. Região de fronteira, com disputas territoriais e intenso trânsito comercial com o Prata.",
-        pext: "A região era disputada com a Espanha (e depois com Argentina e Uruguai). A produção de charque gaúcho competia diretamente com o produto platino — questão central da política externa joanina."
-    },
-    "RJ": { 
-        nome: "Rio de Janeiro (Corte e Capitania)", 
-        produtos: ["Açúcar (Campos dos Goytacazes)", "Café (início da expansão)", "Manufaturas reais"], 
-        grupo: "acucar", cor: "#b37b2e", 
-        descricao: "Sede da Família Real e centro político do Império. O açúcar predominava em Campos, enquanto o café começava a expandir-se pelo Vale do Paraíba. D. João VI fomentou manufaturas têxteis, fábrica de pólvora, ferro e a Imprensa Régia. O porto do Rio tornou-se o mais dinâmico da América do Sul.", 
-        extra: "Abertura dos Portos (1808) e Tratados de Comércio com a Inglaterra transformaram a economia carioca. Surgiram o Banco do Brasil e a Real Junta do Comércio.",
-        pext: "O Rio tornou-se a capital do Império Português (1815). A elevação do Brasil a Reino Unido foi uma jogada diplomática de D. João VI para manter alianças com a Inglaterra e garantir proteção marítima."
-    }
+    "AC": { nome: "Acre (parte da Capitania do Rio Negro)", produtos: ["Drogas do Sertão", "Borracha (início)"], grupo: "extrativo", cor: "#76b852", descricao: "Região amazônica de extrativismo vegetal. As 'drogas do sertão' eram coletadas por populações indígenas e mestiças.", extra: "A região só seria efetivamente ocupada mais tarde, mas já integrava a rota amazônica.", pext: "Fronteira disputada com a Espanha. A exploração de drogas do sertão era estratégica para Portugal." },
+    "AM": { nome: "Capitania do Rio Negro / Amazonas", produtos: ["Drogas do Sertão (cacau, cravo, canela)", "Salsaparrilha", "Guaraná"], grupo: "extrativo", cor: "#76b852", descricao: "As 'drogas do sertão' entraram em declínio devido à concorrência asiática, mas o extrativismo ainda abastecia o mercado interno. A Coroa incentivou expedições científicas e a navegação pelo Rio Amazonas.", extra: "Viajantes naturalistas como Alexandre Rodrigues Ferreira documentaram a riqueza botânica.", pext: "A Amazônia despertava cobiça internacional. Portugal temia que potências estrangeiras estabelecessem bases na região." },
+    "MA": { nome: "Maranhão", produtos: ["Algodão (Rei Algodão)", "Arroz", "Couro"], grupo: "algodao", cor: "#e0ac69", descricao: "O 'Rei Algodão' reinava absoluto: algodão de fibra longa exportado para a Inglaterra. Arroz também se destacava.", extra: "Com a Abertura dos Portos (1808), o escoamento direto para a Europa explodiu.", pext: "O algodão maranhense abastecia diretamente a Revolução Industrial inglesa." },
+    "CE": { nome: "Ceará", produtos: ["Pecuária", "Couro", "Charque"], grupo: "pecuaria", cor: "#c49a6c", descricao: "Economia baseada na criação extensiva de gado, fornecendo couro, carne-seca e animais de tração.", extra: "Grandes fazendas de gado no sertão; o sal também teve relevância.", pext: "O charque cearense competia com o produto platino. D. João VI usou tarifas protecionistas." },
+    "RN": { nome: "Rio Grande do Norte", produtos: ["Sal marinho", "Pecuária", "Algodão"], grupo: "pecuaria", cor: "#d9b48b", descricao: "Salinas naturais produziam sal para conservação. O algodão ganhou espaço, e a pecuária complementava.", extra: "Com a corte no Rio, a demanda por sal e carne seca aumentou.", pext: "O sal era essencial para a indústria da pesca e conservação — produto estratégico." },
+    "PB": { nome: "Paraíba", produtos: ["Algodão", "Cana-de-açúcar", "Mandioca"], grupo: "algodao", cor: "#e0ac69", descricao: "Zona da Mata com pequenos engenhos de açúcar; o algodão tornou-se cada vez mais expressivo.", extra: "Região de transição entre canaviais pernambucanos e sertão paraibano.", pext: "Beneficiou-se da alta dos preços do algodão no mercado internacional." },
+    "PE": { nome: "Pernambuco", produtos: ["Cana-de-açúcar (novos engenhos)", "Tabaco", "Algodão"], grupo: "acucar", cor: "#b3863c", descricao: "Novos engenhos renovaram a lavoura canavieira. Recife tornou-se um dos maiores portos do Império.", extra: "Revolução Pernambucana de 1817 refletiu o descontentamento fiscal e político.", pext: "O porto do Recife era estratégico para os interesses britânicos no Atlântico Sul." },
+    "AL": { nome: "Alagoas", produtos: ["Cana-de-açúcar", "Algodão", "Pecuária"], grupo: "acucar", cor: "#b3863c", descricao: "Região de transição entre a zona canavieira pernambucana e o sertão. Pequenos engenhos predominavam.", extra: "Maceió começava a ganhar importância como porto secundário.", pext: "A produção açucareira alagoana integrava o complexo nordestino voltado à exportação." },
+    "SE": { nome: "Sergipe", produtos: ["Cana-de-açúcar", "Algodão", "Pecuária"], grupo: "acucar", cor: "#b3863c", descricao: "Produção canavieira modesta comparada à Bahia e Pernambuco, mas relevante localmente.", extra: "O Rio São Francisco era importante via de integração com o sertão.", pext: "Região periférica da economia açucareira, mas integrada ao mercado baiano." },
+    "BA": { nome: "Bahia", produtos: ["Cana-de-açúcar", "Tabaco (fumo de corda)", "Azeite de dendê"], grupo: "acucar", cor: "#b3863c", descricao: "Principal região produtora de açúcar e tabaco do período colonial. Salvador era um dos maiores portos atlânticos.", extra: "Casa da moeda e fundição instaladas; relação comercial intensa com a África.", pext: "Salvador era o elo comercial com a África. A pressão inglesa pelo fim do tráfico afetou a economia baiana." },
+    "MG": { nome: "Minas Gerais", produtos: ["Mineração (ouro e diamantes declinantes)", "Agricultura de subsistência", "Pecuária"], grupo: "mineracao", cor: "#cfb27c", descricao: "Capitania mais populosa. A mineração ainda produzia, mas em declínio. D. João VI estimulou manufaturas.", extra: "Vila Rica foi centro cultural. Fábrica de Ferro Patriótica e outras manufaturas surgiram.", pext: "Minas era o coração econômico. A decadência da mineração preocupava Portugal." },
+    "ES": { nome: "Espírito Santo", produtos: ["Açúcar", "Mandioca", "Pecuária"], grupo: "acucar", cor: "#b3863c", descricao: "Economia modesta, com pequenos engenhos de açúcar e produção de alimentos para abastecimento interno.", extra: "A região servia de conexão entre Minas Gerais e o litoral.", pext: "Porto de Vitória era secundário, mas estratégico para o escoamento mineiro." },
+    "RJ": { nome: "Rio de Janeiro (Corte e Capitania)", produtos: ["Açúcar (Campos)", "Café (início)", "Manufaturas reais"], grupo: "acucar", cor: "#b37b2e", descricao: "Sede da Família Real. O açúcar predominava em Campos, enquanto o café começava a expandir-se.", extra: "Abertura dos Portos (1808) transformou a economia. Banco do Brasil e Imprensa Régia foram criados.", pext: "O Rio tornou-se capital do Império Português (1815)." },
+    "SP": { nome: "São Paulo", produtos: ["Açúcar (Piracicaba)", "Tropeirismo", "Algodão"], grupo: "acucar", cor: "#b3863c", descricao: "Piracicaba consolidou-se como hub de tropeiros e novos engenhos de açúcar. Elo entre sul, minas e Santos.", extra: "Caminho para o sul e para o mercado platino; foco na logística.", pext: "Posição geográfica conectava o Prata ao Sudeste. Tropeirismo era crucial para coesão territorial." },
+    "PR": { nome: "Paraná (parte de SP até 1853)", produtos: ["Erva-mate", "Madeira", "Pecuária"], grupo: "mate", cor: "#82b366", descricao: "Erva-mate era o motor econômico, usada como moeda de troca e consumida no sul e no Prata.", extra: "Tropeirismo de mate conectava o sul à Corte; chamada de 'ouro verde'.", pext: "Comércio de mate com o Prata era intenso, mas sujeito a disputas fronteiriças." },
+    "SC": { nome: "Santa Catarina", produtos: ["Óleo de Baleia", "Pescado", "Farinha"], grupo: "baleia", cor: "#5f9ea0", descricao: "Caça à baleia era a principal atividade. Óleo era enviado ao Rio para iluminação pública.", extra: "Real Armação da Baleia era concessionada pela Coroa.", pext: "Óleo de baleia era estratégico. Controle da caça no Atlântico Sul era política marítima joanina." },
+    "RS": { nome: "Rio Grande de São Pedro", produtos: ["Charque", "Couro", "Trigo", "Graxa", "Sebo"], grupo: "pecuaria", cor: "#a57047", descricao: "Pecuária extensiva gerava charque abastecendo o Sudeste e a Corte.", extra: "Charqueadas usavam mão de obra escravizada. Região de fronteira disputada.", pext: "Região disputada com Espanha. Charque gaúcho competia com produto platino." },
+    "GO": { nome: "Goiás", produtos: ["Mineração (ouro declinante)", "Pecuária", "Agricultura"], grupo: "mineracao", cor: "#cfb27c", descricao: "Mineração em forte declínio. Economia voltava-se para pecuária e agricultura de subsistência.", extra: "Região isolada, com difícil acesso aos centros consumidores.", pext: "O isolamento atrasava o desenvolvimento. Portugal tentava integrar a região." },
+    "MT": { nome: "Mato Grosso", produtos: ["Mineração (ouro)", "Pecuária", "Drogas do Sertão"], grupo: "mineracao", cor: "#cfb27c", descricao: "Mineração aurífera em decadência. Pecuária ganhava importância para abastecimento local.", extra: "Cuiabá era o centro. Extremo isolamento caracterizava a capitania.", pext: "Fronteira com a Espanha. Fortes militares guarneciam a região estratégica." },
+    "PA": { nome: "Grão-Pará", produtos: ["Drogas do Sertão", "Cacau", "Pecuária"], grupo: "extrativo", cor: "#76b852", descricao: "Extrativismo vegetal predominante. Cacau e outras drogas do sertão eram exportadas.", extra: "Belém era o principal porto da Amazônia oriental.", pext: "A região amazônica era cobiçada internacionalmente. Portugal reforçou presença militar." }
 };
 
-// Cores por grupo de produto (legenda)
-const produtoCores = {
-    algodao: "#e0ac69",
-    acucar: "#b3863c", 
-    pecuaria: "#a57047",
-    mineracao: "#cfb27c",
-    extrativo: "#76b852",
-    mate: "#82b366",
-    baleia: "#5f9ea0"
-};
-
-// Coordenadas dos estados
+// Coordenadas dos estados (centro aproximado)
 const coordsEstados = {
-    "AM": [-3.47, -62.0], "MA": [-5.5, -45.5], "CE": [-5.2, -39.5], "RN": [-5.8, -36.6],
-    "PB": [-7.0, -36.5], "PE": [-8.3, -37.0], "BA": [-12.5, -41.0], "MG": [-18.5, -44.5],
-    "SP": [-22.5, -48.5], "PR": [-24.8, -51.5], "SC": [-27.2, -50.5], "RS": [-30.0, -53.5],
-    "RJ": [-22.2, -42.5]
+    "AC": [-9.0, -70.0], "AM": [-3.47, -62.0], "MA": [-5.5, -45.5], "CE": [-5.2, -39.5],
+    "RN": [-5.8, -36.6], "PB": [-7.0, -36.5], "PE": [-8.3, -37.0], "AL": [-9.6, -36.0],
+    "SE": [-10.9, -37.1], "BA": [-12.5, -41.0], "MG": [-18.5, -44.5], "ES": [-19.5, -40.5],
+    "RJ": [-22.2, -42.5], "SP": [-22.5, -48.5], "PR": [-24.8, -51.5], "SC": [-27.2, -50.5],
+    "RS": [-30.0, -53.5], "GO": [-15.8, -49.8], "MT": [-13.5, -56.0], "PA": [-5.0, -53.0]
 };
+
+let map = null;
+let geoJsonLayer = null;
 
 // Inicializar mapa
-const map = L.map('map', {center: [-14.2, -53.0], zoom: 4, minZoom: 3, maxZoom: 9});
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {subdomains: 'abcd'}).addTo(map);
+function initMap() {
+    map = L.map('map', {center: [-14.2, -53.0], zoom: 4, minZoom: 3, maxZoom: 9});
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {subdomains: 'abcd'}).addTo(map);
+}
 
-// Carregar GeoJSON do IBGE
-let markers = {};
-let ufNames = {};
-
-fetch('https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF')
-    .then(r => r.json())
-    .then(geoJson => {
-        L.geoJSON(geoJson, {
-            style: {fillColor: '#1a2e1e', fillOpacity: .55, color: '#3d6645', weight: .8},
-            onEachFeature: (feature, layer) => {
-                const uf = feature.properties.sigla;
-                if(uf && dadosEconomicos[uf]) {
-                    ufNames[uf] = feature.properties.nome;
+// Carregar GeoJSON e colorir estados
+function loadGeoJSON() {
+    fetch('https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF')
+        .then(response => response.json())
+        .then(geoJson => {
+            if (geoJsonLayer) map.removeLayer(geoJsonLayer);
+            
+            geoJsonLayer = L.geoJSON(geoJson, {
+                style: function(feature) {
+                    const uf = feature.properties.sigla;
                     const dados = dadosEconomicos[uf];
-                    const icon = L.divIcon({
-                        html: `<div style="width:14px;height:14px;border-radius:50%;background:${dados.cor};border:2px solid rgba(255,255,255,.3);box-shadow:0 0 0 2px ${dados.cor}66,0 0 12px ${dados.cor};cursor:pointer;"></div>`,
-                        iconSize: [14,14], iconAnchor: [7,7]
-                    });
-                    const marker = L.marker(coordsEstados[uf], {icon}).addTo(map);
-                    marker.on('click', () => openPopup(uf));
-                    marker.bindTooltip(`<b>${dados.nome}</b><br><span>🎯 ${dados.produtos[0]}</span>`, {direction: 'top', offset: [0,-8], className: 'cacd-tooltip'});
-                    markers[uf] = marker;
+                    return {
+                        fillColor: dados ? dados.cor : "#3d6645",
+                        fillOpacity: 0.75,
+                        color: "#c9a84c",
+                        weight: 0.8,
+                        opacity: 0.5
+                    };
+                },
+                onEachFeature: function(feature, layer) {
+                    const uf = feature.properties.sigla;
+                    if (uf && dadosEconomicos[uf]) {
+                        const dados = dadosEconomicos[uf];
+                        layer.on('click', () => openPopup(uf));
+                        layer.bindTooltip(`${dados.nome}<br><span style="color:${dados.cor}">${dados.produtos[0]}</span>`, {
+                            sticky: true, className: 'cacd-tooltip'
+                        });
+                        // Adicionar marcador central discreto
+                        if (coordsEstados[uf]) {
+                            const marker = L.circleMarker(coordsEstados[uf], {
+                                radius: 3, fillColor: dados.cor, color: "#fff", weight: 1, fillOpacity: 0.8
+                            }).addTo(map);
+                            marker.on('click', (e) => { L.DomEvent.stopPropagation(e); openPopup(uf); });
+                        }
+                    }
                 }
-            }
-        });
-    })
-    .catch(() => {
-        // Fallback: criar marcadores mesmo sem GeoJSON
-        Object.entries(dadosEconomicos).forEach(([uf, dados]) => {
-            const icon = L.divIcon({
-                html: `<div style="width:14px;height:14px;border-radius:50%;background:${dados.cor};border:2px solid #fff3;box-shadow:0 0 0 2px ${dados.cor}66;cursor:pointer;"></div>`,
-                iconSize: [14,14], iconAnchor: [7,7]
+            }).addTo(map);
+            
+            buildSidebar();
+            filter('all');
+        })
+        .catch(error => {
+            console.error("Erro ao carregar GeoJSON:", error);
+            // Fallback: criar círculos coloridos
+            Object.entries(dadosEconomicos).forEach(([uf, dados]) => {
+                if (coordsEstados[uf]) {
+                    const circle = L.circle(coordsEstados[uf], {
+                        radius: uf === "AM" ? 350000 : (uf === "MG" ? 280000 : 180000),
+                        color: dados.cor, weight: 2, fillColor: dados.cor, fillOpacity: 0.6
+                    }).addTo(map);
+                    circle.on('click', () => openPopup(uf));
+                    circle.bindTooltip(`${dados.nome}<br>${dados.produtos[0]}`, {className: 'cacd-tooltip'});
+                }
             });
-            const marker = L.marker(coordsEstados[uf], {icon}).addTo(map);
-            marker.on('click', () => openPopup(uf));
-            marker.bindTooltip(`<b>${dados.nome}</b><br><span>🎯 ${dados.produtos[0]}</span>`, {className: 'cacd-tooltip'});
-            markers[uf] = marker;
+            buildSidebar();
+            filter('all');
         });
-    });
+}
 
-// Construir sidebar
+// Construir sidebar com lista de estados
 function buildSidebar() {
     const sl = document.getElementById('slist');
     sl.innerHTML = '';
     const total = Object.keys(dadosEconomicos).length;
     document.getElementById('count').textContent = total;
+    
     Object.entries(dadosEconomicos).forEach(([uf, dados]) => {
         const div = document.createElement('div');
         div.className = 'si';
@@ -302,45 +232,62 @@ function buildSidebar() {
     });
 }
 
+// Abrir popup com informações detalhadas
 function openPopup(uf) {
     const d = dadosEconomicos[uf];
-    if(!d) return;
-    const $ = id => document.getElementById(id);
-    $('p-tag').textContent = d.grupo.toUpperCase();
-    $('p-tag').style.cssText = `background:${d.cor}22;color:${d.cor};border:1px solid ${d.cor}55`;
-    $('p-title').textContent = d.nome;
-    $('p-loc').textContent = uf;
-    $('p-produtos').innerHTML = d.produtos.map(p => `<li>${p}</li>`).join('');
-    $('p-desc').textContent = d.descricao;
-    $('p-extra').textContent = d.extra;
-    $('p-pext').textContent = d.pext;
+    if (!d) return;
+    
+    document.getElementById('p-tag').textContent = d.grupo.toUpperCase();
+    document.getElementById('p-tag').style.cssText = `background:${d.cor}22;color:${d.cor};border:1px solid ${d.cor}55`;
+    document.getElementById('p-title').textContent = d.nome;
+    document.getElementById('p-loc').textContent = uf;
+    document.getElementById('p-produtos').innerHTML = d.produtos.map(p => `<li>${p}</li>`).join('');
+    document.getElementById('p-desc').textContent = d.descricao;
+    document.getElementById('p-extra').textContent = d.extra;
+    document.getElementById('p-pext').textContent = d.pext;
     document.getElementById('overlay').classList.add('open');
-    if(coordsEstados[uf]) map.panTo(coordsEstados[uf], {animate: true, duration: .5});
+    
+    if (coordsEstados[uf]) map.panTo(coordsEstados[uf], {animate: true, duration: 0.5});
 }
 
 function closePopup() { document.getElementById('overlay').classList.remove('open'); }
-function closeIfBg(e) { if(e.target === document.getElementById('overlay')) closePopup(); }
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closePopup(); });
+function closeIfBg(e) { if (e.target === document.getElementById('overlay')) closePopup(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
+// Filtrar por tipo de produto
 function filter(grupo) {
     document.querySelectorAll('.produto-btn').forEach(b => b.classList.remove('active'));
     const btn = document.getElementById(`btn-${grupo === 'all' ? 'all' : grupo}`);
-    if(btn) btn.classList.add('active');
+    if (btn) btn.classList.add('active');
     
-    let visible = 0;
-    Object.entries(markers).forEach(([uf, m]) => {
-        const dados = dadosEconomicos[uf];
-        const show = grupo === 'all' || dados.grupo === grupo;
-        if(show) { m.addTo(map); visible++; } else m.remove();
-    });
+    // Filtrar sidebar
     document.querySelectorAll('.si').forEach(el => {
         el.classList.toggle('hidden', grupo !== 'all' && el.dataset.grupo !== grupo);
     });
-    document.getElementById('count').textContent = grupo === 'all' ? Object.keys(dadosEconomicos).length : visible;
+    
+    // Filtrar polígonos no mapa
+    if (geoJsonLayer && geoJsonLayer.eachLayer) {
+        geoJsonLayer.eachLayer(layer => {
+            const uf = layer.feature?.properties?.sigla;
+            const dados = uf ? dadosEconomicos[uf] : null;
+            const show = grupo === 'all' || (dados && dados.grupo === grupo);
+            if (show) {
+                if (layer.setStyle) layer.setStyle({ fillOpacity: 0.75 });
+                if (layer._path) layer._path.style.display = '';
+            } else {
+                if (layer.setStyle) layer.setStyle({ fillOpacity: 0 });
+                if (layer._path) layer._path.style.display = 'none';
+            }
+        });
+    }
+    
+    const visibleCount = document.querySelectorAll('.si:not(.hidden)').length;
+    document.getElementById('count').textContent = visibleCount;
 }
 
-buildSidebar();
-filter('all');
+// Inicializar
+initMap();
+loadGeoJSON();
 </script>
 </body>
 </html>
