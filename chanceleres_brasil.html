@@ -19,10 +19,32 @@ body {
   font-size: 13px; line-height: 1.5; display: flex; flex-direction: column;
 }
 .fixed-top { flex-shrink: 0; background: var(--surface2); border-bottom: 2px solid var(--border); z-index: 100; }
-.page-header { padding: 20px 32px 14px; border-bottom: 1px solid var(--border); }
+.page-header { padding: 20px 32px 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
 .page-header .tag { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
 .page-header h1 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--cream); }
 .page-header p { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+.nav-button {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 2px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
+  margin-left: 20px;
+}
+.nav-button:hover {
+  background: rgba(201,168,76,0.1);
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+}
 .filter-bar { padding: 8px 32px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .filter-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; }
 .filter-btn { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 2px; border: 1px solid var(--border); background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s; }
@@ -82,9 +104,12 @@ ul.mini li::marker { color: var(--gold); }
 <body>
 <div class="fixed-top">
   <div class="page-header">
-    <div class="tag">CACD · História do Brasil · Política Externa</div>
-    <h1>Chanceleres &amp; Diplomatas do Brasil</h1>
-    <p>Governadores-Gerais · Ministros do Império · Ministros das Relações Exteriores · Desde 1549 · Origem · Pensamento · Eventos · Parceiros · Tratados · Indicado por · Legado</p>
+    <div>
+      <div class="tag">CACD · História do Brasil · Política Externa</div>
+      <h1>Chanceleres &amp; Diplomatas do Brasil</h1>
+      <p>Governadores-Gerais · Ministros do Império · Ministros das Relações Exteriores · Desde 1549 · Origem · Pensamento · Eventos · Parceiros · Tratados · Indicado por · Legado</p>
+    </div>
+    <a href="presidentes.index.html" class="nav-button">👤 Ver Presidentes</a>
   </div>
   <div class="filter-bar">
     <span class="filter-label">Filtrar por era:</span>
@@ -116,7 +141,7 @@ ul.mini li::marker { color: var(--gold); }
 <tbody>
 
 <!-- ═══════════════════════ COLONIAL ═══════════════════════ -->
-<tr class="era-header"><td colspan="8">⬛ BRASIL COLONIAL — GOVERNADORES-GERAIS E SECRETÁRIOS DE ESTADO (1549–1807)</td></tr>
+<tr class="era-header"><td colspan="8">⬛ BRASIL COLONIAL — GOVERNADORES-GERAIS E SECRETÁRIOS DE ESTADO (1549–1807)</tr>
 
 <tr class="chan-row" data-era="colonial">
   <td class="name-col">
@@ -124,7 +149,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1549 – 1553</span>
     <span class="chan-origin">Portugal</span>
     <span class="era-tag era-col">1º Gov.-Geral</span>
-  </td>
+   </td>
   <td class="col-pens"><span class="tag-pill tag-mer">Mercantilismo</span><br>Colonialismo centralizador. Fundação do aparato administrativo e da parceria Coroa-Igreja como pilares da colonização.</td>
   <td class="col-caract">Fundação de Salvador como 1ª capital. Estruturação do governo colonial, sistema judiciário e milícia. Início da catequização jesuítica como política de Estado.</td>
   <td class="col-eventos"><ul class="mini"><li>Fundação de Salvador (1549) — 1ª capital e sede do Governo-Geral</li><li>Chegada dos jesuítas com Padre Nóbrega — catequese como projeto estatal</li><li>Primeiras negociações com os Tupi — relações de força no território colonial</li></ul></td>
@@ -140,7 +165,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1558 – 1572</span>
     <span class="chan-origin">Portugal</span>
     <span class="era-tag era-col">3º Gov.-Geral</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-mer">Mercantilismo</span><span class="tag-pill tag-mil2">Expansionismo</span><br>Consolidação territorial e expulsão de ameaças estrangeiras. Parceria intensa com os jesuítas.</td>
   <td class="col-caract">Governo mais longo e efetivo do período inicial. Expulsão dos franceses da França Antártica e fundação do Rio de Janeiro. Consolidação do domínio português contra ameaças externas e internas.</td>
   <td class="col-eventos"><ul class="mini"><li>Expulsão dos franceses da Baía de Guanabara (1560–65) — derrota da França Antártica</li><li>Fundação do Rio de Janeiro (1565) — junto com Estácio de Sá</li><li>Guerras contra os Caetés e Aimorés — consolidação do Nordeste colonial</li></ul></td>
@@ -156,7 +181,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1750 – 1777</span>
     <span class="chan-origin">Portugal</span>
     <span class="era-tag era-col">Secretário de Estado</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Iluminismo</span><span class="tag-pill tag-dev">Despotismo Esclarecido</span><br>Reformismo ilustrado aplicado ao Império. Fortalecimento do Estado, expulsão dos jesuítas, modernização administrativa.</td>
   <td class="col-caract">O mais decisivo reformista colonial. Expulsão dos jesuítas (1759), Companhias de Comércio, transferência da capital para o Rio de Janeiro (1763) e o Tratado de Madrid — que definiu o território brasileiro pelo uti possidetis.</td>
   <td class="col-eventos"><ul class="mini"><li>Expulsão dos jesuítas do Brasil e Portugal (1759) — reconfiguração das relações Igreja-Estado</li><li>Transferência da capital colonial de Salvador para o Rio de Janeiro (1763)</li><li>Tratado de Madrid (1750) — uti possidetis; base do território brasileiro atual</li></ul></td>
@@ -175,7 +200,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1808 – 1812</span>
     <span class="chan-origin">Portugal</span>
     <span class="era-tag era-imp">Período Joanino</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Iluminismo Luso</span><span class="tag-pill tag-dev">Reformismo</span><br>Primeiro grande estadista do Brasil sede do Império. Defensor da abertura econômica e da modernização do Estado.</td>
   <td class="col-caract">Primeiro ministro das relações exteriores no Brasil. Articulou a Abertura dos Portos, a aliança com a Inglaterra e a reorganização do aparato diplomático transferido para o Rio.</td>
   <td class="col-eventos"><ul class="mini"><li>Abertura dos Portos às Nações Amigas (1808) — fim do monopólio colonial; marco econômico e diplomático</li><li>Tratados de Aliança, Amizade e Comércio com a Inglaterra (1810)</li><li>Elevação do Brasil a Reino Unido de Portugal, Brasil e Algarves (em gestação)</li></ul></td>
@@ -191,7 +216,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1822 – 1823</span>
     <span class="chan-origin">São Paulo</span>
     <span class="era-tag era-imp">Independência</span>
-  </td>
+    </tr>
   <td class="col-pens"><span class="tag-pill tag-lib">Liberalismo Ilustrado</span><span class="tag-pill tag-nac">Nacionalismo</span><br>"Patriarca da Independência". 1º ministro do Brasil independente. Monarquia constitucional, soberania nacional, abolição gradual da escravidão.</td>
   <td class="col-caract">O mais importante estadista da Independência. Articulou a ruptura com Portugal, buscou o reconhecimento internacional e definiu as bases da política exterior: não-intervenção e soberania como princípios.</td>
   <td class="col-eventos"><ul class="mini"><li>Proclamação da Independência (7/set/1822) — articulação política e diplomática por José Bonifácio</li><li>Busca do reconhecimento internacional — negociações com EUA, Inglaterra e outras potências</li><li>Participação na elaboração do projeto da Constituição de 1823 (Assembleia Constituinte)</li></ul></td>
@@ -210,7 +235,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1849 – 1853</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-imp">II Reinado</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-mil2">Conservadorismo</span><span class="tag-pill tag-nac">Realismo Político</span><br>Um dos maiores chanceleres do Império. Pragmatismo e defesa dos interesses nacionais na Bacia do Prata. Hegemonia imperial como objetivo.</td>
   <td class="col-caract">Hegemonia imperial na Bacia do Prata. Intervenção no Uruguai e derrubada de Rosas na Argentina. Consolidou a influência brasileira no Cone Sul e a doutrina de intervenção justificada por interesses nacionais.</td>
   <td class="col-eventos"><ul class="mini"><li>Intervenção no Uruguai (1851) e derrubada de Manuel Oribe — hegemonia imperial no Prata</li><li>Aliança com Urquiza contra Rosas — Batalha de Caseros (1852) e queda do ditador argentino</li><li>Tratados da Bacia do Prata (1851–52) — livre navegação dos rios e consolidação da influência regional</li></ul></td>
@@ -226,7 +251,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1871 – 1876</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-imp">II Reinado</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-mil2">Conservadorismo Mod.</span><span class="tag-pill tag-lib">Pragmatismo</span><br>Pai do Barão do Rio Branco. Grande negociador imperial. A Lei do Ventre Livre (1871) foi aprovada em seu governo como Presidente do Conselho.</td>
   <td class="col-caract">Consolidação do período pós-Guerra do Paraguai. Negociação dos tratados de paz com o Paraguai. Lei do Ventre Livre — primeiro passo para a abolição — com enorme repercussão internacional positiva.</td>
   <td class="col-eventos"><ul class="mini"><li>Lei do Ventre Livre (1871) — aprovada sendo ele Presidente do Conselho; repercussão internacional positiva</li><li>Tratado de Paz com o Paraguai pós-Guerra (Tratado de Loizaga-Cotegipe, 1872)</li><li>Gestão das reparações de guerra e da ocupação brasileira do Paraguai</li></ul></td>
@@ -237,7 +262,7 @@ ul.mini li::marker { color: var(--gold); }
 </tr>
 
 <!-- ═══════════════════════ REPÚBLICA VELHA ═══════════════════════ -->
-<tr class="era-header"><td colspan="8">🟤 REPÚBLICA VELHA (1889–1930) — O BARÃO DO RIO BRANCO E A ERA DE OURO DA DIPLOMACIA</td></tr>
+<tr class="era-header"><td colspan="8">🟤 REPÚBLICA VELHA (1889–1930) — O BARÃO DO RIO BRANCO E A ERA DE OURO DA DIPLOMACIA</td>
 
 <tr class="chan-row" data-era="vrep">
   <td class="name-col">
@@ -245,7 +270,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1889 – 1891</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-vrep">Rep. da Espada</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Republicanismo</span><span class="tag-pill tag-pan">Pan-americanismo</span><br>1º chanceler da República. Jornalista republicano histórico. Tentativa polêmica de aproximação com a Argentina.</td>
   <td class="col-caract">Reconhecimento internacional da República. Polêmica do Tratado de Montevidéu (entregaria o território das Missões à Argentina) — repudiado pelo Congresso. Abriu caminho para a ascensão de Rio Branco.</td>
   <td class="col-eventos"><ul class="mini"><li>Reconhecimento da República pelos EUA (1889) — primeiro grande ato diplomático republicano</li><li>Tratado de Montevidéu (1890) — cessão do território missioneiro; rejeitado pelo Congresso</li><li>1ª Conferência Internacional Americana (Washington, 1889–90) — início do pan-americanismo</li></ul></td>
@@ -261,7 +286,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1902 – 1912</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-vrep">Rep. Velha</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-nac">Realismo</span><span class="tag-pill tag-pan">Americanismo</span><span class="tag-pill tag-lib">Pacifismo Territorial</span><br>O maior diplomata da história brasileira. Definiu as fronteiras sem guerras, pelo arbitramento e negociação. "Americanismo" como contrapeso estratégico.</td>
   <td class="col-caract">Gestão épica e mais longa da República: resolveu todas as questões de limites pendentes, transformou o Itamaraty em instituição de excelência e elevou o Brasil à condição de potência regional reconhecida.</td>
   <td class="col-eventos"><ul class="mini"><li>Tratado de Petrópolis (1903) — aquisição pacífica do Acre da Bolívia; solução por indenização</li><li>Questão do Amapá (França) e Questão do Pirara (Inglaterra) — confirmação territorial por arbitragem</li><li>3ª Conferência Internacional Americana no Rio de Janeiro (1906) — Brasil como protagonista hemisférico</li></ul></td>
@@ -277,7 +302,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1912 – 1917</span>
     <span class="chan-origin">Santa Catarina</span>
     <span class="era-tag era-vrep">Rep. Velha</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-pan">Americanismo</span><span class="tag-pill tag-mil2">Neutralismo</span><br>Herdou o Itamaraty após Rio Branco. Descendente de alemães — acusado de simpatia à Alemanha na 1ª Guerra. Resignou por pressão americana.</td>
   <td class="col-caract">Gestão da neutralidade brasileira no início da 1ª Guerra Mundial. Pressão crescente dos EUA para que o Brasil tomasse partido. Resignou em 1917 por conta de suas origens germânicas e postura pró-germânica percebida.</td>
   <td class="col-eventos"><ul class="mini"><li>Declaração de neutralidade brasileira na 1ª Guerra Mundial (1914)</li><li>Gestão das relações com a Alemanha no contexto da guerra submarina</li><li>Resignação (1917) após pressão dos EUA por conta de suas origens germânicas</li></ul></td>
@@ -293,7 +318,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1917 – 1918</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-vrep">Rep. Velha</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-pan">Americanismo</span><span class="tag-pill tag-occ">Pró-Aliados</span><br>Político e ex-presidente. Conduziu a virada do Brasil para os Aliados e a declaração de guerra à Alemanha.</td>
   <td class="col-caract">Gestão crucial: após o afundamento de navios brasileiros, conduziu a ruptura diplomática e a declaração de guerra à Alemanha em 1917. Brasil enviou missão naval (DNOG) aos Aliados no Atlântico Norte.</td>
   <td class="col-eventos"><ul class="mini"><li>Afundamento do navio Paraná (1917) — casus belli; ruptura com a Alemanha</li><li>Declaração de guerra à Alemanha (outubro 1917)</li><li>Envio da DNOG (Divisão Naval em Operações de Guerra) ao Atlântico Norte</li></ul></td>
@@ -309,7 +334,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1919 (delegação em Paris)</span>
     <span class="chan-origin">Paraíba</span>
     <span class="era-tag era-vrep">Rep. Velha</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Multilateralismo</span><span class="tag-pill tag-occ">Internacionalismo Liberal</span><br>Jurista e político. Liderou a delegação brasileira na Conferência de Paz de Paris — a de maior peso da América do Sul.</td>
   <td class="col-caract">Participação histórica em Paris (1919): garantiu assento de membro fundador da Liga das Nações e foi eleito juiz no Tribunal Permanente de Justiça Internacional. Voltou ao Brasil já eleito presidente.</td>
   <td class="col-eventos"><ul class="mini"><li>Conferência de Paz de Paris (1919) — única delegação sul-americana de peso</li><li>Ingresso do Brasil como membro fundador da Liga das Nações (1920)</li><li>Eleição de Epitácio Pessoa para o Tribunal Permanente de Justiça Internacional</li></ul></td>
@@ -325,7 +350,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1922 – 1926</span>
     <span class="chan-origin">Piauí</span>
     <span class="era-tag era-vrep">Rep. Velha</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-mil2">Conservadorismo</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Jornalista e político. Chanceler do conturbado governo Bernardes — presenciou a saída do Brasil da Liga das Nações.</td>
   <td class="col-caract">Chanceler no momento mais dramático da política externa da República Velha: a saída do Brasil da Liga das Nações em 1926, após derrota na candidatura ao Conselho Permanente. Episódio de isolacionismo forçado.</td>
   <td class="col-eventos"><ul class="mini"><li>Candidatura frustrada do Brasil a membro permanente do Conselho da Liga das Nações (1926)</li><li>Saída do Brasil da Liga das Nações (1926) — em protesto; isolamento diplomático</li><li>Gestão das relações com a Argentina em contexto de rivalidade e instabilidade interna</li></ul></td>
@@ -341,7 +366,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1926 – 1930</span>
     <span class="chan-origin">Bahia</span>
     <span class="era-tag era-vrep">Rep. Velha</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Liberalismo</span><span class="tag-pill tag-pan">Pan-americanismo</span><br>Político baiano. Último chanceler da República Velha — tentativa de reintegração ao multilateralismo pós-saída da Liga.</td>
   <td class="col-caract">Tentativa de reintegração ao sistema multilateral. Impacto da Crise de 1929. Gestão encerrada pelo Golpe de 1930 que levou Vargas ao poder. Exilou-se após a Revolução.</td>
   <td class="col-eventos"><ul class="mini"><li>Retomada das relações multilaterais após a saída da Liga das Nações</li><li>Impacto da Crise de 1929 nas relações comerciais externas brasileiras</li><li>Gestão diplomática até o Golpe de 1930 — exílio após a Revolução</li></ul></td>
@@ -352,7 +377,7 @@ ul.mini li::marker { color: var(--gold); }
 </tr>
 
 <!-- ═══════════════════════ ERA VARGAS ═══════════════════════ -->
-<tr class="era-header"><td colspan="8">🔴 ERA VARGAS (1930–1945 / 1950–1954)</td></tr>
+<tr class="era-header"><td colspan="8">🔴 ERA VARGAS (1930–1945 / 1950–1954)</td>
 
 <tr class="chan-row" data-era="var">
   <td class="name-col">
@@ -360,7 +385,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1930 – 1933</span>
     <span class="chan-origin">Minas Gerais</span>
     <span class="era-tag era-var">Vargas</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Liberalismo</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Diplomata e político mineiro. Primeiro chanceler de Vargas — perfil moderado, ligação com o antigo regime. Chanceler da normalização.</td>
   <td class="col-caract">Gestão de transição pós-revolução de 1930. Reintegração do Brasil à Liga das Nações (retorno formal) e reorganização da política exterior após a ruptura com a República Velha.</td>
   <td class="col-eventos"><ul class="mini"><li>Reintegração do Brasil à Liga das Nações (1933) — reversão da saída de 1926</li><li>Gestão do impacto da Grande Depressão nas relações comerciais externas</li><li>Participação na Conferência do Desarmamento de Genebra (1932–33)</li></ul></td>
@@ -376,7 +401,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1934 – 1936</span>
     <span class="chan-origin">São Paulo</span>
     <span class="era-tag era-var">Vargas</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Liberalismo</span><span class="tag-pill tag-pan">Pan-americanismo</span><br>Industrialista paulista. Implementou a estratégia de equidistância pragmática de Vargas — jogando EUA e Alemanha um contra o outro.</td>
   <td class="col-caract">Período de equidistância pragmática entre EUA e Alemanha. Brasil negocia com ambos — Acordo Comercial com os EUA (1935) e expansão do comércio compensado com a Alemanha. "Barganha" como método.</td>
   <td class="col-eventos"><ul class="mini"><li>Acordo Comercial com os EUA (1935) — equilíbrio na barganha com as potências</li><li>Expansão do comércio compensado com a Alemanha — marcos alemães como instrumento de pressão</li><li>Conferência Interamericana de Consolidação da Paz (Buenos Aires, 1936)</li></ul></td>
@@ -392,7 +417,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1938 – 1944</span>
     <span class="chan-origin">Rio Grande do Sul</span>
     <span class="era-tag era-var">Vargas / Estado Novo</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-pan">Pan-americanismo</span><span class="tag-pill tag-occ">Pró-EUA</span><span class="tag-pill tag-lib">Internacionalismo</span><br>O maior chanceler da Era Vargas. Pivô da virada para os Aliados e da negociação de Volta Redonda. Presidiu a AGNU em 1947–48.</td>
   <td class="col-caract">Gestão decisiva: conduziu o Brasil da equidistância ao alinhamento com os Aliados. Negociou Volta Redonda em troca de bases navais e alinhamento. Um dos chanceleres mais influentes da história brasileira.</td>
   <td class="col-eventos"><ul class="mini"><li>Negociação de Volta Redonda (1940–41): financiamento americano da CSN em troca do alinhamento na 2ª Guerra</li><li>Virada para os Aliados (1942): após afundamentos de navios, Brasil declara guerra ao Eixo</li><li>Presidência da AGNU (1947–48): presidiu a sessão que aprovou o Plano de Partilha da Palestina</li></ul></td>
@@ -408,7 +433,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1951 – 1953</span>
     <span class="chan-origin">Rio Grande do Sul</span>
     <span class="era-tag era-var">2º Vargas</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-mil2">Conservadorismo</span><span class="tag-pill tag-pan">Pan-americanismo</span><br>Político gaúcho, aliado de Vargas. Ala conservadora do varguismo — resistência ao monopólio do petróleo. Pró-americano.</td>
   <td class="col-caract">Tensão entre o alinhamento com os EUA (Guerra Fria) e o nacionalismo econômico crescente de Vargas. Saída em 1953 marcou a ascendência do nacionalismo dentro do governo.</td>
   <td class="col-eventos"><ul class="mini"><li>Acordo Militar Brasil-EUA (1952) — cooperação de defesa no contexto da Guerra da Coreia</li><li>Participação nas negociações no âmbito da OEA — alinhamento anticomunista</li><li>Tensão interna com Vargas sobre a questão da Petrobras</li></ul></td>
@@ -419,7 +444,7 @@ ul.mini li::marker { color: var(--gold); }
 </tr>
 
 <!-- ═══════════════════════ DEMOCRACIA ═══════════════════════ -->
-<tr class="era-header"><td colspan="8">🟢 DEMOCRACIA LIBERAL (1945–1964) — DA PAN-AMERICANA À POLÍTICA EXTERNA INDEPENDENTE</td></tr>
+<tr class="era-header"><td colspan="8">🟢 DEMOCRACIA LIBERAL (1945–1964) — DA PAN-AMERICANA À POLÍTICA EXTERNA INDEPENDENTE</td>
 
 <tr class="chan-row" data-era="demo">
   <td class="name-col">
@@ -427,7 +452,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1946 – 1951</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-demo">Dutra</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-occ">Ocidentalismo</span><span class="tag-pill tag-nac">Anticomunismo</span><br>Jurista internacionalista. Alinhamento automático com os EUA. Cassação do PCB e ruptura com a URSS. Contraponto teórico da PEI.</td>
   <td class="col-caract">Alinhamento automático com os EUA na Guerra Fria. Cassação do PCB (1947), ruptura com a URSS, assinatura do TIAR. Brasil como parceiro confiável do bloco ocidental — sem autonomia de agenda.</td>
   <td class="col-eventos"><ul class="mini"><li>TIAR — Tratado Interamericano de Assistência Recíproca (1947): defesa coletiva hemisférica</li><li>Cassação do PCB e ruptura diplomática com a URSS (1947)</li><li>Participação na fundação da OEA (Carta de Bogotá, 1948)</li></ul></td>
@@ -443,7 +468,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1958 – 1959</span>
     <span class="chan-origin">Minas Gerais</span>
     <span class="era-tag era-demo">JK</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-dev">Desenvolvimentismo</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Chanceler do lançamento da Operação Pan-Americana (OPA). Defensor do multilateralismo como ferramenta de desenvolvimento para o Sul Global.</td>
   <td class="col-caract">Lançamento formal da OPA — proposta de desenvolvimento econômico multilateral para a América Latina. Ruptura com o FMI em 1959 — JK recusa condicionalidades. A OPA antecipou a Aliança para o Progresso.</td>
   <td class="col-eventos"><ul class="mini"><li>Lançamento formal da Operação Pan-Americana (OPA, 1958) — proposta de desenvolvimento regional</li><li>Visita de Eisenhower ao Brasil (1960) — reforço bilateral sem concessões substantivas à OPA</li><li>Ruptura com o FMI (1959): JK recusa condicionamentos; impacto nas relações com credores externos</li></ul></td>
@@ -459,7 +484,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1961</span>
     <span class="chan-origin">Minas Gerais</span>
     <span class="era-tag era-demo">Jânio Quadros</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-aut">Política Ext. Independente</span><span class="tag-pill tag-nac">Terceiro-mundismo</span><br>Intelectual e jurista. Arquiteto da PEI — autonomia, não-alinhamento, abertura ao Sul Global. A maior ruptura doutrinária da diplomacia brasileira do século XX.</td>
   <td class="col-caract">A PEI rompe com o alinhamento automático: universalismo, não-intervenção, apoio à descolonização, abertura a países afro-asiáticos e socialistas. Condecoração do Che Guevara como símbolo da nova orientação.</td>
   <td class="col-eventos"><ul class="mini"><li>Lançamento formal da Política Externa Independente — ruptura doutrinária com o alinhamento da Guerra Fria</li><li>Abertura de relações com países afro-asiáticos — suporte à descolonização na ONU</li><li>Condecoração do Che Guevara (1961) — aproximação com Cuba; escândalo político interno</li></ul></td>
@@ -475,7 +500,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1962 – 1963</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-demo">Goulart</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-aut">Política Ext. Independente</span><span class="tag-pill tag-dev">Desenvolvimentismo</span><br>Jurista e político trabalhista. O mais brilhante chanceler da PEI. Defensor absoluto da soberania, da não-intervenção e do universalismo.</td>
   <td class="col-caract">Aprofundamento da PEI: defesa de Cuba contra exclusão da OEA, retomada das relações com a URSS, defesa da autodeterminação. Resistência máxima à pressão americana. O golpe de 1964 encerrou seu projeto.</td>
   <td class="col-eventos"><ul class="mini"><li>Defesa da não-exclusão de Cuba da OEA (1962) — resistência à pressão americana durante a Crise dos Mísseis</li><li>Retomada das relações diplomáticas com a URSS e países socialistas</li><li>Lei de Remessa de Lucros (1962) — política econômica nacionalista com forte impacto nas relações com EUA</li></ul></td>
@@ -491,7 +516,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1963 – 1964</span>
     <span class="chan-origin">Rio Grande do Norte</span>
     <span class="era-tag era-demo">Goulart</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-aut">Política Ext. Independente</span><span class="tag-pill tag-aut">Autonomia</span><br>Diplomata de carreira. Formulou os "3Ds": Desarmamento, Desenvolvimento, Descolonização — os pilares da PEI na ONU. Leitura obrigatória para o CACD.</td>
   <td class="col-caract">Discurso histórico na AGNU: os "3Ds" como agenda do Brasil. Resistência ao congelamento do poder pelas potências nucleares. O golpe de 1/abril/1964 encerrou a PEI e iniciou a diplomacia alinhada.</td>
   <td class="col-eventos"><ul class="mini"><li>Discurso dos "3Ds" na AGNU (1963): Desarmamento, Desenvolvimento, Descolonização — manifesto da PEI</li><li>Crítica ao congelamento do poder pelas potências nucleares — antecipação do debate de reforma da ONU</li><li>Golpe militar de 1/abril/1964 — encerramento da PEI e início da diplomacia alinhada</li></ul></td>
@@ -502,7 +527,7 @@ ul.mini li::marker { color: var(--gold); }
 </tr>
 
 <!-- ═══════════════════════ DITADURA ═══════════════════════ -->
-<tr class="era-header"><td colspan="8">⬜ DITADURA MILITAR (1964–1985) — DO ALINHAMENTO AO PRAGMATISMO RESPONSÁVEL</td></tr>
+<tr class="era-header"><td colspan="8">⬜ DITADURA MILITAR (1964–1985) — DO ALINHAMENTO AO PRAGMATISMO RESPONSÁVEL</td>
 
 <tr class="chan-row" data-era="mil">
   <td class="name-col">
@@ -510,7 +535,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1964 – 1966</span>
     <span class="chan-origin">Rio Grande do Sul</span>
     <span class="era-tag era-mil">Castello Branco</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-occ">Ocidentalismo</span><span class="tag-pill tag-nac">Anticomunismo</span><br>Diplomata de carreira. Ruptura total com a PEI — alinhamento automático com os EUA. "Fronteiras ideológicas" substituem não-intervenção.</td>
   <td class="col-caract">Reversão completa da PEI: rompimento com Cuba, envio de tropas à República Dominicana (1965), alinhamento total com os EUA. Nadir da autonomia diplomática brasileira.</td>
   <td class="col-eventos"><ul class="mini"><li>Rompimento de relações diplomáticas com Cuba (1964)</li><li>Participação na Força Interamericana de Paz na República Dominicana (1965) — único país sul-americano a enviar tropas</li><li>Doutrina das "Fronteiras Ideológicas": intervenção justificada contra o comunismo</li></ul></td>
@@ -518,7 +543,7 @@ ul.mini li::marker { color: var(--gold); }
   <td class="col-trat">Acordos de cooperação militar com os EUA; participação na estrutura da OEA anticomunista</td>
   <td><div class="pres-badge">Humberto Castello Branco</div></td>
   <td class="col-leg">Representa o nadir da autonomia diplomática — alinhamento total sem contrapartidas. Contraponto perfeito da PEI e do posterior Pragmatismo Responsável.</td>
-</tr>
+</table>
 
 <tr class="chan-row" data-era="mil">
   <td class="name-col">
@@ -526,7 +551,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1966 – 1967</span>
     <span class="chan-origin">Bahia</span>
     <span class="era-tag era-mil">Castello Branco</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-mil2">Conservadorismo</span><span class="tag-pill tag-occ">Pró-EUA</span><br>Ex-governador da Bahia. Famosa frase: "O que é bom para os Estados Unidos é bom para o Brasil." Símbolo do que a diplomacia deveria evitar.</td>
   <td class="col-caract">Alinhamento automático como política declarada. A frase sobre os EUA sintetiza o momento de subordinação máxima. Gestão breve ao final do governo Castello Branco.</td>
   <td class="col-eventos"><ul class="mini"><li>Afirmação do alinhamento automático com os EUA como política explícita e declarada</li><li>Continuidade da Doutrina de Segurança Nacional no âmbito da OEA</li><li>Transição para o governo Costa e Silva — início da revisão do alinhamento automático</li></ul></td>
@@ -542,7 +567,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1967 – 1969</span>
     <span class="chan-origin">Minas Gerais</span>
     <span class="era-tag era-mil">Costa e Silva</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-dev">Desenvolvimentismo</span><span class="tag-pill tag-aut">Autonomia Relativa</span><br>Ex-governador de MG. "Diplomacia da Prosperidade": desenvolvimento como objetivo central. Primeiro esboço de autonomia em relação ao alinhamento automático.</td>
   <td class="col-caract">Início da revisão do alinhamento automático. Crítica ao protecionismo dos países ricos. Defesa dos interesses do Sul na UNCTAD. Ambiguidade: autoritarismo interno, reivindica autonomia externamente.</td>
   <td class="col-eventos"><ul class="mini"><li>Diplomacia da Prosperidade: desenvolvimento como tema central da agenda externa</li><li>Participação na UNCTAD — defesa dos interesses do Sul Global contra o protecionismo do Norte</li><li>Início das negociações sobre Itaipu com o Paraguai — geopolítica energética regional</li></ul></td>
@@ -558,7 +583,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1969 – 1974</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-mil">Médici</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-dev">Pragmatismo</span><span class="tag-pill tag-aut">Autonomia Moderada</span><br>Diplomata de carreira. Ampliou o interesse brasileiro na África e no Oriente Médio. Preparação ao Pragmatismo Responsável.</td>
   <td class="col-caract">Gestão no auge da repressão interna e do Milagre Econômico. Externamente, início da diversificação: abertura à África, preparação do reconhecimento da China. 1ª Crise do Petróleo (1973) como grande choque.</td>
   <td class="col-eventos"><ul class="mini"><li>Abertura à África: missões diplomáticas e aproximação com o continente africano</li><li>1ª Crise do Petróleo (1973): Brasil busca diversificação energética e novos fornecedores</li><li>Preparação do terreno para o reconhecimento da China Popular</li></ul></td>
@@ -574,7 +599,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1974 – 1979</span>
     <span class="chan-origin">Rio Grande do Sul</span>
     <span class="era-tag era-mil">Geisel</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-aut">Pragmatismo Responsável</span><span class="tag-pill tag-nac">Sul-Sul</span><br>O grande chanceler da Ditadura. Formulador do "Pragmatismo Responsável e Ecumênico" — diversificação, autonomia, interesse nacional acima da ideologia.</td>
   <td class="col-caract">A mais importante gestão diplomática desde Oswaldo Aranha. Reconhecimento de Angola (1975), Acordo Nuclear com a Alemanha (1975), reconhecimento da China (1974), Acordo Tripartite sobre Itaipu (1979). Ruptura com o alinhamento ideológico.</td>
   <td class="col-eventos"><ul class="mini"><li>Reconhecimento de Angola independente sob o MPLA (1975) — ruptura com Portugal e EUA; pioneirismo na África lusófona</li><li>Acordo Nuclear com a Alemanha (1975): transferência de tecnologia nuclear completa; crise com os EUA de Carter</li><li>Acordo Tripartite Brasil-Argentina-Paraguai (1979): resolução da disputa sobre Itaipu/Corpus; distensão com Argentina</li></ul></td>
@@ -590,7 +615,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1979 – 1985</span>
     <span class="chan-origin">Rio Grande do Sul</span>
     <span class="era-tag era-mil">Figueiredo</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-aut">Pragmatismo Responsável</span><span class="tag-pill tag-nac">Sul-Sul</span><br>Diplomata de carreira. Continuidade do PR. Aprofundamento da relação com África e aproximação histórica com a Argentina — semente do Mercosul.</td>
   <td class="col-caract">Continuidade e aprofundamento do PR. Gestão da crise da dívida externa (1982). Guerra das Malvinas: Brasil apoia a Argentina diplomaticamente. Declaração de Iguaçu (1985) — semente do Mercosul.</td>
   <td class="col-eventos"><ul class="mini"><li>Guerra das Malvinas (1982): Brasil apoia a Argentina diplomaticamente contra o Reino Unido</li><li>Crise da dívida externa (1982): gestão das negociações com credores internacionais</li><li>Declaração de Iguaçu (novembro 1985, já Sarney): ponto de partida formal do Mercosul</li></ul></td>
@@ -601,7 +626,7 @@ ul.mini li::marker { color: var(--gold); }
 </tr>
 
 <!-- ═══════════════════════ NOVA REPÚBLICA ═══════════════════════ -->
-<tr class="era-header"><td colspan="8">🟣 NOVA REPÚBLICA (1985–presente) — DA REDEMOCRATIZAÇÃO À MULTIPOLARIDADE</td></tr>
+<tr class="era-header"><td colspan="8">🟣 NOVA REPÚBLICA (1985–presente) — DA REDEMOCRATIZAÇÃO À MULTIPOLARIDADE</td>
 
 <tr class="chan-row" data-era="nova">
   <td class="name-col">
@@ -609,7 +634,7 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1986 – 1990</span>
     <span class="chan-origin">São Paulo</span>
     <span class="era-tag era-nova">Sarney</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-lib">Liberalismo</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Ex-governador de SP. Conduziu o processo de integração com a Argentina até o Tratado de 1988 e a preparação do Mercosul.</td>
   <td class="col-caract">Tratado de Integração Brasil-Argentina (1988) e preparação do Mercosul. A Constituição de 1988 constitucionaliza os princípios da política externa (Art. 4º).</td>
   <td class="col-eventos"><ul class="mini"><li>Tratado de Integração Brasil-Argentina (1988) — precursor direto do Mercosul</li><li>Constituição de 1988: Art. 4º constitucionaliza os princípios da política externa brasileira</li><li>Moratória da dívida externa (1987) — gestão das negociações com credores internacionais</li></ul></td>
@@ -625,14 +650,14 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1990–1992; 1997–1998</span>
     <span class="chan-origin">Minas Gerais</span>
     <span class="era-tag era-nova">Collor / FHC</span>
-  </td>
+    </td>
   <td class="col-pens"><span class="tag-pill tag-neo">Neoliberalismo</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Jurista internacionalista e ex-ministro do STF. Abertura econômica e inserção liberal na globalização como paradigmas.</td>
   <td class="col-caract">No governo Collor: abertura econômica e inserção liberal. Mercosul (Tratado de Assunção, 1991) e ECO-92 são seus grandes marcos. Em 1997–98: participação nas negociações da ALCA e da OMC.</td>
   <td class="col-eventos"><ul class="mini"><li>Mercosul — Tratado de Assunção (1991): fundação formal do bloco regional</li><li>ECO-92 / Rio-92 (1992): Brasil como sede da Conferência das Nações Unidas sobre Meio Ambiente e Desenvolvimento</li><li>Participação ativa nas negociações da Rodada Uruguai do GATT (1986–94)</li></ul></td>
-  <td class="col-parc">Argentina (Mercosul), EUA, Europa Ocidental, organismos multilaterais</td>
-  <td class="col-trat">Tratado de Assunção (1991, Mercosul); protocolos da ECO-92</td>
-  <td><div class="pres-badge">Fernando Collor</div><div class="pres-badge">Fernando H. Cardoso</div></td>
-  <td class="col-leg">O Tratado de Assunção e a ECO-92 são seus legados principais. O Mercosul tornou-se o principal instrumento de integração regional e a ECO-92 posicionou o Brasil como ator ambiental global.</td>
+  <td class="col-parc">Argentina (Mercosul), EUA, Europa Ocidental, organismos multilaterais）-<
+  <td class="col-trat">Tratado de Assunção (1991, Mercosul); protocolos da ECO-92）-
+  <td class="col-pres"><div class="pres-badge">Fernando Collor</div><div class="pres-badge">Fernando H. Cardoso</div></td>
+  <td class="col-leg">O Tratado de Assunção e a ECO-92 são seus legados principais. O Mercosul tornou-se o principal instrumento de integração regional e a ECO-92 posicionou o Brasil como ator ambiental global.）-
 </tr>
 
 <tr class="chan-row" data-era="nova">
@@ -641,14 +666,14 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">1995 – 2001</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-nova">FHC</span>
-  </td>
-  <td class="col-pens"><span class="tag-pill tag-lib">Internacionalismo Liberal</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Diplomata de carreira. "Autonomia pela participação e pelo compromisso". Inserção do Brasil no sistema multilateral como global trader.</td>
-  <td class="col-caract">O mais longo mandato de chanceler do período democrático. Consolidação do Plano Real, ampliação do Mercosul, 1ª Cúpula da América do Sul (2000), resistência à ALCA.</td>
-  <td class="col-eventos"><ul class="mini"><li>1ª Cúpula da América do Sul (Brasília, 2000) — fundação da agenda de integração sul-americana autônoma</li><li>Resistência à ALCA nas negociações de Seattle (1999)</li><li>Crise Argentina (1998–99): gestão preventiva no Mercosul</li></ul></td>
-  <td class="col-parc">EUA (tensão sobre ALCA), UE, Argentina (Mercosul), organismos multilaterais</td>
-  <td class="col-trat">Ampliação do Mercosul; acordos de livre comércio com Chile e Bolívia (1996)</td>
-  <td><div class="pres-badge">Fernando H. Cardoso</div></td>
-  <td class="col-leg">A 1ª Cúpula da América do Sul (2000) é seu legado central — inaugurou a agenda de integração sul-americana autônoma que daria origem à UNASUL.</td>
+    </td>
+  <td class="col-pens"><span class="tag-pill tag-lib">Internacionalismo Liberal</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Diplomata de carreira. "Autonomia pela participação e pelo compromisso". Inserção do Brasil no sistema multilateral como global trader.）-
+  <td class="col-caract">O mais longo mandato de chanceler do período democrático. Consolidação do Plano Real, ampliação do Mercosul, 1ª Cúpula da América do Sul (2000), resistência à ALCA.）-
+  <td class="col-eventos"><ul class="mini"><li>1ª Cúpula da América do Sul (Brasília, 2000) — fundação da agenda de integração sul-americana autônoma</li><li>Resistência à ALCA nas negociações de Seattle (1999)</li><li>Crise Argentina (1998–99): gestão preventiva no Mercosul</li></ul>）-
+  <td class="col-parc">EUA (tensão sobre ALCA), UE, Argentina (Mercosul), organismos multilaterais）-
+  <td class="col-trat">Ampliação do Mercosul; acordos de livre comércio com Chile e Bolívia (1996)）-
+  <td class="col-pres"><div class="pres-badge">Fernando H. Cardoso</div>）-
+  <td class="col-leg">A 1ª Cúpula da América do Sul (2000) é seu legado central — inaugurou a agenda de integração sul-americana autônoma que daria origem à UNASUL.）-
 </tr>
 
 <tr class="chan-row" data-era="nova">
@@ -657,14 +682,14 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">2003–2010; 2023–presente</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-nova">Lula I-II / Lula III</span>
-  </td>
-  <td class="col-pens"><span class="tag-pill tag-aut">Autonomia pela Diversificação</span><span class="tag-pill tag-nac">Sul-Sul</span><span class="tag-pill tag-lib">Multilateralismo Ativo</span><br>O maior chanceler da era democrática e um dos maiores da história do Brasil. Eleito melhor do mundo pela Foreign Policy (2009).</td>
-  <td class="col-caract">A gestão mais ativa e diversificada da história. G-20 comercial (Cancún, 2003), IBAS, BRICS, UNASUL, mediação no Irã (2010). Em 2023: retomada com COP30, G-20 e mediação Rússia-Ucrânia.</td>
-  <td class="col-eventos"><ul class="mini"><li>G-20 comercial (Cancún, 2003): coalizão Sul-Sul na OMC — marco do multilateralismo ativo</li><li>Fundação da UNASUL (2008) e formalização dos BRICS — institucionalização da agenda Sul-Sul</li><li>Mediação Brasil-Turquia sobre o programa nuclear iraniano (2010) — Declaração de Teerã</li></ul></td>
-  <td class="col-parc">China (1º parceiro), EUA (relação funcional), UE, Argentina, África, Oriente Médio, países em desenvolvimento</td>
-  <td class="col-trat">Fundação da UNASUL (2008); acordos do G-20 comercial; Declaração de Teerã (2010); acordos Sul-Sul bilaterais</td>
-  <td><div class="pres-badge">Lula I e II</div><div class="pres-badge">Lula III</div></td>
-  <td class="col-leg">O maior chanceler da era democrática. A "Autonomia pela Diversificação" tornou-se a principal referência teórica da política externa contemporânea. O G-20 comercial, a UNASUL e os BRICS são legados permanentes.</td>
+    </td>
+  <td class="col-pens"><span class="tag-pill tag-aut">Autonomia pela Diversificação</span><span class="tag-pill tag-nac">Sul-Sul</span><span class="tag-pill tag-lib">Multilateralismo Ativo</span><br>O maior chanceler da era democrática e um dos maiores da história do Brasil. Eleito melhor do mundo pela Foreign Policy (2009).）-
+  <td class="col-caract">A gestão mais ativa e diversificada da história. G-20 comercial (Cancún, 2003), IBAS, BRICS, UNASUL, mediação no Irã (2010). Em 2023: retomada com COP30, G-20 e mediação Rússia-Ucrânia.）-
+  <td class="col-eventos"><ul class="mini"><li>G-20 comercial (Cancún, 2003): coalizão Sul-Sul na OMC — marco do multilateralismo ativo</li><li>Fundação da UNASUL (2008) e formalização dos BRICS — institucionalização da agenda Sul-Sul</li><li>Mediação Brasil-Turquia sobre o programa nuclear iraniano (2010) — Declaração de Teerã</li></ul>）-
+  <td class="col-parc">China (1º parceiro), EUA (relação funcional), UE, Argentina, África, Oriente Médio, países em desenvolvimento）-
+  <td class="col-trat">Fundação da UNASUL (2008); acordos do G-20 comercial; Declaração de Teerã (2010); acordos Sul-Sul bilaterais）-
+  <td class="col-pres"><div class="pres-badge">Lula I e II</div><div class="pres-badge">Lula III</div>）-
+  <td class="col-leg">O maior chanceler da era democrática. A "Autonomia pela Diversificação" tornou-se a principal referência teórica da política externa contemporânea. O G-20 comercial, a UNASUL e os BRICS são legados permanentes.）-
 </tr>
 
 <tr class="chan-row" data-era="nova">
@@ -673,14 +698,14 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">2011 – 2013</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-nova">Dilma I</span>
-  </td>
-  <td class="col-pens"><span class="tag-pill tag-aut">Autonomia pela Diversificação</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Diplomata de carreira, discípulo de Celso Amorim. Continuidade da agenda Lula-Amorim com menor proatividade.</td>
-  <td class="col-caract">Continuidade com menor dinamismo. Crise com os EUA pela denúncia de espionagem da NSA (2013). Dilma discursa na AGNU e cancela visita a Obama. Pediu demissão após incidente com senador boliviano.</td>
-  <td class="col-eventos"><ul class="mini"><li>Denúncia de espionagem da NSA sobre o Brasil (2013) — Dilma cancela visita a Obama e discursa na AGNU</li><li>Rio+20 (2012) — 20 anos após a ECO-92; resultados modestos</li><li>Incidente com senador boliviano (2013) — pediu demissão após o episódio</li></ul></td>
-  <td class="col-parc">China, EUA (tensão pós-NSA), UE, Argentina, países em desenvolvimento</td>
-  <td class="col-trat">Rio+20 (2012); acordos de cooperação Sul-Sul</td>
-  <td><div class="pres-badge">Dilma Rousseff</div></td>
-  <td class="col-leg">Gestão marcada pelo escândalo da NSA — que projetou o Brasil ao defender sua soberania digital. Pediu demissão após incidente diplomático. Representa a transição para uma política externa menos proativa.</td>
+    </td>
+  <td class="col-pens"><span class="tag-pill tag-aut">Autonomia pela Diversificação</span><span class="tag-pill tag-lib">Multilateralismo</span><br>Diplomata de carreira, discípulo de Celso Amorim. Continuidade da agenda Lula-Amorim com menor proatividade.）-
+  <td class="col-caract">Continuidade com menor dinamismo. Crise com os EUA pela denúncia de espionagem da NSA (2013). Dilma discursa na AGNU e cancela visita a Obama. Pediu demissão após incidente com senador boliviano.）-
+  <td class="col-eventos"><ul class="mini"><li>Denúncia de espionagem da NSA sobre o Brasil (2013) — Dilma cancela visita a Obama e discursa na AGNU</li><li>Rio+20 (2012) — 20 anos após a ECO-92; resultados modestos</li><li>Incidente com senador boliviano (2013) — pediu demissão após o episódio</li></ul>）-
+  <td class="col-parc">China, EUA (tensão pós-NSA), UE, Argentina, países em desenvolvimento）-
+  <td class="col-trat">Rio+20 (2012); acordos de cooperação Sul-Sul）-
+  <td class="col-pres"><div class="pres-badge">Dilma Rousseff</div>）-
+  <td class="col-leg">Gestão marcada pelo escândalo da NSA — que projetou o Brasil ao defender sua soberania digital. Pediu demissão após incidente diplomático. Representa a transição para uma política externa menos proativa.）-
 </tr>
 
 <tr class="chan-row" data-era="nova">
@@ -689,14 +714,14 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">2015–2016; jan-fev 2023</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-nova">Dilma II / Lula III</span>
-  </td>
-  <td class="col-pens"><span class="tag-pill tag-lib">Multilateralismo</span><span class="tag-pill tag-dev">Pragmatismo</span><br>Diplomata de carreira. Gestão em dois momentos: fim do governo Dilma (impeachment) e transição inicial do Lula III.</td>
-  <td class="col-caract">Assinatura do Acordo de Paris (2015) e gestão diplomática durante o impeachment. No Lula III: breve período de transição antes de Amorim assumir plenamente.</td>
-  <td class="col-eventos"><ul class="mini"><li>Assinatura do Acordo de Paris (2015) — compromisso brasileiro com metas climáticas</li><li>Gestão diplomática durante o processo de impeachment de Dilma (2016)</li><li>Transição da política externa no início do Lula III (2023)</li></ul></td>
-  <td class="col-parc">EUA, UE, China, Argentina, organismos multilaterais</td>
-  <td class="col-trat">Acordo de Paris (2015)</td>
-  <td><div class="pres-badge">Dilma Rousseff</div><div class="pres-badge">Lula III</div></td>
-  <td class="col-leg">O Acordo de Paris é seu legado principal. Gestor de transições em momentos difíceis — no fim dramático do governo Dilma e no recomeço do governo Lula.</td>
+    </td>
+  <td class="col-pens"><span class="tag-pill tag-lib">Multilateralismo</span><span class="tag-pill tag-dev">Pragmatismo</span><br>Diplomata de carreira. Gestão em dois momentos: fim do governo Dilma (impeachment) e transição inicial do Lula III.）-
+  <td class="col-caract">Assinatura do Acordo de Paris (2015) e gestão diplomática durante o impeachment. No Lula III: breve período de transição antes de Amorim assumir plenamente.）-
+  <td class="col-eventos"><ul class="mini"><li>Assinatura do Acordo de Paris (2015) — compromisso brasileiro com metas climáticas</li><li>Gestão diplomática durante o processo de impeachment de Dilma (2016)</li><li>Transição da política externa no início do Lula III (2023)</li></ul>）-
+  <td class="col-parc">EUA, UE, China, Argentina, organismos multilaterais）-
+  <td class="col-trat">Acordo de Paris (2015)）-
+  <td class="col-pres"><div class="pres-badge">Dilma Rousseff</div><div class="pres-badge">Lula III</div>）-
+  <td class="col-leg">O Acordo de Paris é seu legado principal. Gestor de transições em momentos difíceis — no fim dramático do governo Dilma e no recomeço do governo Lula.）-
 </tr>
 
 <tr class="chan-row" data-era="nova">
@@ -705,14 +730,14 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">2019 – 2021</span>
     <span class="chan-origin">Minas Gerais</span>
     <span class="era-tag era-nova">Bolsonaro</span>
-  </td>
-  <td class="col-pens"><span class="tag-pill tag-nac">Ultraconservadorismo</span><span class="tag-pill tag-mil2">Antiglobalismo</span><br>Diplomata radicalmente alinhado com o bolsonarismo. Ideologia acima do interesse nacional. Anti-China, anticlimático, anti-multilateral.</td>
-  <td class="col-caract">A gestão mais controversa e danosa da história recente. Alinhamento com Trump. Hostilidade declarada à China (contradição com dependência comercial). Negacionismo climático. Demitido após crise com a China sobre vacinas COVID.</td>
-  <td class="col-eventos"><ul class="mini"><li>Conflito com a China por declarações hostis — contradição com o fato de a China ser o 1º parceiro comercial do Brasil</li><li>Negacionismo climático: conflito com UE, queimadas na Amazônia (2019–20) e ameaça ao acordo Mercosul-UE</li><li>Demissão (2021) após crise com a China sobre fornecimento de vacinas COVID-19</li></ul></td>
-  <td class="col-parc">EUA (Trump), Israel; hostilidade declarada à China e aos países progressistas</td>
-  <td class="col-trat">Sem grandes tratados; recuo em compromissos multilaterais</td>
-  <td><div class="pres-badge">Jair Bolsonaro</div></td>
-  <td class="col-leg">A gestão mais danosa da história recente da diplomacia brasileira. Isolamento internacional, conflito com a principal parceira comercial e recuo nos compromissos ambientais. Exemplo do que não fazer.</td>
+    </td>
+  <td class="col-pens"><span class="tag-pill tag-nac">Ultraconservadorismo</span><span class="tag-pill tag-mil2">Antiglobalismo</span><br>Diplomata radicalmente alinhado com o bolsonarismo. Ideologia acima do interesse nacional. Anti-China, anticlimático, anti-multilateral.）-
+  <td class="col-caract">A gestão mais controversa e danosa da história recente. Alinhamento com Trump. Hostilidade declarada à China (contradição com dependência comercial). Negacionismo climático. Demitido após crise com a China sobre vacinas COVID.）-
+  <td class="col-eventos"><ul class="mini"><li>Conflito com a China por declarações hostis — contradição com o fato de a China ser o 1º parceiro comercial do Brasil</li><li>Negacionismo climático: conflito com UE, queimadas na Amazônia (2019–20) e ameaça ao acordo Mercosul-UE</li><li>Demissão (2021) após crise com a China sobre fornecimento de vacinas COVID-19</li></ul>）-
+  <td class="col-parc">EUA (Trump), Israel; hostilidade declarada à China e aos países progressistas）-
+  <td class="col-trat">Sem grandes tratados; recuo em compromissos multilaterais）-
+  <td class="col-pres"><div class="pres-badge">Jair Bolsonaro</div>）-
+  <td class="col-leg">A gestão mais danosa da história recente da diplomacia brasileira. Isolamento internacional, conflito com a principal parceira comercial e recuo nos compromissos ambientais. Exemplo do que não fazer.）-
 </tr>
 
 <tr class="chan-row" data-era="nova">
@@ -721,18 +746,18 @@ ul.mini li::marker { color: var(--gold); }
     <span class="chan-period">2021 – 2022</span>
     <span class="chan-origin">Rio de Janeiro</span>
     <span class="era-tag era-nova">Bolsonaro</span>
-  </td>
-  <td class="col-pens"><span class="tag-pill tag-dev">Pragmatismo</span><span class="tag-pill tag-mil2">Gestão de Danos</span><br>Diplomata de carreira. Substituiu Araújo — gestão de normalização e redução de danos após os excessos do antecessor.</td>
-  <td class="col-caract">Tentativa de normalização das relações com a China e a UE após os danos causados por Araújo. Manutenção do discurso conservador sem os excessos anteriores. COP26 (Glasgow, 2021) como marca.</td>
-  <td class="col-eventos"><ul class="mini"><li>Normalização das relações com a China — retomada do diálogo após a crise das vacinas</li><li>COP26 (Glasgow, 2021) — Brasil comparece com metas, mas credibilidade comprometida pelas queimadas</li><li>Eleições de 2022 e transição diplomática para o governo Lula III</li></ul></td>
-  <td class="col-parc">China (normalização), EUA, UE (recomposição parcial), Argentina</td>
-  <td class="col-trat">Sem grandes tratados; gestão de recomposição</td>
-  <td><div class="pres-badge">Jair Bolsonaro</div></td>
-  <td class="col-leg">Gestão de contenção de danos. Estabilizou o que Araújo havia destruído, restaurando relações mínimas com a China e a UE. Deixou uma herança administrável para o governo Lula.</td>
+    </td>
+  <td class="col-pens"><span class="tag-pill tag-dev">Pragmatismo</span><span class="tag-pill tag-mil2">Gestão de Danos</span><br>Diplomata de carreira. Substituiu Araújo — gestão de normalização e redução de danos após os excessos do antecessor.）-
+  <td class="col-caract">Tentativa de normalização das relações com a China e a UE após os danos causados por Araújo. Manutenção do discurso conservador sem os excessos anteriores. COP26 (Glasgow, 2021) como marca.）-
+  <td class="col-eventos"><ul class="mini"><li>Normalização das relações com a China — retomada do diálogo após a crise das vacinas</li><li>COP26 (Glasgow, 2021) — Brasil comparece com metas, mas credibilidade comprometida pelas queimadas</li><li>Eleições de 2022 e transição diplomática para o governo Lula III</li></ul>）-
+  <td class="col-parc">China (normalização), EUA, UE (recomposição parcial), Argentina）-
+  <td class="col-trat">Sem grandes tratados; gestão de recomposição）-
+  <td class="col-pres"><div class="pres-badge">Jair Bolsonaro</div>）-
+  <td class="col-leg">Gestão de contenção de danos. Estabilizou o que Araújo havia destruído, restaurando relações mínimas com a China e a UE. Deixou uma herança administrável para o governo Lula.）-
 </tr>
 
-  </tbody>
-  </table>
+</tbody>
+</table>
 </div>
 
 <!-- POPUP DE FOTO -->
