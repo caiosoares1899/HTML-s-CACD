@@ -54,6 +54,8 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
 .produto-list{list-style:none;padding:0;margin:0}
 .produto-list li{font-size:14px;color:var(--gold-light);margin-bottom:6px;line-height:1.5}
 .footer-note{position:fixed;bottom:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);background:rgba(10,9,6,.8);padding:6px 12px;border-radius:16px;z-index:1000;pointer-events:none;max-width:380px;line-height:1.4;border-left:2px solid var(--gold);backdrop-filter:blur(4px)}
+.port-marker{background:rgba(0,0,0,0.5);border-radius:50%;padding:4px;transition:transform 0.1s}
+.port-marker:hover{transform:scale(1.1)}
 @media(max-width:700px){.sidebar{display:none}.popup-grid{grid-template-columns:1fr}.footer-note{font-size:7px;max-width:280px;bottom:8px;left:8px}}
 </style>
 </head>
@@ -108,7 +110,7 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
 
 <script>
 // ==============================================================
-// DADOS ECONÔMICOS
+// DADOS ECONÔMICOS DOS ESTADOS
 // ==============================================================
 const dadosEconomicos = {
     "AC": { nome: "Acre (parte da Capitania do Rio Negro)", produtos: ["Drogas do Sertão", "Borracha (início)"], grupo: "extrativo", cor: "#76b852", emoji: "🌿", descricao: "Região amazônica de extrativismo vegetal. As 'drogas do sertão' eram coletadas por populações indígenas e mestiças.", extra: "A região só seria efetivamente ocupada mais tarde, mas já integrava a rota amazônica.", pext: "Fronteira disputada com a Espanha. A exploração de drogas do sertão era estratégica para Portugal." },
@@ -133,6 +135,84 @@ const dadosEconomicos = {
     "PA": { nome: "Grão-Pará", produtos: ["Drogas do Sertão", "Cacau", "Pecuária"], grupo: "extrativo", cor: "#76b852", emoji: "🌿", descricao: "Extrativismo vegetal predominante. Cacau e outras drogas do sertão eram exportadas.", extra: "Belém era o principal porto da Amazônia oriental.", pext: "A região amazônica era cobiçada internacionalmente. Portugal reforçou presença militar." }
 };
 
+// ==============================================================
+// DADOS DOS PORTOS (com emoji 🚢)
+// ==============================================================
+const portos = [
+    { 
+        nome: "Porto de São Luís", 
+        local: "Maranhão", 
+        coords: [-2.53, -44.30], 
+        produtos: "Algodão (Rei Algodão), Arroz, Couro",
+        descricao: "Principal porto escoador do algodão maranhense para a Inglaterra. Com a Abertura dos Portos (1808), São Luís passou a negociar diretamente com Liverpool, dinamizando a economia regional.",
+        importancia: "Centro da Companhia de Comércio do Grão-Pará e Maranhão. O porto foi modernizado no período joanino para atender à crescente demanda europeia por algodão de fibra longa."
+    },
+    { 
+        nome: "Porto do Recife", 
+        local: "Pernambuco", 
+        coords: [-8.05, -34.88], 
+        produtos: "Açúcar, Tabaco, Algodão",
+        descricao: "Um dos portos mais movimentados do Império. Escoava açúcar dos novos engenhos pernambucanos, tabaco de corda e algodão. Foi palco da Revolução Pernambucana de 1817.",
+        importancia: "Polo comercial do Nordeste. O porto conectava o Brasil ao mercado europeu e africano. A influência britânica era forte, com comerciantes ingleses estabelecidos na região."
+    },
+    { 
+        nome: "Porto de Salvador", 
+        local: "Bahia", 
+        coords: [-12.97, -38.51], 
+        produtos: "Açúcar, Tabaco (fumo de corda), Azeite de dendê",
+        descricao: "O maior e mais importante porto do Brasil colonial. Salvador era a capital do país até 1763 e manteve sua relevância comercial durante o período joanino.",
+        importancia: "Estratégico para o tráfico de escravizados com a África. O porto era a porta de entrada de africanos e o principal centro da economia açucareira baiana. A pressão inglesa pelo fim do tráfico impactou diretamente sua economia."
+    },
+    { 
+        nome: "Porto do Rio de Janeiro", 
+        local: "Rio de Janeiro (Corte)", 
+        coords: [-22.90, -43.18], 
+        produtos: "Açúcar, Café (início), Manufaturas reais",
+        descricao: "Com a transferência da Corte portuguesa em 1808, o Rio tornou-se o centro político e comercial do Império. A Abertura dos Portos revolucionou sua economia.",
+        importancia: "O porto mais dinâmico da América do Sul. Recebia navios ingleses, franceses e de outras nações. Ali funcionavam a Alfândega Real, o Banco do Brasil e a Imprensa Régia. Escolhido por D. João VI como capital do Reino Unido (1815)."
+    },
+    { 
+        nome: "Porto de Santos", 
+        local: "São Paulo", 
+        coords: [-23.96, -46.33], 
+        produtos: "Açúcar (Piracicaba), Algodão, Couro",
+        descricao: "Principal via de escoamento da produção paulista. O açúcar produzido em Piracicaba e região descia a serra para ser exportado pelo porto de Santos.",
+        importancia: "Conexão vital entre o planalto paulista e o mercado internacional. O porto cresceu no período joanino com a expansão dos engenhos de açúcar no oeste paulista e a produção de algodão."
+    },
+    { 
+        nome: "Porto de Paranaguá", 
+        local: "Paraná", 
+        coords: [-25.52, -48.51], 
+        produtos: "Erva-mate, Madeira",
+        descricao: "Principal porto escoador da erva-mate paranaense, chamada de 'ouro verde'. O mate era exportado para o Prata e para o sul do Brasil.",
+        importancia: "O porto conectava as plantações de erva-mate do interior aos mercados platinos. A região era zona de influência disputada entre Brasil e Espanha."
+    },
+    { 
+        nome: "Porto de Desterro (Florianópolis)", 
+        local: "Santa Catarina", 
+        coords: [-27.60, -48.55], 
+        produtos: "Óleo de Baleia, Pescado, Farinha",
+        descricao: "Base da Real Armação da Baleia, concessionada pela Coroa Portuguesa. O óleo de baleia era enviado ao Rio de Janeiro para iluminação pública.",
+        importancia: "Centro da caça à baleia no sul do Brasil. O porto também servia como ponto de apoio para navegação entre o Rio de Janeiro e o Prata."
+    },
+    { 
+        nome: "Porto de Rio Grande", 
+        local: "Rio Grande do Sul", 
+        coords: [-32.03, -52.10], 
+        produtos: "Charque, Couro, Trigo, Sebo, Velas",
+        descricao: "Principal porto da região sul. Escoava a produção das charqueadas gaúchas, que abasteciam o Sudeste e a Corte com carne seca e derivados.",
+        importancia: "Estratégico para o comércio com o Prata e para a defesa da fronteira sul. O porto estava no centro das disputas territoriais com a Espanha e, depois, com Argentina e Uruguai."
+    },
+    { 
+        nome: "Porto de Belém", 
+        local: "Grão-Pará", 
+        coords: [-1.45, -48.50], 
+        produtos: "Drogas do Sertão (cacau, cravo), Guaraná",
+        descricao: "Principal porto da Amazônia oriental. Escoava as 'drogas do sertão' coletadas por populações indígenas ao longo do rio Amazonas e seus afluentes.",
+        importancia: "Centro da presença portuguesa na Amazônia. O porto guarnecia a região contra cobiça internacional e organizava as expedições científicas financiadas pela Coroa."
+    }
+];
+
 const coordsEstados = {
     "AC": [-9.0, -70.0], "AM": [-3.47, -62.0], "MA": [-5.5, -45.5], "CE": [-5.2, -39.5],
     "RN": [-5.8, -36.6], "PB": [-7.0, -36.5], "PE": [-8.3, -37.0], "AL": [-9.6, -36.0],
@@ -156,8 +236,12 @@ function loadBaseMap() {
                 style: { fillColor: '#1a2e1e', fillOpacity: 0.35, color: '#3d6645', weight: 0.8, opacity: 0.5 }
             }).addTo(map);
             addEmojiMarkers();
+            addPortMarkers();
         })
-        .catch(() => addEmojiMarkers());
+        .catch(() => {
+            addEmojiMarkers();
+            addPortMarkers();
+        });
 }
 
 function addEmojiMarkers() {
@@ -167,7 +251,7 @@ function addEmojiMarkers() {
         
         const emojiIcon = L.divIcon({
             className: 'emoji-marker',
-            html: `<div style="font-size: 34px; cursor: pointer; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7)); transition: transform 0.1s; text-align: center; background: rgba(0,0,0,0.35); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);">${dados.emoji}</div>`,
+            html: `<div style="font-size: 34px; cursor: pointer; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7)); text-align: center; background: rgba(0,0,0,0.35); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);">${dados.emoji}</div>`,
             iconSize: [52, 52],
             iconAnchor: [26, 26],
             popupAnchor: [0, -22]
@@ -182,6 +266,39 @@ function addEmojiMarkers() {
     
     buildSidebar();
     filter('all');
+}
+
+function addPortMarkers() {
+    portos.forEach(porto => {
+        const portIcon = L.divIcon({
+            className: 'port-marker',
+            html: `<div style="font-size: 28px; cursor: pointer; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8)); text-align: center; background: rgba(26,30,58,0.6); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold);">🚢</div>`,
+            iconSize: [44, 44],
+            iconAnchor: [22, 22],
+            popupAnchor: [0, -18]
+        });
+        
+        const marker = L.marker(porto.coords, { icon: portIcon, zIndexOffset: 200 }).addTo(map);
+        
+        // Popup do porto
+        const popupHTML = `
+            <div class="card-popup" style="min-width: 260px; max-width: 320px;">
+                <div class="card-titulo" style="font-size: 1.3rem; font-weight: bold; color: #c9a84c; margin-bottom: 6px; border-bottom: 2px solid #e2cbaa; display: inline-block;">🚢 ${porto.nome}</div>
+                <div class="card-produto" style="font-size: 0.85rem; background: rgba(201,168,76,0.15); display: inline-block; padding: 4px 12px; border-radius: 40px; margin: 10px 0 8px;">📍 ${porto.local}</div>
+                <div class="card-desc" style="margin: 12px 0; line-height: 1.45; font-size: 0.9rem;"><strong>📦 Produtos escoados:</strong> ${porto.produtos}</div>
+                <div class="card-infoextra" style="background: rgba(201,168,76,0.08); padding: 8px 12px; border-radius: 16px; font-size: 0.8rem; margin-top: 8px; border-left: 3px solid #c9a84c;">
+                    <strong>📖 Contexto:</strong> ${porto.descricao}<br><br>
+                    <strong>🔎 Importância estratégica:</strong> ${porto.importancia}
+                </div>
+                <div style="font-size:0.7rem; margin-top:8px; text-align:right; color:#8b6b3c;">⏳ 1808–1821 | Brasil Joanino</div>
+            </div>
+        `;
+        
+        marker.bindPopup(popupHTML, { className: 'custom-popup', maxWidth: 340, minWidth: 260 });
+        marker.bindTooltip(`${porto.nome}<br>🎯 ${porto.produtos.split(',')[0]}`, { 
+            direction: 'top', offset: [0, -24], className: 'cacd-tooltip' 
+        });
+    });
 }
 
 function buildSidebar() {
