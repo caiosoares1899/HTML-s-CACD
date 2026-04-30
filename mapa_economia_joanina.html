@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏭</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
@@ -37,24 +37,24 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
 .si-sub{font-size:9px;color:var(--muted);margin-top:2px}
 .overlay{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
-.popup{background:var(--surface);border:1px solid var(--border);border-radius:3px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto;position:relative;animation:popIn .18s ease}
+.popup{background:var(--surface);border:1px solid var(--border);border-radius:4px;width:100%;max-width:750px;max-height:90vh;overflow-y:auto;position:relative;animation:popIn .18s ease}
 @keyframes popIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.popup-close{position:absolute;top:13px;right:14px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:17px}
+.popup-close{position:absolute;top:15px;right:18px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:20px;line-height:1;z-index:2}
 .popup-close:hover{color:var(--cream)}
-.popup-top{padding:18px 44px 14px 20px;border-bottom:1px solid var(--border)}
-.p-tag{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:2px 7px;border-radius:2px;display:inline-block;margin-bottom:9px}
-.p-title{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--cream)}
-.p-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:14px}
+.popup-top{padding:20px 50px 16px 22px;border-bottom:1px solid var(--border)}
+.p-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:3px 9px;border-radius:2px;display:inline-block;margin-bottom:12px}
+.p-title{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--cream);margin-bottom:8px}
+.p-meta{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);display:flex;gap:18px}
 .p-meta span{color:var(--gold-light)}
-.popup-grid{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.pbox{border:1px solid var(--border);border-radius:2px;padding:11px 13px}
+.popup-grid{padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pbox{border:1px solid var(--border);border-radius:4px;padding:14px 16px;background:rgba(255,255,255,.02)}
 .pbox.full{grid-column:1/-1}
-.pbox h3{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.pbox p{font-size:12px;line-height:1.65;color:var(--text)}
+.pbox h3{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.pbox p{font-size:14px;line-height:1.6;color:var(--text)}
 .produto-list{list-style:none;padding:0;margin:0}
-.produto-list li{font-size:12px;color:var(--gold-light);margin-bottom:3px}
-.footer-note{position:fixed;bottom:8px;left:8px;right:8px;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--muted);background:rgba(10,9,6,.7);padding:4px 8px;border-radius:12px;z-index:1000;pointer-events:none}
-@media(max-width:700px){.sidebar{display:none}.popup-grid{grid-template-columns:1fr}}
+.produto-list li{font-size:14px;color:var(--gold-light);margin-bottom:6px;line-height:1.5}
+.footer-note{position:fixed;bottom:12px;left:12px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted);background:rgba(10,9,6,.8);padding:6px 12px;border-radius:16px;z-index:1000;pointer-events:none;max-width:380px;line-height:1.4;border-left:2px solid var(--gold);backdrop-filter:blur(4px)}
+@media(max-width:700px){.sidebar{display:none}.popup-grid{grid-template-columns:1fr}.footer-note{font-size:7px;max-width:280px;bottom:8px;left:8px}}
 </style>
 </head>
 <body>
@@ -108,8 +108,7 @@ body{height:100vh;display:flex;flex-direction:column;font-family:'IBM Plex Sans'
 
 <script>
 // ==============================================================
-// DADOS ECONÔMICOS COM EMOJIS ATUALIZADOS
-// Algodão/tecido: 🧵 | Açúcar/tabaco: 🌾
+// DADOS ECONÔMICOS
 // ==============================================================
 const dadosEconomicos = {
     "AC": { nome: "Acre (parte da Capitania do Rio Negro)", produtos: ["Drogas do Sertão", "Borracha (início)"], grupo: "extrativo", cor: "#76b852", emoji: "🌿", descricao: "Região amazônica de extrativismo vegetal. As 'drogas do sertão' eram coletadas por populações indígenas e mestiças.", extra: "A região só seria efetivamente ocupada mais tarde, mas já integrava a rota amazônica.", pext: "Fronteira disputada com a Espanha. A exploração de drogas do sertão era estratégica para Portugal." },
@@ -134,7 +133,6 @@ const dadosEconomicos = {
     "PA": { nome: "Grão-Pará", produtos: ["Drogas do Sertão", "Cacau", "Pecuária"], grupo: "extrativo", cor: "#76b852", emoji: "🌿", descricao: "Extrativismo vegetal predominante. Cacau e outras drogas do sertão eram exportadas.", extra: "Belém era o principal porto da Amazônia oriental.", pext: "A região amazônica era cobiçada internacionalmente. Portugal reforçou presença militar." }
 };
 
-// Coordenadas para posicionar os emojis
 const coordsEstados = {
     "AC": [-9.0, -70.0], "AM": [-3.47, -62.0], "MA": [-5.5, -45.5], "CE": [-5.2, -39.5],
     "RN": [-5.8, -36.6], "PB": [-7.0, -36.5], "PE": [-8.3, -37.0], "AL": [-9.6, -36.0],
@@ -145,26 +143,23 @@ const coordsEstados = {
 
 let map = null;
 
-// Inicializar mapa
 function initMap() {
     map = L.map('map', {center: [-14.2, -53.0], zoom: 4, minZoom: 3, maxZoom: 9});
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', {subdomains: 'abcd'}).addTo(map);
 }
 
-// Carregar GeoJSON para base
 function loadBaseMap() {
     fetch('https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF')
         .then(response => response.json())
         .then(geoJson => {
             L.geoJSON(geoJson, {
-                style: { fillColor: '#1a2e1e', fillOpacity: 0.4, color: '#3d6645', weight: 0.8, opacity: 0.6 }
+                style: { fillColor: '#1a2e1e', fillOpacity: 0.35, color: '#3d6645', weight: 0.8, opacity: 0.5 }
             }).addTo(map);
             addEmojiMarkers();
         })
         .catch(() => addEmojiMarkers());
 }
 
-// Adicionar apenas os emojis clicáveis (sem siglas)
 function addEmojiMarkers() {
     Object.entries(dadosEconomicos).forEach(([uf, dados]) => {
         const coords = coordsEstados[uf];
@@ -172,16 +167,16 @@ function addEmojiMarkers() {
         
         const emojiIcon = L.divIcon({
             className: 'emoji-marker',
-            html: `<div style="font-size: 32px; cursor: pointer; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6)); transition: transform 0.1s; text-align: center; background: rgba(0,0,0,0.3); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center;">${dados.emoji}</div>`,
-            iconSize: [48, 48],
-            iconAnchor: [24, 24],
-            popupAnchor: [0, -20]
+            html: `<div style="font-size: 34px; cursor: pointer; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.7)); transition: transform 0.1s; text-align: center; background: rgba(0,0,0,0.35); border-radius: 50%; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px);">${dados.emoji}</div>`,
+            iconSize: [52, 52],
+            iconAnchor: [26, 26],
+            popupAnchor: [0, -22]
         });
         
         const marker = L.marker(coords, { icon: emojiIcon, zIndexOffset: 100 }).addTo(map);
         marker.on('click', () => openPopup(uf));
         marker.bindTooltip(`${dados.nome}<br><span style="color:${dados.cor}">${dados.produtos[0]}</span>`, { 
-            direction: 'top', offset: [0, -25], className: 'cacd-tooltip' 
+            direction: 'top', offset: [0, -28], className: 'cacd-tooltip' 
         });
     });
     
@@ -189,7 +184,6 @@ function addEmojiMarkers() {
     filter('all');
 }
 
-// Construir sidebar
 function buildSidebar() {
     const sl = document.getElementById('slist');
     sl.innerHTML = '';
@@ -209,7 +203,6 @@ function buildSidebar() {
     });
 }
 
-// Abrir popup
 function openPopup(uf) {
     const d = dadosEconomicos[uf];
     if (!d) return;
@@ -231,7 +224,6 @@ function closePopup() { document.getElementById('overlay').classList.remove('ope
 function closeIfBg(e) { if (e.target === document.getElementById('overlay')) closePopup(); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-// Filtrar por tipo de produto
 function filter(grupo) {
     document.querySelectorAll('.produto-btn').forEach(b => b.classList.remove('active'));
     const btn = document.getElementById(`btn-${grupo === 'all' ? 'all' : grupo}`);
@@ -245,7 +237,6 @@ function filter(grupo) {
     document.getElementById('count').textContent = visibleCount;
 }
 
-// Inicializar
 initMap();
 loadBaseMap();
 </script>
