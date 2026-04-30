@@ -17,10 +17,15 @@ header{background:#090d12;border-bottom:2px solid var(--gold);padding:10px 20px;
 .tord-btn{background:var(--gold-dim);border:1.5px solid rgba(212,168,67,.5);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:.6rem;padding:6px 14px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
 .tord-btn:hover,.tord-btn.on{background:var(--gold);color:#090d12}
 .body-wrap{flex:1;display:flex;overflow:hidden;min-height:0}
-.map-wrap{flex:1;overflow:auto;background:#0a1520;display:flex;align-items:flex-start;justify-content:center;padding:8px}
+.map-wrap{flex:1;overflow:auto;background:#0a1520;display:flex;align-items:flex-start;justify-content:center;padding:8px;position:relative}
+.map-container{position:relative;display:inline-block}
 #map-svg{height:calc(100vh - 116px);width:auto;display:block;flex-shrink:0}
-#tord-overlay{display:none}
-#tord-overlay.on{display:block}
+.map-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:5}
+.map-overlay.active{opacity:1}
+#tord-overlay{pointer-events:none;z-index:10}
+#tord-overlay line{stroke:#000;stroke-width:5;stroke-dasharray:12,6}
+#tord-overlay line.outline{stroke:#fff;stroke-width:7;stroke-dasharray:12,6;opacity:0.5}
+#tord-overlay text{fill:#000;font-weight:bold;text-shadow:0 0 4px white,0 0 4px white}
 .map-legend{position:fixed;top:70px;left:10px;z-index:50;background:rgba(9,13,18,.93);border:1px solid var(--border);padding:12px 16px;backdrop-filter:blur(4px);border-radius:6px;min-width:180px}
 .ml-title{font-size:.55rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;text-align:center}
 .ml-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;transition:opacity .15s}
@@ -73,36 +78,44 @@ header{background:#090d12;border-bottom:2px solid var(--gold);padding:10px 20px;
 </header>
 <div class="body-wrap">
   <div class="map-wrap">
-    <div class="map-legend">
-      <div class="ml-title">🗺️ REGIÕES — CLIQUE PARA ABRIR</div>
-      <div class="ml-row" onclick="openEv('original')">     <div class="ml-dot" style="background:#c87060"></div><span class="ml-txt">Território Original (1494)</span></div>
-      <div class="ml-row" onclick="openEv('espanha1494')">  <div class="ml-dot" style="background:#d4a843"></div><span class="ml-txt">Ced. Espanha (1494)</span></div>
-      <div class="ml-row" onclick="openEv('peru1600')">     <div class="ml-dot" style="background:#e8a850"></div><span class="ml-txt">Ced. Peru/Esp. (1600)</span></div>
-      <div class="ml-row" onclick="openEv('peru1650')">     <div class="ml-dot" style="background:#d8c858"></div><span class="ml-txt">Ced. Peru/Esp. (1650)</span></div>
-      <div class="ml-row" onclick="openEv('colombia1750')"> <div class="ml-dot" style="background:#b2ccb9"></div><span class="ml-txt">Ced. Colômbia/Esp. (1750)</span></div>
-      <div class="ml-row" onclick="openEv('colombia1860')"> <div class="ml-dot" style="background:#b2ccb9"></div><span class="ml-txt">Ced. Colômbia (1860)</span></div>
-      <div class="ml-row" onclick="openEv('bolivia1860')">  <div class="ml-dot" style="background:#b1cebe"></div><span class="ml-txt">Ced. Bolívia (1860)</span></div>
-      <div class="ml-row" onclick="openEv('bolivia1903')">  <div class="ml-dot" style="background:#b888c8"></div><span class="ml-txt">Ced. Bolívia/Acre (1903)</span></div>
-      <div class="ml-row" onclick="openEv('paraguai1870')"> <div class="ml-dot" style="background:#7898c0"></div><span class="ml-txt">Ced. Paraguai (1870)</span></div>
-      <div class="ml-row" onclick="openEv('argentina1801')"><div class="ml-dot" style="background:#90b878"></div><span class="ml-txt">Ced. Argentina (1801)</span></div>
-      <div class="ml-row" onclick="openEv('argentina1816')"><div class="ml-dot" style="background:#50c880"></div><span class="ml-txt">Ced. Argentina+Uruguai (1816)</span></div>
-      <div class="ml-row" onclick="openEv('franca1816')">   <div class="ml-dot" style="background:#58c0d8"></div><span class="ml-txt">Ced. França (1816)</span></div>
+    <div class="map-container">
+      <div class="map-overlay" id="mapOverlay"></div>
+      <div class="map-legend">
+        <div class="ml-title">🗺️ REGIÕES — CLIQUE PARA ABRIR</div>
+        <div class="ml-row" onclick="openEv('original')">     <div class="ml-dot" style="background:#c87060"></div><span class="ml-txt">Território Original (1494)</span></div>
+        <div class="ml-row" onclick="openEv('espanha1494')">  <div class="ml-dot" style="background:#d4a843"></div><span class="ml-txt">Ced. Espanha (1494)</span></div>
+        <div class="ml-row" onclick="openEv('peru1600')">     <div class="ml-dot" style="background:#e8a850"></div><span class="ml-txt">Ced. Peru/Esp. (1600)</span></div>
+        <div class="ml-row" onclick="openEv('peru1650')">     <div class="ml-dot" style="background:#d8c858"></div><span class="ml-txt">Ced. Peru/Esp. (1650)</span></div>
+        <div class="ml-row" onclick="openEv('colombia1750')"> <div class="ml-dot" style="background:#b2ccb9"></div><span class="ml-txt">Ced. Colômbia/Esp. (1750)</span></div>
+        <div class="ml-row" onclick="openEv('colombia1860')"> <div class="ml-dot" style="background:#b2ccb9"></div><span class="ml-txt">Ced. Colômbia (1860)</span></div>
+        <div class="ml-row" onclick="openEv('bolivia1860')">  <div class="ml-dot" style="background:#b1cebe"></div><span class="ml-txt">Ced. Bolívia (1860)</span></div>
+        <div class="ml-row" onclick="openEv('bolivia1903')">  <div class="ml-dot" style="background:#b888c8"></div><span class="ml-txt">Ced. Bolívia/Acre (1903)</span></div>
+        <div class="ml-row" onclick="openEv('paraguai1870')"> <div class="ml-dot" style="background:#7898c0"></div><span class="ml-txt">Ced. Paraguai (1870)</span></div>
+        <div class="ml-row" onclick="openEv('argentina1801')"><div class="ml-dot" style="background:#90b878"></div><span class="ml-txt">Ced. Argentina (1801)</span></div>
+        <div class="ml-row" onclick="openEv('argentina1816')"><div class="ml-dot" style="background:#50c880"></div><span class="ml-txt">Ced. Argentina+Uruguai (1816)</span></div>
+        <div class="ml-row" onclick="openEv('franca1816')">   <div class="ml-dot" style="background:#58c0d8"></div><span class="ml-txt">Ced. França (1816)</span></div>
+      </div>
+      <svg id="map-svg" viewBox="0 0 1105 1092" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <image href="mapa_brasil.png" x="0" y="0" width="1105" height="1092" preserveAspectRatio="none"/>
+        <g id="tord-overlay" style="display:none">
+          <!-- Linha com contorno branco para melhor visibilidade -->
+          <line x1="635" y1="0" x2="635" y2="1092" stroke="#fff" stroke-width="7" stroke-dasharray="12,6" opacity="0.6"/>
+          <line x1="635" y1="0" x2="635" y2="1092" stroke="#000" stroke-width="4" stroke-dasharray="12,6"/>
+          <!-- Texto do lado espanhol -->
+          <text x="318" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" fill="#000" font-weight="bold" stroke="#fff" stroke-width="2" paint-order="stroke">COROA DE CASTELA / ESPANHA</text>
+          <text x="318" y="70" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" fill="#000" font-weight="bold" stroke="#fff" stroke-width="2" paint-order="stroke" opacity="0">COROA DE CASTELA / ESPANHA</text>
+          <!-- Texto do lado português -->
+          <text x="870" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" fill="#000" font-weight="bold" stroke="#fff" stroke-width="2" paint-order="stroke">COROA DE PORTUGAL</text>
+          <!-- Título central -->
+          <text x="635" y="80" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" fill="#000" font-style="italic" font-weight="bold" stroke="#fff" stroke-width="1.5" paint-order="stroke">Tratado de Tordesilhas — 7 de junho de 1494</text>
+          <!-- Caixa de informação -->
+          <rect x="60" y="490" width="460" height="80" rx="3" fill="rgba(0,0,0,0.85)" stroke="#d4a843" stroke-width="1.5"/>
+          <text x="290" y="517" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#d4a843">O Brasil moderno (8,5 mi km²) seria</text>
+          <text x="290" y="537" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#d4a843">~60% menor se esta linha</text>
+          <text x="290" y="555" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#7d8590">tivesse sido respeitada.</text>
+        </g>
+      </svg>
     </div>
-    <svg id="map-svg" viewBox="0 0 1105 1092" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-      <image href="mapa_brasil.png" x="0" y="0" width="1105" height="1092" preserveAspectRatio="none"/>
-      <g id="tord-overlay">
-        <rect x="635" y="0" width="470" height="1092" fill="rgba(212,168,67,0.15)"/>
-        <rect x="0" y="0" width="635" height="1092" fill="rgba(80,120,200,0.10)"/>
-        <line x1="635" y1="0" x2="635" y2="1092" stroke="#d4a843" stroke-width="4" stroke-dasharray="14,7" opacity="0.9"/>
-        <text x="318" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="18" fill="rgba(80,120,200,0.85)" letter-spacing="2">COROA DE CASTELA / ESPANHA</text>
-        <text x="870" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="18" fill="rgba(212,168,67,0.9)" letter-spacing="2">COROA DE PORTUGAL</text>
-        <text x="635" y="76" text-anchor="middle" font-family="Playfair Display,serif" font-size="15" fill="#d4a843" font-style="italic">Tratado de Tordesilhas — 7 de junho de 1494</text>
-        <rect x="60" y="490" width="460" height="80" rx="3" fill="rgba(9,13,18,0.88)" stroke="#d4a843" stroke-width="1.5"/>
-        <text x="290" y="517" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#d4a843">O Brasil moderno (8,5 mi km²) seria</text>
-        <text x="290" y="537" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#d4a843">~60% menor se esta linha</text>
-        <text x="290" y="555" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#7d8590">tivesse sido respeitada.</text>
-      </g>
-    </svg>
   </div>
   <div class="side-panel">
     <div class="sp-empty" id="spEmpty">
@@ -204,8 +217,13 @@ function closePanel() {
 let tordOn = false;
 function toggleTord() {
   tordOn = !tordOn;
-  document.getElementById('tordBtn').classList.toggle('on', tordOn);
-  document.getElementById('tord-overlay').classList.toggle('on', tordOn);
+  const btn = document.getElementById('tordBtn');
+  const overlay = document.getElementById('tord-overlay');
+  const mapOverlay = document.getElementById('mapOverlay');
+  
+  btn.classList.toggle('on', tordOn);
+  overlay.style.display = tordOn ? 'block' : 'none';
+  mapOverlay.classList.toggle('active', tordOn);
 }
 </script>
 </body>
