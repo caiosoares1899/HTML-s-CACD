@@ -2973,6 +2973,7 @@ function buildSidebar() {
       const cor = CORES[pais.presenca] || CORES.acreditacao;
       const capital = pais.capital || '';
       const contC = CONT_COLOR[pais.continente] || cor.border;
+      d.dataset.presenca = pais.presenca || 'acreditacao';
       d.innerHTML = `
         <div class="si-flag">${pais.flag}</div>
         <div>
@@ -3004,6 +3005,7 @@ function filterCont(cont) {
   const btn = document.getElementById('btn-' + (cont === 'all' ? 'all' : cont));
   if (btn) btn.classList.add('active');
   applyFilters();
+  applyMapFilter(cont);
 }
 
 function searchCountry(term) {
@@ -3011,12 +3013,80 @@ function searchCountry(term) {
   applyFilters();
 }
 
+// Re-estiliza o mapa quando um filtro de continente é ativado
+function applyMapFilter(cont) {
+  if (!geoLayer) return;
+  geoLayer.eachLayer(layer => {
+    const feature = layer.feature;
+    if (!feature) return;
+    const pais = getPaisData(feature);
+
+    // Brasil: sempre destacado
+    const fp = feature.properties || {};
+    const isoVals = [fp.ISO_A3, fp.iso_a3, fp.ADM0_A3, fp.id].filter(Boolean);
+    if (isoVals.some(c => c.toUpperCase() === 'BRA')) return;
+
+    if (cont === 'all') {
+      // Restaurar estilo normal
+      layer.setStyle(getStyle(feature));
+      if (pais) {
+        layer.off('click').on('click', () => openPopup(pais));
+      }
+      return;
+    }
+
+    if (cont === 'parlamento') {
+      // Sem embaixada: destacar acreditações, desbotar embaixadas
+      if (!pais) {
+        layer.setStyle({ fillColor: '#111', fillOpacity: 0.4, color: '#1e1e1e', weight: 0.3, opacity: 0.4 });
+        layer.off('click');
+        return;
+      }
+      const isAcred = ['acreditacao','honorario'].includes(pais.presenca);
+      if (isAcred) {
+        layer.setStyle(getStyle(feature)); // cor normal
+        layer.off('click').on('click', () => openPopup(pais));
+      } else {
+        // Embaixadas: desbotadas
+        const contBorder = CONT_COLOR[pais.continente] || '#6b7280';
+        const rgb = hexToRgb(contBorder);
+        layer.setStyle({ fillColor: `rgba(${rgb},0.03)`, fillOpacity: 1, color: contBorder, opacity: 0.15, weight: 0.4 });
+        layer.off('click').on('click', () => openPopup(pais)); // ainda clicável
+      }
+      return;
+    }
+
+    // Filtro de continente: destacar o continente, desbotar os outros
+    if (!pais) {
+      layer.setStyle({ fillColor: '#111', fillOpacity: 0.4, color: '#1a1a1a', weight: 0.3, opacity: 0.3 });
+      layer.off('click');
+      return;
+    }
+
+    if (pais.continente === cont) {
+      // Continente selecionado: estilo normal + levemente mais brilhante
+      const s = getStyle(feature);
+      layer.setStyle({ ...s, opacity: 1.0 });
+      layer.off('click').on('click', () => openPopup(pais));
+    } else {
+      // Outros continentes: muito desbotados, quase invisíveis
+      const contBorder = CONT_COLOR[pais.continente] || '#444';
+      const rgb = hexToRgb(contBorder);
+      layer.setStyle({ fillColor: `rgba(${rgb},0.03)`, fillOpacity: 1, color: contBorder, opacity: 0.12, weight: 0.3 });
+      layer.off('click').on('click', () => openPopup(pais)); // ainda clicável
+    }
+  });
+}
+
 function applyFilters() {
-  document.querySelectorAll('.si, [data-cont]').forEach(el => {
-    if (!el.classList.contains('si')) return;
-    const matchCont = currentFilter === 'all' || el.dataset.cont === currentFilter;
+  const isSemEmb = currentFilter === 'parlamento';
+
+  document.querySelectorAll('.si').forEach(el => {
+    const matchCont = currentFilter === 'all' || isSemEmb || el.dataset.cont === currentFilter;
     const matchSearch = !currentSearch || el.dataset.nome.includes(currentSearch);
-    el.classList.toggle('hidden', !(matchCont && matchSearch));
+    // Filtro "sem embaixada": mostrar só acreditação e honorário
+    const matchPresenca = !isSemEmb || (el.dataset.presenca && ['acreditacao','honorario'].includes(el.dataset.presenca));
+    el.classList.toggle('hidden', !(matchCont && matchSearch && matchPresenca));
   });
 
   // Headers
@@ -3026,20 +3096,85 @@ function applyFilters() {
       .some(el => !el.classList.contains('hidden'));
     header.style.display = hasVisible ? '' : 'none';
   });
-  
-  // Filtro especial "sem embaixada"
-  if (currentFilter === 'parlamento') {
-    document.querySelectorAll('.si').forEach(el => {
-      // mostrar só acreditação
-    });
-  }
-  
+
   updateCount();
 }
 
 // ═══════════════════════════════════════════════
 // POPUP
 // ═══════════════════════════════════════════════
+
+// ─── HISTÓRICO DE RUPTURAS DIPLOMÁTICAS ───────────────────────────────────────
+const RUPT = {
+  "CHN": {
+    ruptura: 1964, retomada: 1974,
+    motivo: "O Brasil reconhecia Taiwan (República da China) como o governo legítimo da China. Com o governo Geisel, em 1974, o Brasil reconheceu a República Popular da China e rompeu relações com Taiwan.",
+    duracao: "10 anos"
+  },
+  "CUB": {
+    ruptura: 1964, retomada: 1986,
+    motivo: "Após o golpe militar de 1964, o governo Castelo Branco rompeu relações com Cuba por considerá-la uma ameaça comunista na região. As relações foram retomadas no governo Sarney.",
+    duracao: "22 anos"
+  },
+  "PRK": {
+    ruptura: null, retomada: null,
+    motivo: "O Brasil nunca manteve relações diplomáticas plenas com a Coreia do Norte. Relações informais existem via embaixada em Pequim.",
+    duracao: "Nunca estabelecidas formalmente"
+  },
+  "ISR": {
+    ruptura: 2024, retomada: null,
+    motivo: "Em fevereiro de 2024, o Brasil retirou seu embaixador de Tel Aviv após o governo Lula comparar a ofensiva israelense em Gaza ao Holocausto. Israel declarou Lula persona non grata. A crise é a mais grave da história das relações Brasil-Israel.",
+    duracao: "Em curso (desde 2024)"
+  },
+  "IRN": {
+    ruptura: 1987, retomada: 1990,
+    motivo: "O Brasil rompeu relações com o Irã em 1987 durante o governo Sarney, em meio à pressão ocidental após a Revolução Islâmica e à guerra Irã-Iraque. As relações foram retomadas em 1990 pelo governo Collor.",
+    duracao: "3 anos"
+  },
+  "VEN": {
+    ruptura: 2019, retomada: 2023,
+    motivo: "O governo Bolsonaro reconheceu Juan Guaidó como presidente legítimo da Venezuela e retirou o embaixador de Caracas. O governo Lula retomou as relações plenas em 2023, reconhecendo o governo Maduro.",
+    duracao: "4 anos"
+  },
+  "DOM": {
+    ruptura: null, retomada: null,
+    motivo: null, duracao: null
+  },
+  "BOL": {
+    ruptura: 2019, retomada: 2020,
+    motivo: "Após a renúncia de Evo Morales em novembro de 2019, o governo Bolsonaro reconheceu o governo interino de Jeanine Áñez. A embaixada boliviana foi palco de crise diplomática quando asilados do partido de Morales buscaram refúgio. As relações foram normalizadas com a eleição de Arce em 2020.",
+    duracao: "Crise de 1 ano (sem ruptura formal)"
+  },
+  "CHE": {
+    ruptura: null, retomada: null,
+    motivo: null, duracao: null
+  },
+  "TWN": {
+    ruptura: 1974, retomada: null,
+    motivo: "O Brasil reconhecia Taiwan (República da China) desde 1949. Em 1974, o governo Geisel rompeu relações com Taiwan para reconhecer a República Popular da China, seguindo a política de 'Uma só China'.",
+    duracao: "Definitivo (desde 1974)"
+  },
+  "SDN": {
+    ruptura: null, retomada: null,
+    motivo: null, duracao: null
+  },
+  "PRY": {
+    ruptura: 1965, retomada: 1966,
+    motivo: "Breve crise diplomática durante o regime militar brasileiro relacionada a disputas sobre o aproveitamento do Rio Paraná, que precedeu as negociações de Itaipu.",
+    duracao: "Menos de 1 ano"
+  },
+  "ALB": {
+    ruptura: 1961, retomada: 1993,
+    motivo: "Durante a Guerra Fria, o Brasil rompeu relações com a Albânia comunista alinhada com a China. As relações foram retomadas após a queda do comunismo.",
+    duracao: "32 anos"
+  }
+};
+
+// Enriquecer os dados do país com informação de ruptura no openPopup
+function getRuptura(pais) {
+  return RUPT[pais.iso] || null;
+}
+
 function openPopup(pais) {
   const cor = CORES[pais.presenca] || CORES.acreditacao;
   // Cor do continente para destaque visual
@@ -3109,6 +3244,21 @@ function openPopup(pais) {
   // Aproximações e Conflitos
   if (aprox) addBox(grid, conf ? '' : 'full', '🤝 Aproximações e Parcerias', `<p>${aprox}</p>`);
   if (conf) addBox(grid, aprox ? '' : 'full', '⚡ Tensões e Conflitos', `<p>${conf}</p>`);
+
+  // Ruptura diplomática
+  const rupt = getRuptura(pais);
+  if (rupt && rupt.motivo) {
+    const ruptColor = rupt.retomada ? '#f59e0b' : '#f87171';
+    const ruptStatus = rupt.retomada
+      ? `Rompimento em <b>${rupt.ruptura}</b> · Retomada em <b>${rupt.retomada}</b> · Duração: ${rupt.duracao}`
+      : `Rompimento em <b>${rupt.ruptura || '—'}</b> · <span style="color:#f87171">Sem retomada formal</span> · ${rupt.duracao}`;
+    addBox(grid, 'full', '🚨 Histórico de Ruptura Diplomática',
+      `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:${ruptColor};flex-shrink:0"></div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:${ruptColor}">${ruptStatus}</span>
+      </div>
+      <p>${rupt.motivo}</p>`);
+  }
 
   document.getElementById('overlay').classList.add('open');
 }
