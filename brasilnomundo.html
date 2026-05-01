@@ -3104,73 +3104,91 @@ function applyFilters() {
 // POPUP
 // ═══════════════════════════════════════════════
 
-// ─── HISTÓRICO DE RUPTURAS DIPLOMÁTICAS ───────────────────────────────────────
+// ─── HISTÓRICO DE RUPTURAS DIPLOMÁTICAS ─────────────────────────────────────
+// Fontes: Itamaraty, Wikipedia, CEBRI, historiografia acadêmica
+// Campos: ruptura (ano), retomada (ano ou null), motivo, duracao, contexto
 const RUPT = {
+
+  // ── SÉCULO XIX ──────────────────────────────────────────────────────────────
+  "GBR": {
+    ruptura: 1863, retomada: 1865, duracao: "2 anos",
+    motivo: "Questão Christie: o ministro britânico William Dougal Christie ordenou o bloqueio do porto do Rio de Janeiro e a apreensão de navios brasileiros como represália ao naufrágio do brigue inglês Prince of Wales e a um incidente envolvendo marinheiros ingleses bêbados. O Brasil recusou as exigências britânicas, expulsou Christie e o governo de Palmerston recusou-se a se desculpar formalmente. O Imperador D. Pedro II rompeu relações em 1863. O Brasil ganhou no arbitramento internacional e a Inglaterra acabou pagando indenização — mas sem retratação pública. Relações retomadas em 1865."
+  },
+  "PRT": {
+    ruptura: 1894, retomada: 1895, duracao: "1 ano",
+    motivo: "Revolta da Armada (1893-94): Portugal concedeu asilo nos seus navios de guerra aos rebeldes da Armada liderados por Saldanha da Gama, que eram inimigos do presidente Floriano Peixoto. Os navios portugueses transportaram mais de 200 rebeldes para o Rio da Prata, onde se juntaram à Revolução Federalista. Floriano considerou o ato uma violação da soberania nacional e rompeu relações em maio de 1894. A ruptura refletia também o 'americanismo' republicano de Floriano em oposição à antiga metrópole portuguesa associada à Monarquia. Relações restabelecidas com Prudente de Morais (1895)."
+  },
+
+  // ── PRIMEIRA GUERRA MUNDIAL ──────────────────────────────────────────────────
+  "DEU": {
+    ruptura: 1917, retomada: 1920, duracao: "3 anos (1ª ruptura); 3 anos (2ª ruptura: 1942-45)",
+    motivo: "1ª Ruptura (1917): O vapor brasileiro Paraná, carregado de café, foi torpedeado por um submarino alemão em abril de 1917, matando 3 brasileiros. O Brasil rompeu relações com a Alemanha em 11 de abril de 1917 e declarou guerra em outubro. Relações retomadas em 1920 após o Tratado de Versalhes. — 2ª Ruptura (1942): Na III Reunião de Consulta dos Chanceleres Americanos (Rio, jan. 1942), o Brasil anunciou ruptura com os países do Eixo após pressão dos EUA e o ataque a Pearl Harbor. Navios brasileiros foram afundados por submarinos alemães e italianos, levando à declaração de guerra em agosto de 1942. Relações retomadas em 1945."
+  },
+  "AUT": {
+    ruptura: 1917, retomada: 1920, duracao: "3 anos",
+    motivo: "Brasil rompeu relações com o Império Austro-Húngaro simultaneamente à ruptura com a Alemanha, em abril de 1917, após o torpedeamento de navios brasileiros. Após o fim da Primeira Guerra e a dissolução do Império, relações foram estabelecidas com a nova República Austríaca em 1920."
+  },
+  "ITA": {
+    ruptura: 1942, retomada: 1945, duracao: "3 anos",
+    motivo: "Na III Reunião de Consulta dos Chanceleres Americanos (Rio de Janeiro, 28 de janeiro de 1942), o Brasil rompeu relações com a Itália fascista de Mussolini simultaneamente a Alemanha e Japão. Navios brasileiros foram afundados por submarinos do Eixo no Atlântico Sul, acelerando a declaração de guerra em agosto de 1942. A Força Expedicionária Brasileira (FEB) combateu na Campanha da Itália (1944-45), libertando cidades como Montese. Relações retomadas com a Itália republicana em 1945."
+  },
+  "JPN": {
+    ruptura: 1942, retomada: 1952, duracao: "10 anos",
+    motivo: "Brasil rompeu relações com o Japão em 28 de janeiro de 1942 após o ataque a Pearl Harbor e sob pressão americana. Em agosto de 1942, após submarinos do Eixo afundarem navios brasileiros, o Brasil declarou guerra ao Japão. A comunidade nikkei no Brasil sofreu intensa repressão: bens confiscados, restrições de movimento e deportações. Após a rendição japonesa em 1945, o tratado de paz foi assinado em São Francisco (1951) e as relações restabelecidas em 1952. Detalhe histórico: os 'kachigumi' (japoneses que não acreditavam na derrota do Japão) causaram assassinatos dentro da comunidade nikkei brasileira até 1947."
+  },
+
+  // ── GUERRA FRIA ──────────────────────────────────────────────────────────────
+  "RUS": {
+    ruptura: 1917, retomada: 1945, duracao: "28 anos (1ª ruptura); 14 anos (2ª ruptura: 1947-61)",
+    motivo: "1ª Ruptura (1917-1945): O Brasil não reconheceu o governo bolchevique de Lênin após a Revolução de Outubro de 1917, por considerá-lo ilegítimo e radical. Somente em 1945, após a aliança da 2ª Guerra Mundial, as relações foram retomadas. — 2ª Ruptura (1947-1961): O governo do general Eurico Gaspar Dutra rompeu relações com a URSS de Stalin em 20 de outubro de 1947, sendo o primeiro país ocidental a fazê-lo. O estopim foi o incidente do diplomata Soares de Pinna, detido pelos soviéticos sob acusação de embriaguez — que o Brasil considerou um pretexto. O pano de fundo era a Guerra Fria: o PCB havia sido cassado em maio de 1947, e o Brasil se alinhava ao bloco ocidental. O Brasil 'foi mais realista que o rei' — atuou mais anticomunista que os próprios EUA, que ainda conversavam com Moscou. Relações retomadas em 1961 pelo governo Jânio Quadros/Goulart, como parte da Política Externa Independente — coincidindo com a visita do cosmonauta Yuri Gagarin ao Brasil."
+  },
   "CHN": {
-    ruptura: 1964, retomada: 1974,
-    motivo: "O Brasil reconhecia Taiwan (República da China) como o governo legítimo da China. Com o governo Geisel, em 1974, o Brasil reconheceu a República Popular da China e rompeu relações com Taiwan.",
-    duracao: "10 anos"
-  },
-  "CUB": {
-    ruptura: 1964, retomada: 1986,
-    motivo: "Após o golpe militar de 1964, o governo Castelo Branco rompeu relações com Cuba por considerá-la uma ameaça comunista na região. As relações foram retomadas no governo Sarney.",
-    duracao: "22 anos"
-  },
-  "PRK": {
-    ruptura: null, retomada: null,
-    motivo: "O Brasil nunca manteve relações diplomáticas plenas com a Coreia do Norte. Relações informais existem via embaixada em Pequim.",
-    duracao: "Nunca estabelecidas formalmente"
-  },
-  "ISR": {
-    ruptura: 2024, retomada: null,
-    motivo: "Em fevereiro de 2024, o Brasil retirou seu embaixador de Tel Aviv após o governo Lula comparar a ofensiva israelense em Gaza ao Holocausto. Israel declarou Lula persona non grata. A crise é a mais grave da história das relações Brasil-Israel.",
-    duracao: "Em curso (desde 2024)"
-  },
-  "IRN": {
-    ruptura: 1987, retomada: 1990,
-    motivo: "O Brasil rompeu relações com o Irã em 1987 durante o governo Sarney, em meio à pressão ocidental após a Revolução Islâmica e à guerra Irã-Iraque. As relações foram retomadas em 1990 pelo governo Collor.",
-    duracao: "3 anos"
-  },
-  "VEN": {
-    ruptura: 2019, retomada: 2023,
-    motivo: "O governo Bolsonaro reconheceu Juan Guaidó como presidente legítimo da Venezuela e retirou o embaixador de Caracas. O governo Lula retomou as relações plenas em 2023, reconhecendo o governo Maduro.",
-    duracao: "4 anos"
-  },
-  "DOM": {
-    ruptura: null, retomada: null,
-    motivo: null, duracao: null
-  },
-  "BOL": {
-    ruptura: 2019, retomada: 2020,
-    motivo: "Após a renúncia de Evo Morales em novembro de 2019, o governo Bolsonaro reconheceu o governo interino de Jeanine Áñez. A embaixada boliviana foi palco de crise diplomática quando asilados do partido de Morales buscaram refúgio. As relações foram normalizadas com a eleição de Arce em 2020.",
-    duracao: "Crise de 1 ano (sem ruptura formal)"
-  },
-  "CHE": {
-    ruptura: null, retomada: null,
-    motivo: null, duracao: null
+    ruptura: 1949, retomada: 1974, duracao: "25 anos",
+    motivo: "Com a vitória comunista na Guerra Civil Chinesa (1949) e a proclamação da República Popular da China por Mao Tsé-Tung, o Brasil reconheceu o governo nacionalista de Chiang Kai-shek em Taiwan (República da China) como o legítimo governo chinês. O Brasil manteve essa posição por 25 anos, isolando-se comercial e diplomaticamente do gigante asiático. Somente em 1974, no governo Geisel e sob orientação de Azeredo da Silveira, o Brasil reconheceu a RPC e rompeu relações com Taiwan — numa decisão autônoma que antecipou o isolamento de Taiwan e abriu imenso mercado ao agronegócio brasileiro."
   },
   "TWN": {
-    ruptura: 1974, retomada: null,
-    motivo: "O Brasil reconhecia Taiwan (República da China) desde 1949. Em 1974, o governo Geisel rompeu relações com Taiwan para reconhecer a República Popular da China, seguindo a política de 'Uma só China'.",
-    duracao: "Definitivo (desde 1974)"
+    ruptura: 1974, retomada: null, duracao: "Definitivo (desde 1974)",
+    motivo: "O Brasil reconhecia Taiwan (República da China) como o governo legítimo da China desde 1949. Em 1974, o governo Geisel reconheceu a República Popular da China, seguindo a política de 'Uma só China'. Taiwan foi substituído pela RPC no assento permanente do CSNU já em 1971 (Resolução 2758). O Brasil mantém relações comerciais informais via Câmara de Comércio Brasil-Taiwan (CCBT), mas sem relações diplomáticas formais."
   },
-  "SDN": {
-    ruptura: null, retomada: null,
-    motivo: null, duracao: null
-  },
-  "PRY": {
-    ruptura: 1965, retomada: 1966,
-    motivo: "Breve crise diplomática durante o regime militar brasileiro relacionada a disputas sobre o aproveitamento do Rio Paraná, que precedeu as negociações de Itaipu.",
-    duracao: "Menos de 1 ano"
+  "CUB": {
+    ruptura: 1964, retomada: 1986, duracao: "22 anos",
+    motivo: "Após o golpe militar de 1964, o governo Castelo Branco rompeu relações com Cuba revolucionária de Fidel Castro, alinhando-se ao anticomunismo americano. Cuba já havia sido expulsa da OEA em 1962. O Brasil pressionou outros países latino-americanos a fazerem o mesmo. As relações foram retomadas pelo governo Sarney em 1986, como parte da redemocratização e da busca por maior autonomia na política externa. Nos anos seguintes, Brasil e Cuba cooperaram ativamente em saúde pública e ensino técnico."
   },
   "ALB": {
-    ruptura: 1961, retomada: 1993,
-    motivo: "Durante a Guerra Fria, o Brasil rompeu relações com a Albânia comunista alinhada com a China. As relações foram retomadas após a queda do comunismo.",
-    duracao: "32 anos"
-  }
-};
+    ruptura: 1961, retomada: 1993, duracao: "32 anos",
+    motivo: "Durante a Guerra Fria, o Brasil rompeu relações com a Albânia comunista em 1961, após esta se alinhar à China maoísta e romper com a URSS. A Albânia de Enver Hoxha adotou um comunismo isolacionista radical. As relações foram retomadas após a queda do regime comunista albanês em 1991-92 e a redemocratização do país."
+  },
 
-// Enriquecer os dados do país com informação de ruptura no openPopup
+  // ── REGIMES MILITARES E DITADURAS ────────────────────────────────────────────
+  "VEN": {
+    ruptura: 1964, retomada: 1966, duracao: "Crise de 2 anos (1964-66); + Crise 2019-2023",
+    motivo: "1ª Crise (1964): A Venezuela do presidente Rómulo Betancourt aplicou a 'Doutrina Betancourt' — não reconhecer governos oriundos de golpe de Estado — e retirou seu embaixador após o golpe de 1964. Relações normalizadas em 1966. — 2ª Crise (2019-2023): O governo Bolsonaro reconheceu Juan Guaidó como presidente interino da Venezuela e retirou o embaixador de Caracas. Maduro expulsou o representante brasileiro. O governo Lula retomou as relações plenas em 2023, reconhecendo o governo Maduro. Embaixada reaberta após 4 anos."
+  },
+  "IRN": {
+    ruptura: 1987, retomada: 1990, duracao: "3 anos",
+    motivo: "O Brasil rompeu relações com o Irã em 1987, durante o governo Sarney, em meio à pressão ocidental decorrente da Revolução Islâmica (1979) e da guerra Irã-Iraque. A ruptura foi também influenciada pela descoberta de atividades do Hezbollah e grupos ligados ao Irã em território brasileiro (Tríplice Fronteira). As relações foram restabelecidas em 1990, pelo governo Collor, que buscava reinserção internacional e diversificação comercial."
+  },
+  "BOL": {
+    ruptura: 2019, retomada: 2020, duracao: "Crise de ~1 ano (sem ruptura formal)",
+    motivo: "Após a renúncia de Evo Morales em novembro de 2019, o governo Bolsonaro reconheceu rapidamente o governo interino de Jeanine Áñez. A embaixada boliviana no Brasil se tornou palco de crise quando partidários de Morales buscaram refúgio — o Itamaraty recusou conceder asilo. A crise se agravou com acusações de interferência brasileira na política interna boliviana. Com a eleição de Luis Arce (MAS) em 2020, as relações foram normalizadas."
+  },
+
+  // ── SÉCULO XXI ────────────────────────────────────────────────────────────────
+  "ISR": {
+    ruptura: 2024, retomada: null, duracao: "Em curso (desde fev. 2024)",
+    motivo: "Em fevereiro de 2024, após a ofensiva israelense em Gaza pós-ataque do Hamas (7 out. 2023), o presidente Lula comparou a operação ao Holocausto em discurso na União Africana, em Adis Abeba: 'O que está acontecendo na Faixa de Gaza não existe em outro momento da história. Existiu quando Hitler resolveu matar os judeus'. Israel declarou Lula persona non grata, convocou seu embaixador para consultas e exigiu retratação. O Brasil retirou seu embaixador de Tel Aviv. A crise é a mais grave na história das relações Brasil-Israel. Paralelamente, o Brasil votou em outubro de 2024 pela adesão da Palestina à ONU como membro pleno. Em 2024, o Brasil também reconheceu a competência do TPI para julgar Netanyahu."
+  },
+  "PRK": {
+    ruptura: null, retomada: null, duracao: "Nunca estabelecidas formalmente",
+    motivo: "O Brasil nunca manteve relações diplomáticas plenas com a Coreia do Norte. O Brasil se opõe ao programa nuclear norte-coreano e votou em favor de resoluções de sanções no CSNU. O canal diplomático informal se dá via embaixada brasileira em Pequim. A Coreia do Norte tem uma das relações mais esparsas com o Brasil entre todos os países do mundo."
+  },
+  };
+
+// Retornar dados de ruptura para um país
+function getRuptura(pais) {
+  return RUPT[pais.iso] || null;
+}
+
 function getRuptura(pais) {
   return RUPT[pais.iso] || null;
 }
@@ -3249,15 +3267,15 @@ function openPopup(pais) {
   const rupt = getRuptura(pais);
   if (rupt && rupt.motivo) {
     const ruptColor = rupt.retomada ? '#f59e0b' : '#f87171';
-    const ruptStatus = rupt.retomada
-      ? `Rompimento em <b>${rupt.ruptura}</b> · Retomada em <b>${rupt.retomada}</b> · Duração: ${rupt.duracao}`
-      : `Rompimento em <b>${rupt.ruptura || '—'}</b> · <span style="color:#f87171">Sem retomada formal</span> · ${rupt.duracao}`;
-    addBox(grid, 'full', '🚨 Histórico de Ruptura Diplomática',
-      `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <div style="width:8px;height:8px;border-radius:50%;background:${ruptColor};flex-shrink:0"></div>
-        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:${ruptColor}">${ruptStatus}</span>
+    const statusIcon = rupt.retomada ? '🟡' : '🔴';
+    const statusText = rupt.retomada
+      ? `Rompimento em <b style="color:${ruptColor}">${rupt.ruptura}</b> &nbsp;·&nbsp; Retomada em <b style="color:#4ade80">${rupt.retomada}</b> &nbsp;·&nbsp; Duração: <b>${rupt.duracao}</b>`
+      : `Rompimento em <b style="color:${ruptColor}">${rupt.ruptura || 'data incerta'}</b> &nbsp;·&nbsp; <span style="color:#f87171">Sem retomada formal</span> &nbsp;·&nbsp; <b>${rupt.duracao}</b>`;
+    addBox(grid, 'full', `${statusIcon} Histórico de Ruptura Diplomática`,
+      `<div style="padding:7px 10px;border-radius:2px;background:rgba(${rupt.retomada?'245,158,11':'248,113,113'},0.08);border:1px solid rgba(${rupt.retomada?'245,158,11':'248,113,113'},0.25);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.7">
+        ${statusText}
       </div>
-      <p>${rupt.motivo}</p>`);
+      <p style="font-size:12px;line-height:1.7;color:var(--text)">${rupt.motivo}</p>`);
   }
 
   document.getElementById('overlay').classList.add('open');
