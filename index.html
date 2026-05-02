@@ -103,7 +103,7 @@
   .about-section p + p { margin-top: 0.9rem; }
   .about-section em { font-style: italic; color: var(--ink); font-weight: 400; }
 
-  /* ── GRID ── */
+  /* ── GRID HEADING ── */
   .projects-heading { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2rem; }
   .projects-heading::after {
     content: ''; flex: 1; height: 1px;
@@ -114,19 +114,23 @@
     text-transform: uppercase; color: var(--ink-mid); white-space: nowrap;
   }
 
-  .projects-grid {
+  /* ── LINHAS DO GRID ──
+     Linha A: 2 cards  (brasilnomundo · conflitos)
+     Linha B: 1 card   (capitanias — destaque central)
+     Linha C: 3 cards  (presidentes · ec.joanina · chanceleres)
+     Linha D: 1 card   (expansão territorial — solo)
+  ── */
+  .grid-row {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.8rem; margin-bottom: 4rem;
+    gap: 1.8rem;
+    margin-bottom: 1.8rem;
   }
+  .row-2   { grid-template-columns: 1fr 1fr; }
+  .row-1c  { grid-template-columns: 1fr; max-width: 600px; margin-left: auto; margin-right: auto; }
+  .row-3   { grid-template-columns: 1fr 1fr 1fr; }
+  .row-1s  { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; margin-bottom: 0; }
 
-  @media (max-width: 960px) {
-    .projects-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 580px) {
-    .projects-grid { grid-template-columns: 1fr; }
-  }
-
+  /* ── CARD BASE ── */
   .project-card {
     background: rgba(255,255,255,0.42);
     border: 1px solid var(--parchment-deep); border-radius: 2px;
@@ -150,12 +154,15 @@
     background: var(--parchment-dark);
     border-bottom: 1px solid var(--parchment-deep);
   }
+  /* card de destaque (linha B) com preview mais alto */
+  .card-featured .card-preview { height: 260px; }
+
   .card-preview iframe {
     width: 1280px; height: 854px;
     border: none; display: block;
     transform-origin: top left;
     pointer-events: none;
-    transform: scale(0.234); /* fallback; JS ajusta */
+    transform: scale(0.234); /* fallback; JS recalcula */
   }
   .card-preview .overlay {
     position: absolute; inset: 0; z-index: 2; cursor: pointer;
@@ -164,7 +171,7 @@
     position: absolute; bottom: 7px; right: 8px; z-index: 3;
     font-family: 'Cinzel', serif; font-size: 0.5rem; letter-spacing: 0.25em;
     text-transform: uppercase; color: var(--ink-light);
-    background: rgba(245,238,216,0.82); padding: 2px 6px; border-radius: 1px;
+    background: rgba(245,238,216,0.85); padding: 2px 6px; border-radius: 1px;
   }
   .card-preview::after {
     content: 'carregando prévia…';
@@ -175,20 +182,34 @@
   }
 
   /* ── CARD BODY ── */
-  .card-body { padding: 1.3rem 1.5rem 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 0.45rem; }
+  .card-body {
+    padding: 1.3rem 1.5rem 1.5rem; flex: 1;
+    display: flex; flex-direction: column; gap: 0.45rem;
+  }
+  .card-featured .card-body { padding: 1.5rem 1.8rem 1.8rem; }
+
   .card-tag {
     display: inline-block; font-family: 'Cinzel', serif; font-size: 0.56rem;
     letter-spacing: 0.32em; text-transform: uppercase; color: var(--gold-dark);
     border: 1px solid var(--tan); padding: 0.22rem 0.65rem; border-radius: 1px; width: fit-content;
   }
-  .card-title { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 600; color: var(--ink); line-height: 1.3; margin-top: 0.15rem; }
+  .card-title {
+    font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 600;
+    color: var(--ink); line-height: 1.3; margin-top: 0.15rem;
+  }
+  .card-featured .card-title { font-size: 1.2rem; }
+
   .card-desc { font-size: 0.875rem; line-height: 1.65; color: var(--ink-light); font-weight: 300; flex: 1; }
+
   .card-cta {
     display: flex; align-items: center; gap: 0.5rem; margin-top: 0.7rem;
     font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.3em;
     text-transform: uppercase; color: var(--gold-dark);
   }
-  .card-cta::after { content: ''; display: block; width: 22px; height: 1px; background: var(--gold-dark); transition: width 0.25s ease; }
+  .card-cta::after {
+    content: ''; display: block; width: 22px; height: 1px;
+    background: var(--gold-dark); transition: width 0.25s ease;
+  }
   .project-card:hover .card-cta::after { width: 38px; }
 
   /* ── SEPARATOR ── */
@@ -214,7 +235,10 @@
     display: flex; align-items: center; justify-content: center;
     font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--gold-dark); flex-shrink: 0;
   }
-  .author-label { font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.4rem; display: block; }
+  .author-label {
+    font-family: 'Cinzel', serif; font-size: 0.6rem; letter-spacing: 0.4em;
+    text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.4rem; display: block;
+  }
   .author-name { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.3rem; }
   .author-role { font-family: 'IM Fell English', serif; font-style: italic; font-size: 0.88rem; color: var(--ink-light); margin-bottom: 0.7rem; }
   .author-bio { font-size: 0.88rem; line-height: 1.75; color: var(--ink-mid); font-weight: 300; }
@@ -227,10 +251,17 @@
   @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
   header          { animation: fadeUp 0.7s ease both; }
   .about-section  { animation: fadeUp 0.7s 0.15s ease both; }
-  .projects-grid  { animation: fadeUp 0.7s 0.25s ease both; }
+  .projects-heading,
+  .grid-row       { animation: fadeUp 0.7s 0.25s ease both; }
   .author-section { animation: fadeUp 0.7s 0.35s ease both; }
 
-  @media (max-width: 600px) {
+  /* ── RESPONSIVO ── */
+  @media (max-width: 860px) {
+    .row-3 { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 580px) {
+    .row-2, .row-3 { grid-template-columns: 1fr; }
+    .row-1c, .row-1s { max-width: 100%; }
     .about-section { padding: 1.6rem 1.4rem; }
     .author-section { grid-template-columns: 1fr; }
     .author-avatar { margin: 0 auto; }
@@ -259,7 +290,7 @@
         <g stroke="#b8892a" stroke-width="0.5" opacity="0.5">
           <line x1="40" y1="8" x2="40" y2="12"/>
           <line x1="40" y1="68" x2="40" y2="72"/>
-          <line x1="8" y1="40" x2="12" y2="40"/>
+          <line x1="8"  y1="40" x2="12" y2="40"/>
           <line x1="68" y1="40" x2="72" y2="40"/>
         </g>
       </svg>
@@ -278,7 +309,8 @@
   <!-- PROJECTS -->
   <div class="projects-heading"><h2>Instrumentos disponíveis</h2></div>
 
-  <div class="projects-grid">
+  <!-- LINHA A: 2 cards -->
+  <div class="grid-row row-2">
 
     <!-- 1 · Brasil no Mundo -->
     <a href="https://caiosoares1899.github.io/cacd.html/brasilnomundo"
@@ -314,7 +346,34 @@
       </div>
     </a>
 
-    <!-- 3 · Presidentes -->
+  </div><!-- /linha A -->
+
+  <!-- LINHA B: destaque central -->
+  <div class="grid-row row-1c">
+
+    <!-- 3 · Capitanias Hereditárias -->
+    <a href="https://caiosoares1899.github.io/cacd.html/capitanias.html"
+       class="project-card card-featured" target="_blank">
+      <div class="card-preview">
+        <iframe src="https://caiosoares1899.github.io/cacd.html/capitanias.html"
+                loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true"></iframe>
+        <div class="overlay"></div>
+        <span class="preview-tag">Brasil Colonial</span>
+      </div>
+      <div class="card-body">
+        <span class="card-tag">História · Administração Colonial</span>
+        <div class="card-title">Capitanias Hereditárias — 1534 / 1536</div>
+        <p class="card-desc">Mapa interativo das 17 capitanias hereditárias com graus de sucesso colonizador, baseado no estudo do Prof. Jorge Pimentel Cintra (Anais do Museu Paulista, 2013), que corrige erros da cartografia clássica sobre as divisas coloniais.</p>
+        <div class="card-cta">Acessar instrumento</div>
+      </div>
+    </a>
+
+  </div><!-- /linha B -->
+
+  <!-- LINHA C: 3 cards -->
+  <div class="grid-row row-3">
+
+    <!-- 4 · Presidentes -->
     <a href="https://caiosoares1899.github.io/cacd.html/presidentes.index.html"
        class="project-card" target="_blank">
       <div class="card-preview">
@@ -326,12 +385,12 @@
       <div class="card-body">
         <span class="card-tag">História do Brasil</span>
         <div class="card-title">Presidentes do Brasil</div>
-        <p class="card-desc">Linha do tempo interativa dos presidentes brasileiros desde a Proclamação da República — períodos, contextos históricos e características de cada governo.</p>
+        <p class="card-desc">Linha do tempo interativa dos presidentes desde a Proclamação da República — períodos, contextos e características de cada governo.</p>
         <div class="card-cta">Acessar instrumento</div>
       </div>
     </a>
 
-    <!-- 4 · Economia Joanina -->
+    <!-- 5 · Economia Joanina -->
     <a href="https://caiosoares1899.github.io/cacd.html/mapa_economia_joanina.html"
        class="project-card" target="_blank">
       <div class="card-preview">
@@ -341,14 +400,14 @@
         <span class="preview-tag">Economia Colonial</span>
       </div>
       <div class="card-body">
-        <span class="card-tag">História do Brasil · Período Joanino</span>
+        <span class="card-tag">Período Joanino</span>
         <div class="card-title">Brasil Joanino — Economia &amp; Produção</div>
-        <p class="card-desc">Mapa interativo da economia durante a presença da Corte portuguesa no Rio de Janeiro (1808–1821). Explore capitanias, produtos e repercussões na política externa.</p>
+        <p class="card-desc">Mapa da economia durante a Corte portuguesa no Rio (1808–1821). Capitanias, produtos e repercussões na política externa.</p>
         <div class="card-cta">Acessar instrumento</div>
       </div>
     </a>
 
-    <!-- 5 · Chanceleres -->
+    <!-- 6 · Chanceleres -->
     <a href="https://caiosoares1899.github.io/cacd.html/chanceleres_brasil.html"
        class="project-card" target="_blank">
       <div class="card-preview">
@@ -360,12 +419,17 @@
       <div class="card-body">
         <span class="card-tag">Política Externa · História</span>
         <div class="card-title">Chanceleres &amp; Diplomatas do Brasil</div>
-        <p class="card-desc">De Tomé de Sousa à Nova República — linha do tempo completa com governadores-gerais, ministros do Império e chanceleres: pensamento, eventos-chave e legado.</p>
+        <p class="card-desc">De Tomé de Sousa à Nova República — chanceleres, ministros e governadores com pensamento diplomático, eventos-chave e legado.</p>
         <div class="card-cta">Acessar instrumento</div>
       </div>
     </a>
 
-    <!-- 6 · Expansão Territorial -->
+  </div><!-- /linha C -->
+
+  <!-- LINHA D: solo -->
+  <div class="grid-row row-1s">
+
+    <!-- 7 · Expansão Territorial -->
     <a href="https://caiosoares1899.github.io/cacd.html/brasil_tratados.html"
        class="project-card" target="_blank">
       <div class="card-preview">
@@ -377,12 +441,12 @@
       <div class="card-body">
         <span class="card-tag">História · Direito Internacional</span>
         <div class="card-title">Brasil — Expansão Territorial &amp; Diplomacia</div>
-        <p class="card-desc">Mapa interativo das aquisições territoriais brasileiras desde o Tratado de Tordesilhas (1494) até o século XX. Clique nas regiões para acessar os eventos diplomáticos.</p>
+        <p class="card-desc">Aquisições territoriais desde Tordesilhas (1494) até o séc. XX. Clique nas regiões para ver os tratados e eventos diplomáticos.</p>
         <div class="card-cta">Acessar instrumento</div>
       </div>
     </a>
 
-  </div>
+  </div><!-- /linha D -->
 
   <!-- SEPARATOR -->
   <div class="ornament-sep" aria-hidden="true"><span>✦ ✦ ✦</span></div>
@@ -405,7 +469,7 @@
 </div>
 
 <script>
-  // Ajusta a escala do iframe ao tamanho real do card
+  // Recalcula o scale de cada iframe ao tamanho real do seu card-preview
   function scaleIframes() {
     document.querySelectorAll('.card-preview').forEach(function(preview) {
       var iframe = preview.querySelector('iframe');
@@ -419,7 +483,7 @@
   scaleIframes();
   window.addEventListener('resize', scaleIframes);
 
-  // Overlay redireciona o clique para o link do card pai
+  // Overlay redireciona o clique para o href do card pai
   document.querySelectorAll('.overlay').forEach(function(overlay) {
     overlay.addEventListener('click', function() {
       var card = overlay.closest('.project-card');
