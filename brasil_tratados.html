@@ -14,18 +14,19 @@ header{background:#090d12;border-bottom:2px solid var(--gold);padding:10px 20px;
 .logo h1{font-family:"Playfair Display",serif;font-size:clamp(.85rem,1.6vw,1.15rem);font-weight:900;color:var(--text)}
 .logo h1 em{color:var(--gold);font-style:normal}
 .logo-sub{font-size:.5rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
-.tord-btn{background:var(--gold-dim);border:1.5px solid rgba(212,168,67,.5);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:.6rem;padding:6px 14px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
-.tord-btn:hover,.tord-btn.on{background:var(--gold);color:#090d12}
+.tord-btn{background:rgba(124,58,237,.12);border:1.5px solid rgba(167,139,250,.4);color:#c4b5fd;font-family:"IBM Plex Mono",monospace;font-size:.6rem;padding:6px 14px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tord-btn:hover{background:rgba(124,58,237,.2);border-color:rgba(167,139,250,.7);color:#e9d5ff}
+.tord-btn.on{background:rgba(109,40,217,.35);border-color:#a78bfa;color:#e9d5ff;box-shadow:0 0 12px rgba(167,139,250,.25)}
 .body-wrap{flex:1;display:flex;overflow:hidden;min-height:0}
 .map-wrap{flex:1;overflow:auto;background:#0a1520;display:flex;align-items:flex-start;justify-content:center;padding:8px;position:relative}
 .map-container{position:relative;display:inline-block}
 #map-svg{height:calc(100vh - 116px);width:auto;display:block;flex-shrink:0}
-.map-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:5}
+.map-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(10,5,25,0.75);opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:5}
 .map-overlay.active{opacity:1}
 #tord-overlay{pointer-events:none;z-index:10}
-#tord-overlay line{stroke:#000;stroke-width:5;stroke-dasharray:12,6}
-#tord-overlay line.outline{stroke:#fff;stroke-width:7;stroke-dasharray:12,6;opacity:0.5}
-#tord-overlay text{fill:#000;font-weight:bold;text-shadow:0 0 4px white,0 0 4px white}
+#tord-overlay line{stroke:#a78bfa;stroke-width:2.5;stroke-dasharray:14,7;opacity:1}
+#tord-overlay line.outline{stroke:#7c3aed;stroke-width:6;stroke-dasharray:14,7;opacity:0.35}
+#tord-overlay text{fill:#e9d5ff;font-weight:400}
 .map-legend{position:fixed;top:70px;left:10px;z-index:50;background:rgba(9,13,18,.93);border:1px solid var(--border);padding:12px 16px;backdrop-filter:blur(4px);border-radius:6px;min-width:180px}
 .ml-title{font-size:.55rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;text-align:center}
 .ml-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;transition:opacity .15s}
@@ -99,25 +100,20 @@ header{background:#090d12;border-bottom:2px solid var(--gold);padding:10px 20px;
         <image href="mapa_brasil.png" x="0" y="0" width="1105" height="1092" preserveAspectRatio="none"/>
         <g id="tord-overlay" style="display:none">
           <!-- Linha com contorno branco para melhor visibilidade -->
-          <line x1="635" y1="0" x2="635" y2="1092" stroke="#fff" stroke-width="7" stroke-dasharray="12,6" opacity="0.6"/>
-          <line x1="635" y1="0" x2="635" y2="1092" stroke="#000" stroke-width="4" stroke-dasharray="12,6"/>
+          <line x1="635" y1="0" x2="635" y2="1092" stroke="#7c3aed" stroke-width="6" stroke-dasharray="14,7" opacity="0.4"/>
+          <line x1="635" y1="0" x2="635" y2="1092" stroke="#a78bfa" stroke-width="2.5" stroke-dasharray="14,7" opacity="1"/>
           <!-- Texto do lado espanhol -->
-          <text x="318" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" fill="#000" font-weight="bold" stroke="#fff" stroke-width="2" paint-order="stroke">COROA DE CASTELA / ESPANHA</text>
-          <text x="318" y="70" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" fill="#000" font-weight="bold" stroke="#fff" stroke-width="2" paint-order="stroke" opacity="0">COROA DE CASTELA / ESPANHA</text>
+          <text x="318" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="3" fill="#c4b5fd" font-weight="400" opacity="0.85">COROA DE CASTELA / ESPANHA</text>
+          
           <!-- Texto do lado português -->
-          <text x="870" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="16" fill="#000" font-weight="bold" stroke="#fff" stroke-width="2" paint-order="stroke">COROA DE PORTUGAL</text>
+          <text x="870" y="50" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="3" fill="#c4b5fd" font-weight="400" opacity="0.85">COROA DE PORTUGAL</text>
           <!-- Título central -->
-          <text x="635" y="80" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" fill="#000" font-style="italic" font-weight="bold" stroke="#fff" stroke-width="1.5" paint-order="stroke">Tratado de Tordesilhas — 7 de junho de 1494</text>
+          <text x="635" y="78" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" fill="#e9d5ff" font-style="italic" opacity="0.9">Tratado de Tordesilhas — 7 de junho de 1494</text>
           <!-- Caixa de informação -->
-          <rect x="60" y="490" width="460" height="80" rx="3" fill="rgba(0,0,0,0.85)" stroke="#d4a843" stroke-width="1.5"/>
-          <text x="290" y="517" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#d4a843">O Brasil moderno (8,5 mi km²) seria</text>
-          <text x="290" y="537" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" fill="#d4a843">~60% menor se esta linha</text>
-          <text x="290" y="555" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#7d8590">tivesse sido respeitada.</text>
-        </g>
-      </svg>
-    </div>
-  </div>
-  <div class="side-panel">
+          <rect x="60" y="490" width="460" height="80" rx="3" fill="rgba(15,10,25,0.88)" stroke="#a78bfa" stroke-width="1"/>
+          <text x="290" y="514" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" letter-spacing="1.5" fill="#c4b5fd" opacity="0.7">FATO HISTÓRICO</text>
+          <text x="290" y="534" text-anchor="middle" font-family="Playfair Display,serif" font-size="14" fill="#e9d5ff">O Brasil moderno (8,5 mi km²) seria ~60% menor</text>
+          <text x="290" y="554" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" fill="#a78bfa" opacity="0.8">se esta linha tivesse sido respeitada.</text>s="side-panel">
     <div class="sp-empty" id="spEmpty">
       <div class="ico">📜</div>
       <h3>Selecione uma Região</h3>
