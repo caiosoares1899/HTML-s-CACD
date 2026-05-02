@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política Externa Brasileira — CACD</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;--bg2:#090d12;--panel:#13191f;--border:#30363d;
+  --gold:#d4a843;--gold-dim:rgba(212,168,67,0.13);--gold-glow:rgba(212,168,67,0.25);
+  --text:#e6edf3;--muted:#7d8590;
+  --red:#ef5350;--green:#66bb6a;--blue:#42a5f5;--purple:#ab47bc;--teal:#26a69a;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:"IBM Plex Mono",monospace;color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* HEADER */
+header{background:var(--bg2);border-bottom:2px solid var(--gold);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;flex-shrink:0;z-index:100}
+.logo h1{font-family:"Playfair Display",serif;font-size:clamp(.8rem,1.5vw,1.05rem);font-weight:900;color:var(--text)}
+.logo h1 em{color:var(--gold);font-style:normal}
+.logo-sub{font-size:.48rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.hfilters{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.flbl{font-size:.47rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.fbtn{font-family:"IBM Plex Mono",monospace;font-size:.48rem;padding:4px 10px;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;border:1.5px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;white-space:nowrap}
+.fbtn:hover,.fbtn.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+/* ERA COLOR CLASSES */
+.era-imp{--era:#b8892a}
+.era-rep{--era:#42a5f5}
+.era-var{--era:#ab47bc}
+.era-gf{--era:#26a69a}
+.era-mil{--era:#ef5350}
+.era-nova{--era:#66bb6a}
+
+/* LAYOUT */
+.wrap{display:flex;flex:1;overflow:hidden;min-height:0}
+
+/* SIDEBAR */
+.sidebar{width:300px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent;position:relative}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border)}
+.sidebar::before{content:'';position:absolute;left:44px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 5%,var(--border) 95%,transparent)}
+
+/* ERA HEADER in sidebar */
+.era-hdr{padding:6px 14px 4px 64px;font-size:.44rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+.ti{position:relative;padding:0 12px 3px 62px;cursor:pointer}
+.tdot{position:absolute;left:38px;top:14px;width:12px;height:12px;border-radius:50%;border:2px solid var(--border);background:var(--bg2);transition:all .2s;z-index:1}
+.ti:hover .tdot,.ti.active .tdot{transform:scale(1.5);box-shadow:0 0 10px var(--gold-glow)}
+.ti.active .tdot{border-color:var(--gold)}
+
+.tc{background:var(--panel);border:1px solid var(--border);border-left:3px solid transparent;padding:9px 11px;transition:all .2s}
+.ti:hover .tc{border-left-color:var(--gold);background:rgba(212,168,67,.03)}
+.ti.active .tc{border-color:var(--gold);border-left-color:var(--gold);background:rgba(212,168,67,.06)}
+
+.tper{font-size:.48rem;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+.tnm{font-family:"Playfair Display",serif;font-size:.82rem;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:3px}
+.tsub{font-size:.45rem;color:var(--muted);line-height:1.4;margin-bottom:4px}
+.tpres{font-size:.44rem;color:var(--muted);letter-spacing:.03em}
+.tpres span{color:var(--text)}
+
+/* DETAIL */
+.detail{flex:1;min-width:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.detail::-webkit-scrollbar{width:4px}
+.detail::-webkit-scrollbar-thumb{background:var(--border)}
+
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--muted);padding:80px 40px;text-align:center;min-height:400px}
+.empty .ico{font-size:3rem;opacity:.1}
+.empty h3{font-family:"Playfair Display",serif;font-size:1.1rem;font-weight:400}
+.empty p{font-size:.6rem;line-height:1.7;max-width:320px}
+
+/* DETAIL HEADER */
+.dhdr{background:var(--bg2);border-bottom:1px solid var(--border);padding:20px 28px 16px;position:relative;display:none}
+.dhdr.on{display:block}
+.dper{font-size:.52rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dper .era-pill{font-size:.42rem;padding:2px 9px;border:1px solid;letter-spacing:.08em;text-transform:uppercase}
+.dtitle{font-family:"Playfair Display",serif;font-size:clamp(1.3rem,2.8vw,2rem);font-weight:900;color:var(--text);line-height:1.1;margin-bottom:5px}
+.dtitle em{color:var(--gold);font-style:italic}
+.dideia{font-family:"Crimson Pro",serif;font-style:italic;font-size:1.1rem;color:#c9d1d9;line-height:1.5;margin-bottom:10px;border-left:3px solid var(--gold);padding-left:14px}
+.dclose{position:absolute;top:15px;right:18px;background:transparent;border:1px solid var(--border);color:var(--muted);width:26px;height:26px;cursor:pointer;font-size:.68rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.dclose:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ACTORS ROW */
+.actors-row{display:flex;gap:8px;padding:12px 28px;background:rgba(255,255,255,.015);border-bottom:1px solid var(--border);flex-wrap:wrap;display:none}
+.actors-row.on{display:flex}
+.actor-box{background:var(--panel);border:1px solid var(--border);padding:8px 14px;flex:1;min-width:140px}
+.actor-lbl{font-size:.42rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
+.actor-list{display:flex;flex-direction:column;gap:3px}
+.actor-item{font-size:.62rem;color:var(--text);font-family:"Crimson Pro",serif;line-height:1.4}
+.actor-role{font-size:.44rem;color:var(--muted);letter-spacing:.04em}
+
+/* TABS */
+.dtabs{display:none;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto;scrollbar-width:none}
+.dtabs.on{display:flex}
+.dtabs::-webkit-scrollbar{display:none}
+.dtab{font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;padding:10px 15px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.dtab:hover{color:var(--text)}
+.dtab.on{color:var(--gold);border-bottom-color:var(--gold)}
+
+/* BODY */
+.dbody{display:none;padding:22px 28px 50px}
+.dbody.on{display:block}
+.dpane{display:none}
+.dpane.on{display:block}
+
+/* CONTENT BLOCKS */
+.stitle{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);margin-top:22px}
+.stitle:first-child{margin-top:0}
+.prose{font-family:"Crimson Pro",serif;font-size:1.05rem;line-height:1.85;color:#c9d1d9;margin-bottom:6px}
+
+/* EVENTS */
+.ev-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.ev-item{display:flex;gap:14px;align-items:flex-start;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:12px 16px}
+.ev-num{font-family:"Playfair Display",serif;font-size:1.8rem;font-weight:900;color:var(--gold);opacity:.25;line-height:1;flex-shrink:0;width:32px}
+.ev-body{}
+.ev-title{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.ev-date{font-size:.44rem;color:var(--muted);margin-bottom:5px;letter-spacing:.05em}
+.ev-txt{font-family:"Crimson Pro",serif;font-size:.95rem;line-height:1.72;color:#c9d1d9}
+
+/* TAGS */
+.tags-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px}
+.tag{font-size:.52rem;padding:4px 10px;border:1px solid var(--border);color:var(--text);background:rgba(255,255,255,.03);letter-spacing:.03em;font-family:"IBM Plex Mono",monospace}
+.tag.ally{border-color:rgba(102,187,106,.4);color:var(--green);background:rgba(102,187,106,.07)}
+.tag.enemy{border-color:rgba(239,83,80,.4);color:var(--red);background:rgba(239,83,80,.07)}
+.tag.neutral{border-color:rgba(66,165,245,.4);color:var(--blue);background:rgba(66,165,245,.07)}
+.tag.author{border-color:rgba(171,71,188,.4);color:var(--purple);background:rgba(171,71,188,.07)}
+
+/* SPEECH / VOTE items */
+.speech-list,.vote-list{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.speech-item{border-left:3px solid var(--gold);padding:11px 16px;background:rgba(212,168,67,.04)}
+.speech-who{font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
+.speech-ctx{font-size:.44rem;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
+.speech-txt{font-family:"Crimson Pro",serif;font-size:.98rem;line-height:1.72;color:#c9d1d9;font-style:italic}
+
+.vote-item{background:rgba(255,255,255,.02);border:1px solid var(--border);padding:12px 16px}
+.vote-forum{font-size:.44rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.vote-title{font-size:.6rem;color:var(--text);letter-spacing:.04em;margin-bottom:5px;font-family:"IBM Plex Mono",monospace}
+.vote-pos{font-family:"Crimson Pro",serif;font-size:.92rem;line-height:1.65;color:#c9d1d9}
+.vote-res{display:inline-block;font-size:.42rem;padding:2px 8px;border:1px solid;letter-spacing:.06em;text-transform:uppercase;margin-top:5px}
+.vr-fav{border-color:rgba(102,187,106,.5);color:var(--green);background:rgba(102,187,106,.08)}
+.vr-con{border-color:rgba(239,83,80,.5);color:var(--red);background:rgba(239,83,80,.08)}
+.vr-abs{border-color:rgba(125,133,144,.5);color:var(--muted);background:rgba(125,133,144,.08)}
+
+/* LEGACY */
+.leg-item{border-left:3px solid var(--teal);padding:11px 16px;background:rgba(38,166,154,.04);margin-bottom:9px}
+.leg-item .prose{margin-bottom:0}
+
+/* BOTTOM BAR */
+.bbar{background:var(--bg2);border-top:1px solid var(--border);padding:6px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;z-index:100}
+.bhint{font-size:.46rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;flex-shrink:0}
+.pills{display:flex;gap:3px;flex-wrap:wrap}
+.pill{font-size:.43rem;padding:3px 7px;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--muted);cursor:pointer;letter-spacing:.04em;transition:all .15s;white-space:nowrap}
+.pill:hover,.pill.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+@media(max-width:700px){
+  body{height:auto;overflow:auto}
+  .wrap{flex-direction:column;height:auto;overflow:visible}
+  .sidebar{width:100%;height:auto;overflow-y:visible;border-right:none;border-bottom:1px solid var(--border)}
+  .sidebar::before{display:none}
+  .detail{height:auto;overflow-y:visible}
+  .ti{padding-left:12px}.tdot{display:none}
+  .dhdr,.dbody,.actors-row{padding-left:16px;padding-right:16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <h1>Brasil &mdash; <em>Política Externa</em> &amp; Inserção Internacional</h1>
+    <div class="logo-sub">Império · República Velha · Era Vargas · Guerra Fria · Regime Militar · Nova República · CACD</div>
+  </div>
+  <div class="hfilters">
+    <span class="flbl">Era:</span>
+    <button class="fbtn on" id="fAll" onclick="filterAll()">Todas</button>
+    <button class="fbtn" id="fImp"  onclick="filterEra('imp')">Império</button>
+    <button class="fbtn" id="fRep"  onclick="filterEra('rep')">Rep. Velha</button>
+    <button class="fbtn" id="fVar"  onclick="filterEra('var')">Era Vargas</button>
+    <button class="fbtn" id="fGf"   onclick="filterEra('gf')">Guerra Fria</button>
+    <button class="fbtn" id="fMil"  onclick="filterEra('mil')">Militar</button>
+    <button class="fbtn" id="fNova" onclick="filterEra('nova')">Nova Rep.</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="sidebar" id="sidebar"></div>
+  <div class="detail" id="detail">
+    <div class="empty" id="empty">
+      <div class="ico">🌎</div>
+      <h3>Selecione uma Política Externa</h3>
+      <p>Clique em qualquer item da linha do tempo para explorar a orientação diplomática brasileira em cada período — presidentes, chanceleres, acontecimentos, parceiros, autores e legado.</p>
+    </div>
+    <div class="dhdr" id="dhdr">
+      <div class="dper" id="dper"></div>
+      <div class="dtitle" id="dtitle"></div>
+      <div class="dideia" id="dideia"></div>
+      <button class="dclose" onclick="fechar()">✕</button>
+    </div>
+    <div class="actors-row" id="actorsRow"></div>
+    <div class="dtabs" id="dtabs"></div>
+    <div class="dbody" id="dbody"></div>
+  </div>
+</div>
+
+<div class="bbar">
+  <span class="bhint">Acesso rápido →</span>
+  <div class="pills" id="pills"></div>
+</div>
+
+<script>
+var ERAS = {
+  imp: {label:"Império", color:"#b8892a"},
+  rep: {label:"República Velha", color:"#42a5f5"},
+  var: {label:"Era Vargas", color:"#ab47bc"},
+  gf:  {label:"Guerra Fria / 3ª Rep.", color:"#26a69a"},
+  mil: {label:"Regime Militar", color:"#ef5350"},
+  nova:{label:"Nova República", color:"#66bb6a"}
+};
+
+var DATA = [
+/* ═══════════════════════════════════════════════
+   IMPÉRIO
+═══════════════════════════════════════════════ */
+{
+  id:"pe_imp1",era:"imp",
+  per:"1822 – 1889",
+  nome:"Diplomacia Imperial",
+  sub:"Reconhecimento · Consolidação Territorial · Equilíbrio Sul-americano",
+  ideia:"Assegurar o reconhecimento internacional da independência, consolidar as fronteiras e projetar o Brasil como potência regional estável num continente de repúblicas instáveis.",
+  presidentes:["D. Pedro I (1822–1831)","D. Pedro II (1831–1889)"],
+  chanceleres:["José Bonifácio de Andrada e Silva","Carneiro de Campos","Paulino Soares de Sousa (Visconde do Uruguai)","José Maria da Silva Paranhos (Visconde do Rio Branco)"],
+  pilares:"Reconhecimento internacional. Manutenção da unidade territorial. Equilíbrio de poder na Bacia do Prata. Comércio com a Grã-Bretanha. Isolamento seletivo do Pan-americanismo.",
+  parceiros:["Grã-Bretanha (tratados comerciais e reconhecimento)","Portugal (Tratado de 1825)","França (relações culturais e diplomáticas)","Argentina (após Guerra do Paraguai)"],
+  enemies:["Paraguai (Francisco Solano López)","Rosas/Argentina (até 1852)","Oribe/Uruguai (período do Prata)"],
+  autores:["Visconde do Uruguai (Paulino José Soares de Sousa) — 'Ensaio sobre o Direito Administrativo' e a doutrina do Prata","José Maria da Silva Paranhos (Visconde do Rio Branco) — política platina","João Pandiá Calógeras — 'A Política Exterior do Império'","Amado Luiz Cervo — 'O Desafio Internacional'"],
+  eventos:[
+    {n:1, titulo:"Reconhecimento da Independência por Portugal", data:"Agosto de 1825", txt:"O Tratado de 1º de Agosto de 1825 formalizou o reconhecimento português da independência brasileira ao custo de 2 milhões de libras esterlinas pagas à Portugal e livre-comércio com a Grã-Bretanha. Mediação britânica foi essencial — o preço econômico foi alto, mas o reconhecimento jurídico era condição para a inserção internacional."},
+    {n:2, titulo:"Guerra do Paraguai e a Questão do Prata", data:"1864 – 1870", txt:"A maior guerra da América do Sul envolveu Brasil, Argentina e Uruguai contra o Paraguai de Francisco Solano López. O Brasil obteve os territórios entre os rios Apa e Branco. A vitória consolidou a hegemonia brasileira na Bacia do Prata, mas o custo humano e financeiro acelerou a crise do Império e a Proclamação da República."},
+    {n:3, titulo:"Política do Prata — Visconde do Uruguai", data:"1840–1860", txt:"Paulino Soares de Sousa, como ministro, desenvolveu a doutrina da intervenção nos assuntos do Prata para garantir a livre navegação dos rios e evitar a hegemonia de Rosas sobre o Rio da Prata. Derrubou Oribe no Uruguai (1851) e participou da aliança que depôs Rosas na Argentina (1852) — a mais ativa política platina do Império."}
+  ],
+  geral:"A diplomacia imperial teve três eixos centrais: o reconhecimento e legitimação internacional do novo Estado; a definição e consolidação das fronteiras (especialmente no Sul); e o equilíbrio de poder na Bacia do Prata contra a hegemonia argentina. A monarquia foi um diferencial positivo para as relações com as potências europeias, enquanto criava distância ideológica das repúblicas vizinhas. A Grã-Bretanha foi o parceiro central — em troca de reconhecimento precoce e apoio financeiro, o Brasil cedeu privilégios comerciais que perdurariam décadas.",
+  legado:[
+    "Consolidação da unidade territorial num continente que se fragmentou — o Brasil manteve a maior parte do território do vice-reinado do Brasil.",
+    "Estabelecimento do princípio do uti possidetis como base do direito territorial brasileiro — herdado e aperfeiçoado por Rio Branco.",
+    "Doutrina da não-intervenção nos assuntos internos, com exceção da Bacia do Prata — tradição ambígua que o Brasil manteria.",
+    "Hegemonia regional na América do Sul: o Brasil saiu da guerra como potência incontestável do continente."
+  ],
+  discursos:[
+    {who:"Visconde do Uruguai", ctx:"Relatório Ministerial, 1853", txt:"'A política do Império no Prata tem por fim constante e invariável a independência dos Estados que o compõem, e a livre navegação de seus rios, bases indispensáveis da paz e prosperidade desta parte da América do Sul.'"},
+    {who:"D. Pedro II", ctx:"Abertura do Parlamento, 1870", txt:"'A paz com o Paraguai, obtida depois de uma luta que impusemos justificados pelo direito de nossa defesa, é hoje o maior título de glória do Império.'"}
+  ],
+  votos:[
+    {forum:"Congresso de Viena / Direito Internacional", titulo:"Participação nas negociações de limites fluviais (1856)", pos:"O Brasil negociou o Tratado de 10 de novembro de 1856 que estabeleceu a livre navegação do Rio Paraguai para todos os países, afirmando o princípio da liberdade de navegação fluvial.", res:"fav", label:"Posição afirmada"},
+    {forum:"Questão Christie (1862–1865)", titulo:"Confronto diplomático com a Grã-Bretanha", pos:"Após incidentes com navios britânicos, o Brasil rejeitou a arbitragem proposta por Londres, rompeu relações e exigiu satisfações — demonstrando disposição de defender a soberania mesmo contra a principal potência.", res:"fav", label:"Soberania mantida"}
+  ]
+},
+
+/* ═══════════════════════════════════════════════
+   REPÚBLICA VELHA / RIO BRANCO
+═══════════════════════════════════════════════ */
+{
+  id:"pe_riobranco",era:"rep",
+  per:"1902 – 1912",
+  nome:"Política Externa de Rio Branco",
+  sub:"Consolidação das Fronteiras · Americanismo · Prestígio Internacional",
+  ideia:"Consolidar definitivamente as fronteiras brasileiras pela via diplomática e arbitral, aproximar o Brasil dos Estados Unidos como contrapeso à Europa, e projetar o Brasil como potência respeitável e pacífica.",
+  presidentes:["Rodrigues Alves (1902–1906)","Afonso Pena (1906–1909)","Nilo Peçanha (1909–1910)","Hermes da Fonseca (1910–1914)"],
+  chanceleres:["José Maria da Silva Paranhos Júnior — Barão do Rio Branco (1902–1912)"],
+  pilares:"Solução arbitral e diplomática de todas as questões de limites. Aproximação com os EUA ('americanismo'). Construção do prestígio internacional brasileiro. Elevação das legações a embaixadas. Não-intervenção nos assuntos internos.",
+  parceiros:["Estados Unidos (parceria estratégica)","Argentina (regularização após tensões)","Reino Unido","Países com fronteiras a definir (Bolívia, Peru, Colômbia, Uruguai, Venezuela)"],
+  enemies:["Nenhum inimigo aberto — a política era de conciliação e arbitragem"],
+  autores:["Barão do Rio Branco — memoriais e peças de arbitragem","Joaquim Nabuco — 'A Aproximação entre os dois grandes Países da América'","Eugênio Vargas Garcia — 'O Brasil e a Liga das Nações'","Clodoaldo Bueno — 'A República e sua Política Exterior'","Amado Luiz Cervo e Clodoaldo Bueno — 'História da Política Exterior do Brasil'"],
+  eventos:[
+    {n:1, titulo:"10 Questões de Fronteiras Resolvidas", data:"1902–1909", txt:"Rio Branco resolveu pela via diplomática e arbitral 10 questões de fronteiras: Questão das Missões/Palmas (1895, antes de ser ministro), Amapá (1900), Acre/Tratado de Petrópolis (1903), com Colômbia (1907), com Peru (1909), Venezuela, Guiana Britânica, Guiana Holandesa, Uruguai e Argentina. Consolidou definitivamente o mapa do Brasil com 8,5 milhões de km²."},
+    {n:2, titulo:"Tratado de Petrópolis — Acre (1903)", data:"17 de novembro de 1903", txt:"Após a Revolução Acreana liderada por Plácido de Castro, Rio Branco negociou o Tratado de Petrópolis com a Bolívia: o Brasil pagou £2 milhões e cedeu territórios compensatórios, incorporando 191.000 km² do Acre. Considerado o maior triunfo diplomático brasileiro do século XX, demonstrou que questões territoriais podiam ser resolvidas sem guerra."},
+    {n:3, titulo:"Americanismo e 3ª Conferência Pan-Americana (1906)", data:"Julho de 1906", txt:"Realizada no Rio de Janeiro e presidida por Joaquim Nabuco como embaixador em Washington, a 3ª Conferência Pan-Americana consolidou a aproximação Brasil-EUA. Rio Branco elevou as legações a embaixadas reciprocamente com os EUA (1905) — o Brasil foi o primeiro país sul-americano a ter embaixada americana."}
+  ],
+  geral:"O barão do Rio Branco é o maior nome da diplomacia brasileira. Seu decênio à frente do Itamaraty (1902–1912) combinou visão estratégica, erudição jurídica e habilidade política para resolver todas as pendências territoriais do Brasil. Seu 'americanismo' — a aproximação com os EUA — foi uma inovação estratégica que buscava equilibrar o poder europeu com o ascendente poder norte-americano. A doutrina de Rio Branco: paz, prestígio e consolidação — sem confrontação, mas com firmeza soberana.",
+  legado:[
+    "Mapa definitivo do Brasil: 8,5 milhões de km² consolidados sem uma guerra.",
+    "Americanismo como tradição: a parceria estratégica com os EUA tornou-se eixo recorrente da PEB.",
+    "Profissionalização da diplomacia: Rio Branco reformou o Itamaraty, elevou o prestígio da carreira e formou uma geração de diplomatas.",
+    "A 'tradição Rio Branco': pacifismo, juridicismo, multilateralismo e prestígio — referência até hoje para os diplomatas."
+  ],
+  discursos:[
+    {who:"Barão do Rio Branco", ctx:"Discurso em banquete, 1909", txt:"'Nunca entramos em guerra para conquistar, mas quando nos atacaram, soubemos defender o que era nosso. A grandeza do Brasil repousa no seu amor à paz e no respeito que inspira.'"},
+    {who:"Joaquim Nabuco", ctx:"Conferência Pan-Americana, Rio de Janeiro, 1906", txt:"'O Brasil e os Estados Unidos têm uma missão comum: demonstrar que as grandes repúblicas americanas podem conviver em paz, progresso e fraternidade, servindo de modelo ao mundo.'"}
+  ],
+  votos:[
+    {forum:"Arbitragem de Berna — Questão do Amapá", titulo:"Amapá vs. França (1900)", pos:"Rio Branco, antes de ser ministro, apresentou a defesa brasileira ao árbitro suíço. O Conselho Federal Suíço decidiu em favor do Brasil em 1900, incorporando ~260.000 km² do Amapá.", res:"fav", label:"Vitória arbitral"},
+    {forum:"Arbitragem de Washington — Missões", titulo:"Questão de Palmas vs. Argentina (1895)", pos:"Novamente Rio Branco, advogando pelo Brasil perante o presidente Cleveland dos EUA, obteve em 1895 o reconhecimento de que as Missões Orientais pertenciam ao Brasil.", res:"fav", label:"Vitória arbitral"}
+  ]
+},
+{
+  id:"pe_liganacoesold",era:"rep",
+  per:"1919 – 1926",
+  nome:"Liga das Nações e a Ambição de Grande Potência",
+  sub:"Candidatura ao Conselho · Frustração Multilateral · Retirada",
+  ideia:"Projetar o Brasil como grande potência no sistema internacional emergente do pós-1ª Guerra, conquistando assento permanente no Conselho da Liga das Nações.",
+  presidentes:["Epitácio Pessoa (1919–1922)","Arthur Bernardes (1922–1926)"],
+  chanceleres:["Domício da Gama","Azevedo Marques","Félix Pacheco"],
+  pilares:"Participação ativa no multilateralismo europeu. Candidatura ao assento permanente no Conselho da Liga. Representação dos interesses latino-americanos. Prestígio como única grande nação latino-americana na guerra.",
+  parceiros:["França (aliança histórica)","Itália (apoio à candidatura)","Países latino-americanos (liderança pretendida)"],
+  enemies:["Espanha (rival pela vaga latino-americana no Conselho)","Grã-Bretanha (resistência à expansão do Conselho)"],
+  autores:["Eugênio Vargas Garcia — 'O Brasil e a Liga das Nações (1919–1926): Vencer ou Não Perder'","Clodoaldo Bueno","João Hermes Pereira de Araújo"],
+  eventos:[
+    {n:1, titulo:"Conferência de Paz de Paris — Epitácio Pessoa", data:"1919", txt:"O Brasil participou da Conferência de Paz de Versalhes como um dos vencedores da 1ª Guerra (havia declarado guerra à Alemanha em 1917). Epitácio Pessoa liderou a delegação e negociou a participação brasileira na recém-criada Liga das Nações, conseguindo assento no Conselho como membro não-permanente temporário."},
+    {n:2, titulo:"Candidatura ao Assento Permanente no Conselho", data:"1923–1926", txt:"O Brasil candidatou-se a membro permanente do Conselho da Liga ao lado de Alemanha e Espanha. A proposta não passou — as potências europeias resistiram à expansão do Conselho. O fracasso foi interpretado como humilhação nacional."},
+    {n:3, titulo:"Retirada da Liga das Nações (1926)", data:"Junho de 1926", txt:"Após a recusa do assento permanente, o Brasil retirou-se da Liga das Nações — o único país a abandonar a organização antes de sua dissolução. A saída simbolizou o fracasso da estratégia de inserção via prestígio multilateral e a resistência das grandes potências à promoção de países do Sul."}
+  ],
+  geral:"O episódio da Liga das Nações revela a tensão estrutural da política externa brasileira: a ambição de ser reconhecido como grande potência versus a resistência das potências centrais em abrir espaço no sistema internacional. O Brasil havia enviado tropas médicas para a Europa e declarado guerra à Alemanha — esperava reconhecimento. O fracasso na Liga e a posterior saída foram a primeira grande frustração multilateral brasileira, com ecos até hoje nas discussões sobre o Conselho de Segurança da ONU.",
+  legado:[
+    "Primeira grande frustração multilateral brasileira — padrão que se repetiria na ONU.",
+    "Consolidação da noção de que o Brasil merecia assento de grande potência — aspiração permanente desde então.",
+    "Lição sobre os limites do prestígio sem poder material: sem força militar ou econômica proporcional, o reconhecimento não vinha automaticamente."
+  ],
+  discursos:[
+    {who:"Ministro Félix Pacheco", ctx:"Carta à Liga das Nações, junho de 1926", txt:"'O Brasil não pode continuar a participar de uma organização que lhe nega o lugar que lhe é de direito pela sua extensão, população e contribuição à causa da paz. Retiramo-nos com a consciência limpa de quem fez mais do que era obrigado.'"}
+  ],
+  votos:[
+    {forum:"Liga das Nações — Assembleia", titulo:"Candidatura ao Conselho Permanente (1926)", pos:"O Brasil votou a favor de sua própria candidatura e mobilizou apoios latino-americanos. A proposta foi bloqueada pelas potências europeias.", res:"con", label:"Derrota diplomática"},
+    {forum:"Liga das Nações", titulo:"Admissão da Alemanha ao Conselho (1926)", pos:"O Brasil condicionou seu voto favorável à admissão alemã à obtenção de seu próprio assento permanente. Como a condição não foi aceita, o Brasil votou contra e depois se retirou.", res:"con", label:"Impasse / Retirada"}
+  ]
+},
+
+/* ═══════════════════════════════════════════════
+   ERA VARGAS
+═══════════════════════════════════════════════ */
+{
+  id:"pe_equid",era:"var",
+  per:"1930 – 1945",
+  nome:"Equidistância Pragmática",
+  sub:"Barganha Nacionalista · Neutralidade Calculada · II Guerra Mundial",
+  ideia:"Extrair o máximo de concessões econômicas tanto dos EUA quanto da Alemanha pela manutenção de uma neutralidade calculada — usando a ambiguidade como instrumento de política externa.",
+  presidentes:["Getúlio Vargas (1930–1945)"],
+  chanceleres:["Afrânio de Melo Franco","José Carlos de Macedo Soares","Oswaldo Aranha (1938–1944)"],
+  pilares:"Neutralidade ativa entre EUA e Eixo até 1942. Barganha para obter financiamento da industrialização (Usina de Volta Redonda). Autonomia em relação às pressões externas. Prioridade ao desenvolvimento nacional.",
+  parceiros:["Estados Unidos (a partir de 1942 — financiamento e tecnologia)","Alemanha (comércio e equipamentos militares até 1942)","Argentina (tensão constante)"],
+  enemies:["Após 1942: Alemanha e Itália (afundaram navios brasileiros)","Grã-Bretanha (pressão para alinhar antes de 1942)"],
+  autores:["Stanley Hilton — 'O Brasil e a Crise Internacional (1930–1945)'","Gerson Moura — 'Autonomia na Dependência'","Ricardo Seitenfus — 'O Brasil de Getúlio Vargas e a Formação dos Blocos'","Amado Luiz Cervo — 'O Desafio Internacional'","Frank McCann — 'Soldados da Pátria'"],
+  eventos:[
+    {n:1, titulo:"Acordo de Volta Redonda — A Maior Barganha", data:"1940–1941", txt:"Vargas negociou com os EUA o financiamento da Companhia Siderúrgica Nacional em troca de apoio logístico aos Aliados e uso das bases aéreas do Nordeste. O acordo de setembro de 1940 (Export-Import Bank) e a missão técnica americana garantiram a construção de Volta Redonda — o maior projeto industrial da história brasileira até então. A equidistância rendeu dividendos concretos."},
+    {n:2, titulo:"Afundamentos e Declaração de Guerra (1942)", data:"Fevereiro–Agosto de 1942", txt:"Após o Brasil romper relações com o Eixo (janeiro de 1942), submarinos alemães afundaram 17 navios mercantes brasileiros com mais de 600 mortos. A pressão popular foi decisiva: Vargas declarou guerra à Alemanha e Itália em 22 de agosto de 1942. O Brasil tornou-se o único país sul-americano a enviar tropas combatentes para a Europa (FEB — Força Expedicionária Brasileira)."},
+    {n:3, titulo:"FEB na Itália — Diplomacia e Combate", data:"1944–1945", txt:"25.000 soldados da FEB lutaram na Itália ao lado dos Aliados, participando da quebra da Linha Gótica. A participação militar valeu ao Brasil assento honorário nas negociações de paz e na Conferência de São Francisco (1945), onde se criou a ONU. O 'cobra fumando' (símbolo da FEB) tornou-se metáfora da habilidade brasileira: assim como cobra fumando, o Brasil foi para a guerra quando 'parecia impossível'."}
+  ],
+  geral:"A equidistância pragmática foi a política mais sofisticada de Vargas: usar a posição geopolítica do Brasil (nordeste estratégico para o Atlântico Sul) como moeda de troca em negociações com as duas superpotências em formação. O resultado foi a industrialização pesada financiada externamente sem abrir mão da soberania sobre o processo. A entrada na guerra em 1942, embora pareça uma ruptura, foi também um cálculo: garantia assento na ordem do pós-guerra e recursos adicionais dos EUA.",
+  legado:[
+    "Volta Redonda e a industrialização pesada como modelo de desenvolvimento soberano.",
+    "FEB e a participação na II Guerra como fundamento do 'Brasil potência' no pós-guerra.",
+    "A 'autonomia na dependência' como padrão recorrente da PEB: extrair o máximo do sistema sem submissão total.",
+    "Oswaldo Aranha como chanceler que conduziu o alinhamento final com os EUA — tradição de ministros com visão estratégica clara."
+  ],
+  discursos:[
+    {who:"Getúlio Vargas", ctx:"Discurso do Encouraçado Minas Gerais, 11 de junho de 1940", txt:"'Estamos marchando para o mar, em direção a um futuro que nos pertence. Os povos vitoriosos serão os que se organizaram com base no trabalho e na disciplina nacional.'"},
+    {who:"Oswaldo Aranha", ctx:"Conferência de Chanceleres do Rio de Janeiro, janeiro de 1942", txt:"'O Brasil está do lado da democracia. Não porque nos obriguem, mas porque é nossa convicção que o futuro da humanidade repousa nos princípios que os Aliados defendem.'"}
+  ],
+  votos:[
+    {forum:"Conferência de Chanceleres — Rio de Janeiro (1942)", titulo:"Rompimento de relações com o Eixo", pos:"Sob pressão dos EUA e depois dos afundamentos, o Brasil votou pelo rompimento coletivo com Alemanha, Itália e Japão. O chanceler Oswaldo Aranha foi decisivo para convencer os outros países latino-americanos.", res:"fav", label:"Ruptura com o Eixo"},
+    {forum:"Conferência de São Francisco (1945) — Criação da ONU", titulo:"Carta da ONU e veto no Conselho de Segurança", pos:"O Brasil participou da Conferência de São Francisco que criou a ONU. Apoiou a criação, mas defendeu voto plural e representação ampliada. Aceitou o veto das 5 grandes potências como condição para a participação.", res:"fav", label:"ONU fundada"}
+  ]
+},
+
+/* ═══════════════════════════════════════════════
+   GUERRA FRIA / 3ª REPÚBLICA
+═══════════════════════════════════════════════ */
+{
+  id:"pe_alinha",era:"gf",
+  per:"1946 – 1961",
+  nome:"Alinhamento com os EUA",
+  sub:"Guerra Fria · Anticomunismo · Americanismo · PEB subordinada",
+  ideia:"Alinhamento automático com os Estados Unidos na Guerra Fria, na expectativa de que a lealdade seria recompensada com investimentos, tecnologia e prestígio — expectativa que se frustrou.",
+  presidentes:["General Eurico Gaspar Dutra (1946–1951)","Getúlio Vargas (1951–1954)","Café Filho / Carlos Luz / Nereu Ramos (1954–1955)","Juscelino Kubitschek (1956–1961)"],
+  chanceleres:["João Neves da Fontoura","Raul Fernandes","Vicente Rao","Horácio Lafer","Francisco Negrão de Lima"],
+  pilares:"Anticomunismo como eixo central. TIAR (1947) como comprometimento militar hemisférico. Cassação do PCB (1947). Alinhamento nos organismos internacionais. Frustração com a 'ingratidão' americana (Operação Pan-Americana de JK).",
+  parceiros:["Estados Unidos (parceiro central)","Países da OTAN","Organizações internacionais ocidentais (FMI, BIRD)"],
+  enemies:["União Soviética","China (não reconhecida)","Cuba após 1959","Movimentos comunistas internacionais"],
+  autores:["Moniz Bandeira — 'Relações Brasil-EUA no contexto da globalização'","Gerson Moura — 'Autonomia na Dependência'","Paulo Vizentini — 'Relações Exteriores do Brasil (1945–1964)'","Amado Luiz Cervo"],
+  eventos:[
+    {n:1, titulo:"Conferência do Rio — Tratado Interamericano de Assistência Recíproca (TIAR)", data:"Agosto-Setembro de 1947", txt:"O Brasil sediou a Conferência que criou o TIAR, comprometendo militarmente os países americanos à defesa coletiva — um bloco americano anticomunista. Dutra foi seu principal articulador. O TIAR representou o ápice do alinhamento automático: defesa coletiva só fazia sentido num marco geopolítico americano."},
+    {n:2, titulo:"Operação Pan-Americana de JK (1958)", data:"Maio de 1958", txt:"Juscelino Kubitschek propôs a 'Operação Pan-Americana' (OPA) ao presidente Eisenhower: um plano Marshall para a América Latina. A iniciativa partia da constatação de que o alinhamento automático não havia trazido os investimentos prometidos. A OPA não foi aceita, mas originou mais tarde a Aliança para o Progresso de Kennedy e inspirou a criação do BID (Banco Interamericano de Desenvolvimento)."},
+    {n:3, titulo:"Visita de Nixon ao Brasil e Rejeição Popular (1958)", data:"Maio de 1958", txt:"O vice-presidente Richard Nixon foi recebido com protestos hostis em várias capitais latino-americanas durante sua tournée pela região. No Brasil, a recepção foi mais cordial, mas o incidente revelou o crescente descontentamento latino-americano com a política externa americana — e motivou JK a lançar a OPA dias depois."}
+  ],
+  geral:"O período de alinhamento automático com os EUA foi ao mesmo tempo compreensível e frustrante. Compreensível porque a Guerra Fria tornava a neutralidade arriscada e porque havia genuíno anticomunismo nas elites brasileiras. Frustrante porque a lealdade esperava reciprocidade econômica que nunca veio na escala desejada. JK foi o primeiro a sistematizar a crítica ao alinhamento automático com a OPA — abrindo caminho para a Política Externa Independente.",
+  legado:[
+    "TIAR como comprometimento permanente que seria testado nas Malvinas (1982) e questionado pelo Brasil.",
+    "Frustração com o alinhamento automático como motor da autonomia posterior.",
+    "OPA de JK como embrião da tese desenvolvimentista na política externa — que JQ/San Tiago Dantas aprofundariam.",
+    "BID (1959) como resultado concreto da pressão brasileira por desenvolvimento."
+  ],
+  discursos:[
+    {who:"Juscelino Kubitschek", ctx:"Carta ao Presidente Eisenhower, maio de 1958", txt:"'A segurança do hemisfério não pode ser apenas militar. Um povo que não tem o que comer não defende a liberdade com o estômago vazio. Precisamos de uma operação Pan-Americana que coloque o desenvolvimento no centro da agenda interamericana.'"}
+  ],
+  votos:[
+    {forum:"OEA — Expulsão de Cuba (1962)", titulo:"Posição do Brasil na crise cubana", pos:"O Brasil, sob Goulart, absteve-se da votação para expulsão de Cuba da OEA. San Tiago Dantas defendeu a não-intervenção e a autodeterminação. A posição marcou a ruptura definitiva com o alinhamento automático.", res:"abs", label:"Abstenção (não-intervenção)"},
+    {forum:"AGNU — Resolução sobre descolonização", titulo:"Apoio à descolonização africana (1960–1961)", pos:"O Brasil, sob Jânio Quadros e Afonso Arinos, votou a favor das resoluções de descolonização africana, rompendo com Portugal na ONU — decisão de alto custo político interno mas de grande valor simbólico externo.", res:"fav", label:"Favor à descolonização"}
+  ]
+},
+{
+  id:"pe_pei",era:"gf",
+  per:"1961 – 1964",
+  nome:"Política Externa Independente (PEI)",
+  sub:"Autonomia · Descolonização · Não-alinhamento · San Tiago Dantas",
+  ideia:"Definir os interesses nacionais brasileiros independentemente dos blocos da Guerra Fria, buscando relações com todos os países independente de seu sistema político, e liderar o Terceiro Mundo.",
+  presidentes:["Jânio Quadros (1961)","João Goulart (1961–1964)"],
+  chanceleres:["Afonso Arinos de Melo Franco","San Tiago Dantas","Evandro Lins e Silva","João Augusto de Araújo Castro"],
+  pilares:"Universalismo: relações com todos, independente do regime. Não-intervenção e autodeterminação como princípios absolutos. Apoio à descolonização africana e asiática. Relações com Cuba e URSS. Defesa do desarmamento. Oposição ao colonialismo português.",
+  parceiros:["Países africanos recém-independentes","Iugoslávia (Tito)","Egito (Nasser)","Índia (Nehru)","Cuba (relações mantidas)","URSS (relações comerciais)"],
+  enemies:["Nenhum inimigo formal — mas tensão com EUA e Portugal"],
+  autores:["San Tiago Dantas — 'Política Externa Independente'","Araújo Castro — 'O Congelamento do Poder Mundial'","Celso Lafer — análise da PEI","João Augusto de Araújo Castro","Paulo Vizentini","Amado Luiz Cervo"],
+  eventos:[
+    {n:1, titulo:"Condecoração de Che Guevara e Rompimento com o Alinhamento", data:"Agosto de 1961", txt:"Jânio Quadros condecorou Ernesto 'Che' Guevara com a Ordem do Cruzeiro do Sul no mesmo momento em que o Brasil atingia o ápice das pressões americanas sobre Cuba. O gesto simbólico consolidou a ruptura com o alinhamento automático e custou a Jânio o apoio da UDN — que votou contra o veto presidencial, precipitando sua renúncia."},
+    {n:2, titulo:"Crise dos Mísseis de Cuba — Posição Brasileira (1962)", data:"Outubro de 1962", txt:"Durante a Crise dos Mísseis, o Brasil propôs transformar a América Latina em zona desnuclearizada (proposta que antecipou o Tratado de Tlatelolco de 1967). San Tiago Dantas navegou entre as pressões americanas e soviéticas defendendo uma saída negociada e a autonomia da região — posição coerente com a PEI."},
+    {n:3, titulo:"Proposta do Araújo Castro — 'DDDes'", data:"1963–1964", txt:"Araújo Castro sistematizou a PEI na fórmula dos 'três DDDs': Desarmamento (contra o monopólio nuclear das grandes potências), Descolonização (apoio aos movimentos de independência) e Desenvolvimento (crítica à ordem econômica internacional). A tese do 'congelamento do poder mundial' — de que as grandes potências usavam o multilateralismo para perpetuar sua hegemonia — tornou-se referência da diplomacia brasileira."}
+  ],
+  geral:"A PEI foi a política externa mais inovadora e ideologicamente coerente da história brasileira até então. Rompeu com o alinhamento automático com os EUA, buscou o terceiro mundo como parceiro, afirmou o universalismo como método e o desenvolvimento como objetivo. Foi abortada pelo golpe de 1964, mas seu legado intelectual foi imenso: San Tiago Dantas e Araújo Castro tornaram-se referências permanentes para os diplomatas brasileiros. A PEI é a política externa que mais divide opiniões — entre admiradores de sua ousadia e críticos de sua ingenuidade.",
+  legado:[
+    "Universalismo como método: relações com todos independente do regime — princípio que a diplomacia brasileira retomaria em 1974 e consolidaria em 1988.",
+    "Araújo Castro e o 'congelamento do poder mundial' como crítica permanente ao Conselho de Segurança e ao TNP.",
+    "Tese dos 'três Des' (Desarmamento, Descolonização, Desenvolvimento) como agenda da periferia — precursora do G-77 e da NIEO.",
+    "A PEI como divisor de águas: antes e depois na PEB — o Brasil descobriu que havia alternativas ao alinhamento automático."
+  ],
+  discursos:[
+    {who:"San Tiago Dantas", ctx:"Exposição de Motivos ao Presidente Goulart, 1962", txt:"'A política exterior do Brasil deve ter por guia a defesa da paz e a busca do desenvolvimento econômico. Para isso, não pode subordinar-se a alinhamentos que constranjam nossa liberdade de ação. Somos um país em desenvolvimento — nossos interesses são os interesses do mundo em desenvolvimento.'"},
+    {who:"Araújo Castro", ctx:"Discurso na AGNU, 1963", txt:"'O mundo de hoje está congelado em termos de poder. As grandes potências controlam os mecanismos internacionais que deveriam distribuir oportunidades mais igualmente. Desarmamento, descolonização e desenvolvimento são as três condições para descongelar o sistema.'"}
+  ],
+  votos:[
+    {forum:"AGNU — Questão colonial portuguesa", titulo:"Voto contra Portugal nas colônias africanas (1961)", pos:"O Brasil rompeu com a tradição de proteger Portugal na ONU e votou favoravelmente às resoluções que condenavam a política colonial portuguesa em Angola e Moçambique. Decisão de alto custo político com Lisboa.", res:"fav", label:"Descolonização afirmada"},
+    {forum:"OEA — Cuba", titulo:"Abstenção na expulsão de Cuba (1962)", pos:"O Brasil absteve-se de votar pela expulsão de Cuba da OEA, argumentando com o princípio da não-intervenção e da autodeterminação dos povos — mesmo sem apoiar o regime de Castro.", res:"abs", label:"Não-intervenção"}
+  ]
+},
+
+/* ═══════════════════════════════════════════════
+   REGIME MILITAR
+═══════════════════════════════════════════════ */
+{
+  id:"pe_alinha64",era:"mil",
+  per:"1964 – 1967",
+  nome:"Alinhamento Automático Revisitado",
+  sub:"Ideologia da Segurança Nacional · Guerra Fria · Castelismo",
+  ideia:"Recolocar o Brasil no campo ocidental-anticomunista após o 'desvio' da PEI, buscando o reconhecimento dos EUA e legitimando o golpe na comunidade internacional.",
+  presidentes:["General Humberto Castelo Branco (1964–1967)"],
+  chanceleres:["Vasco Leitão da Cunha","Juracy Magalhães"],
+  pilares:"Anticomunismo como eixo central. Reconhecimento imediato do golpe de Pinochet (1973). Ruptura com Cuba. Subordinação à estratégia americana na América Latina. Doutrina de Segurança Nacional.",
+  parceiros:["Estados Unidos (parceiro privilegiado)","Países da OEA alinhados","Regimes militares da América do Sul"],
+  enemies:["Cuba","URSS","Movimentos de esquerda internacionais","China"],
+  autores:["Paulo Vizentini — 'Relações Exteriores do Brasil (1945–1964)'","Moniz Bandeira","Amado Luiz Cervo"],
+  eventos:[
+    {n:1, titulo:"Reconhecimento Americano do Golpe em 13 Horas", data:"2 de abril de 1964", txt:"O governo dos EUA reconheceu o golpe militar brasileiro em menos de 13 horas — antes mesmo de Goulart deixar o país. A rapidez do reconhecimento revelou o envolvimento americano (Operação Brother Sam) e inaugurou um período de alinhamento quase total."},
+    {n:2, titulo:"Intervenção na República Dominicana (1965)", data:"Maio de 1965", txt:"O Brasil participou da Força Interamericana de Paz (FIP) enviada à República Dominicana para estabilizar o país após intervenção americana. O general Hugo Panasco Alvim comandou a força — o Brasil forneceu a fachada multilateral para uma intervenção americana unilateral, em flagrante contradição com a não-intervenção."},
+    {n:3, titulo:"Rompimento com Cuba e Novas Alianças (1964)", data:"Maio de 1964", txt:"O Brasil rompeu relações com Cuba imediatamente após o golpe e passou a defender a exclusão cubana das instâncias interamericanas. A política de Castelo Branco buscava distinguir o Brasil como 'baluarte da democracia' na América Latina — discurso que legitimava o regime nos EUA enquanto perseguia opositores internamente."}
+  ],
+  geral:"O período Castelo Branco representou o maior alinhamento automático da história brasileira — mais que nos anos Dutra. A cumplicidade com a política americana na América Latina chegou ao ponto de participar da intervenção na República Dominicana. O custo foi o abandono de posições conquistadas na PEI e a subordinação dos interesses nacionais à estratégia global americana.",
+  legado:[
+    "A Operação Brother Sam como prova do envolvimento americano no golpe — marcou a visão crítica das gerações seguintes sobre a relação Brasil-EUA.",
+    "A participação na FIP dominicana como exemplo de 'multilateralismo de cobertura' — que o Brasil rejeitaria depois.",
+    "O contraste com o Pragmatismo Responsável posterior mostrou que o alinhamento automático era uma escolha, não uma necessidade estrutural."
+  ],
+  discursos:[
+    {who:"Juracy Magalhães", ctx:"Entrevista, 1964", txt:"'O que é bom para os Estados Unidos é bom para o Brasil.' — Frase controversa que condensou o alinhamento automático e tornou-se símbolo do que a diplomacia brasileira posterior buscou superar."}
+  ],
+  votos:[
+    {forum:"OEA — Operação na República Dominicana (1965)", titulo:"Participação na Força Interamericana de Paz", pos:"O Brasil votou a favor da criação da FIP e enviou tropas — legitimando uma intervenção americana unilateral com fachada multilateral. Contradição explícita com o princípio de não-intervenção.", res:"fav", label:"Intervencionismo legitimado"}
+  ]
+},
+{
+  id:"pe_prag",era:"mil",
+  per:"1974 – 1985",
+  nome:"Pragmatismo Responsável",
+  sub:"Diversificação · Autonomia · Terceiro Mundo · Geisel / Azeredo da Silveira",
+  ideia:"Recuperar a autonomia da política externa brasileira dentro de limites responsáveis — diversificando parcerias, reconhecendo novos atores e priorizando o desenvolvimento nacional sobre o alinhamento ideológico.",
+  presidentes:["General Ernesto Geisel (1974–1979)","General João Batista Figueiredo (1979–1985)"],
+  chanceleres:["Antonio Francisco Azeredo da Silveira (1974–1979)","Ramiro Saraiva Guerreiro (1979–1985)"],
+  pilares:"Diversificação de parcerias (Africa, Oriente Médio, Europa). Reconhecimento de governos independente do regime. Denúncia do acordo militar com os EUA (1977). Apoio à descolonização africana. Petróleo árabe após 1973. Acordos nucleares com Alemanha Ocidental.",
+  parceiros:["Alemanha Ocidental (acordo nuclear)","Angola e Moçambique (reconhecimento)","Oriente Médio árabe (petróleo)","Nigeria","China (relações estabelecidas 1974)","África em geral"],
+  enemies:["EUA (tensão sobre o acordo nuclear)","África do Sul (apartheid rejeitado)"],
+  autores:["Amado Luiz Cervo e Clodoaldo Bueno","Paulo Vizentini","Maria Regina Soares de Lima","Gelson Fonseca Jr.","Carlos Estevam Martins"],
+  eventos:[
+    {n:1, titulo:"Reconhecimento de Angola marxista (1975)", data:"11 de novembro de 1975", txt:"O Brasil foi o primeiro país ocidental a reconhecer a República Popular de Angola, governada pelo MPLA marxista apoiado pela URSS e Cuba. A decisão rompeu com o alinhamento anticomunista e inaugurou a política africana do pragmatismo: interesses comerciais, laços históricos e posição de liderança entre países em desenvolvimento eram mais importantes que a ideologia."},
+    {n:2, titulo:"Denúncia do Acordo Militar com os EUA (1977)", data:"Março de 1977", txt:"O governo Carter exigiu que o Brasil aceitasse garantias sobre direitos humanos como condição para a continuidade do acordo militar de 1952. Geisel denunciou o acordo — rompendo um vínculo de 25 anos com Washington. A decisão afirmou a soberania brasileira e a recusa de subordinação, mesmo ao custo de tensão com o principal parceiro."},
+    {n:3, titulo:"Acordo Nuclear com a Alemanha Ocidental (1975)", data:"27 de junho de 1975", txt:"O Brasil assinou com a Alemanha Ocidental o maior acordo de transferência de tecnologia nuclear da história: 8 usinas nucleares e tecnologia de enriquecimento de urânio. Os EUA pressionaram fortemente contra — viam risco de proliferação. O Brasil afirmou sua soberania no campo energético e tecnológico, mas o acordo nunca foi plenamente implementado."}
+  ],
+  geral:"O Pragmatismo Responsável é considerado por muitos a mais bem-sucedida política externa do período militar e um dos grandes momentos da PEB. Ao combinar diversificação de parcerias com responsabilidade (ausência de aventureirismo), Geisel e Azeredo da Silveira recuperaram a autonomia perdida em 1964 sem romper com a ordem ocidental. O 'responsável' indicava que a autonomia tinha limites — não ia a ponto de alinhar o Brasil ao bloco soviético.",
+  legado:[
+    "Abertura para a África como parceira estratégica — relação que se aprofundou com Lula (2003–2010).",
+    "Denúncia do acordo militar com os EUA como afirmação de soberania: modelo para recusar subordinação a pressões externas.",
+    "Acordo nuclear como busca de tecnologia estratégica — a ambição do 'projeto paralelo' e depois o Acordo de Guadalupe Hidalgo.",
+    "O 'Pragmatismo Responsável' como fórmula: autonomia sim, aventureirismo não — equilíbrio que a PEB buscou repetir."
+  ],
+  discursos:[
+    {who:"Azeredo da Silveira", ctx:"Discurso na AGNU, 1975", txt:"'O Brasil não aceita que sua política externa seja ditada por conveniências alheias. Nossos interesses são o desenvolvimento e a paz — e para realizá-los, precisamos de parceiros em todos os quadrantes do mundo.'"},
+    {who:"General Geisel", ctx:"Reunião ministerial, 1977", txt:"'Não aceitarei que um país estrangeiro, por mais poderoso que seja, venha ditar condições ao Brasil sobre como deve tratar seus cidadãos. Isso é soberania — e dela não abro mão.'"}
+  ],
+  votos:[
+    {forum:"AGNU — Resolução sobre sionismo como racismo (1975)", titulo:"Voto na resolução 3379", pos:"O Brasil votou a favor da resolução que equiparava sionismo ao racismo — seguindo a maioria dos países em desenvolvimento e do mundo árabe fornecedor de petróleo. Decisão controversa, revertida na resolução 46/86 de 1991.", res:"fav", label:"Terceiro Mundismo"},
+    {forum:"ONU — Descolonização de Angola e Moçambique", titulo:"Apoio à independência das colônias portuguesas (1974–1975)", pos:"O Brasil apoiou as resoluções que reconheciam o direito à independência das colônias africanas de Portugal, e foi o primeiro a reconhecer Angola — rompimento histórico com Lisboa.", res:"fav", label:"Descolonização"}
+  ]
+},
+
+/* ═══════════════════════════════════════════════
+   NOVA REPÚBLICA
+═══════════════════════════════════════════════ */
+{
+  id:"pe_univ",era:"nova",
+  per:"1985 – 2002",
+  nome:"Universalismo e Autonomia pela Participação",
+  sub:"Redemocratização · Multilateralismo · Mercosul · Credibilidade Internacional",
+  ideia:"Inserir o Brasil no sistema internacional como ator responsável e confiável, apostando no multilateralismo, na integração regional e nas normas internacionais como instrumentos de autonomia.",
+  presidentes:["José Sarney (1985–1990)","Fernando Collor (1990–1992)","Itamar Franco (1992–1994)","Fernando Henrique Cardoso (1995–2002)"],
+  chanceleres:["Olavo Setúbal","Roberto de Abreu Sodré","Francisco Rezek","Celso Lafer","Luiz Felipe Lampreia"],
+  pilares:"Integração sul-americana (Mercosul, 1991). Regime de não-proliferação nuclear (Tratado de Tlatelolco, 1994; TNP, 1998). Meio ambiente (Rio-92). Direitos humanos. Participação em missões de paz da ONU. Credibilidade como ativo estratégico.",
+  parceiros:["Argentina (Mercosul)","Paraguai e Uruguai","União Europeia","FMI e Banco Mundial (reformas dos anos 1990)","ONU e agências especializadas"],
+  enemies:["Nenhum — política de credibilidade e integração"],
+  autores:["Celso Lafer — 'A Identidade Internacional do Brasil e a Política Externa Brasileira'","Gelson Fonseca Jr. — 'A Legitimidade e Outras Questões Internacionais'","Maria Regina Soares de Lima","Tullo Vigevani","Amado Luiz Cervo"],
+  eventos:[
+    {n:1, titulo:"Criação do Mercosul (1991)", data:"26 de março de 1991", txt:"O Tratado de Assunção criou o Mercado Comum do Sul entre Brasil, Argentina, Paraguai e Uruguai. Foi o maior projeto de integração regional da América do Sul — resultado da reconciliação brasileiro-argentina iniciada com Sarney e Alfonsín (1985). O Mercosul transformou as relações regionais e tornou-se plataforma de inserção internacional do Brasil."},
+    {n:2, titulo:"Conferência Rio-92 — Brasil como líder ambiental", data:"Junho de 1992", txt:"O Brasil sediou a Conferência das Nações Unidas sobre Meio Ambiente e Desenvolvimento (CNUMAD), com 172 países presentes. Resultou em documentos fundamentais: Agenda 21, Convenção do Clima, Convenção da Biodiversidade. O Brasil projetou-se como ator central na governança ambiental global — posição que manteria com altos e baixos."},
+    {n:3, titulo:"Adesão ao TNP e Agência Internacional de Energia Atômica (1997–1998)", data:"1997–1998", txt:"Sob FHC, o Brasil aderiu ao Tratado de Não Proliferação Nuclear e aprofundou o acordo com a Argentina no campo nuclear (ABACC). A decisão encerrou décadas de ambiguidade sobre as intenções nucleares brasileiras e foi parte da estratégia de credibilidade — o custo foi a renúncia à opção nuclear."}
+  ],
+  geral:"A política externa da Nova República apostou na credibilidade como ativo estratégico. Se o Brasil era confiável, cumpria acordos, participava de regimes internacionais e promovia direitos humanos, seria mais atraente para parceiros e investidores. O Mercosul, a Rio-92, o TNP e as missões de paz foram expressões dessa lógica. Celso Lafer sistematizou esse projeto na noção de 'autonomia pela participação' — em contraste com a 'autonomia pela distância' do período militar.",
+  legado:[
+    "Mercosul como plataforma de integração e negociação coletiva — projeto inacabado mas irreversível.",
+    "Rio-92 e a identidade ambiental brasileira — legado positivo que o Brasil desperdiçaria nos anos seguintes.",
+    "Credibilidade como ativo: o Brasil dos anos 1990 era visto como parceiro confiável — base para a projeção dos anos 2000.",
+    "'Autonomia pela participação' vs. 'autonomia pela distância' — dicotomia que organiza o debate da PEB até hoje."
+  ],
+  discursos:[
+    {who:"Fernando Henrique Cardoso", ctx:"Discurso na AGNU, 1995", txt:"'O Brasil acredita que a globalização pode ser gerida de forma a beneficiar todos os povos. Para isso, precisamos de instituições internacionais mais democráticas e de regras mais justas para o comércio e as finanças.'"},
+    {who:"Celso Lafer", ctx:"'A Identidade Internacional do Brasil', 2001", txt:"'A autonomia do Brasil não requer isolamento — requer participação ativa nos regimes internacionais para moldá-los aos interesses nacionais e globais. A distância não nos protege; a presença nos fortalece.'"}
+  ],
+  votos:[
+    {forum:"AGNU — Conferências de revisão do TNP", titulo:"Adesão ao Tratado de Não-Proliferação (1998)", pos:"O Brasil aderiu ao TNP como Estado não-nuclear, encerrando a ambiguidade sobre o 'programa paralelo'. A decisão foi parte da estratégia de credibilidade mas renunciou à opção nuclear.", res:"fav", label:"Não-proliferação"},
+    {forum:"ONU — Missão no Haiti (MINUSTAH)", titulo:"Liderança da missão de paz (2004)", pos:"O Brasil aceitou liderar a MINUSTAH — a missão de paz da ONU no Haiti — com 1.200 tropas. Foi a maior liderança militar brasileira em missão de paz e demonstrou capacidade de projeção regional.", res:"fav", label:"Liderança regional"}
+  ]
+},
+{
+  id:"pe_lula",era:"nova",
+  per:"2003 – 2010",
+  nome:"Autonomia pela Diversificação — Lula / Celso Amorim",
+  sub:"Sul-Sul · BRICS · G-20 Comercial · Projeção de Potência Média",
+  ideia:"Ampliar a autonomia do Brasil diversificando parcerias para além do eixo Norte — fortalecendo relações Sul-Sul, criando novos blocos e usando a cooperação como instrumento de política externa.",
+  presidentes:["Luiz Inácio Lula da Silva (2003–2010)"],
+  chanceleres:["Celso Amorim (2003–2010)"],
+  pilares:"Cooperação Sul-Sul. BRICS (com Rússia, Índia, China, África do Sul). G-20 comercial na OMC. UNASUL e integração sul-americana. Relações com África, Oriente Médio, Irã. Candidatura ao Conselho de Segurança. Mediação em conflitos (Acordo de Teerã, 2010).",
+  parceiros:["China (maior parceiro comercial a partir de 2009)","África (aumento dramático de embaixadas)","India","Rússia","Venezuela (UNASUL)","Turquia (Acordo de Teerã)","países árabes"],
+  enemies:["EUA (tensão sobre o Acordo de Teerã e Irã)","União Europeia (tensões no Acordo Mercosul-UE)"],
+  autores:["Celso Amorim — 'Breve História Recente da Política Externa Brasileira'","Marco Aurélio Garcia","Tullo Vigevani e Gabriel Cepaluni — 'A Política Externa de Lula da Silva'","Amado Luiz Cervo — 'Inserção Internacional'","Paulo Vizentini"],
+  eventos:[
+    {n:1, titulo:"G-20 Comercial na OMC — Cancelação de Cancún (2003)", data:"Setembro de 2003", txt:"Na Conferência Ministerial da OMC em Cancún, o Brasil liderou a criação do G-20 comercial — coalizão de países em desenvolvimento (incluindo Índia, China, África do Sul) que bloqueou o acordo agrícola favorável aos países ricos. Celso Amorim defendeu os interesses dos países em desenvolvimento e a rodada de Cancún fracassou. Foi a maior vitória multilateral brasileira em décadas."},
+    {n:2, titulo:"BRICS — De Sigla a Organização (2006–2009)", data:"2006–2009", txt:"O Brasil foi um dos articuladores da transformação do BRIC (criado pelo economista Jim O'Neill em 2001) de conceito acadêmico em organização política. A primeira cúpula dos líderes do BRIC ocorreu em Ecaterimburgo em 2009. O BRICS (com a África do Sul a partir de 2010) tornou-se o maior projeto de cooperação Sul-Sul do século XXI."},
+    {n:3, titulo:"Acordo de Teerã — A Maior Derrota Diplomática (2010)", data:"Maio de 2010", txt:"Brasil e Turquia mediaram um acordo com o Irã sobre seu programa nuclear: o Irã depositaria 1.200 kg de urânio enriquecido na Turquia em troca de combustível nuclear. O acordo foi rejeitado pelos EUA, UE e Rússia — que queriam sanções mais duras. O Brasil e a Turquia votaram contra a resolução de sanções no Conselho de Segurança. O episódio mostrou os limites da ambição brasileira como ator global e a resistência das grandes potências."}
+  ],
+  geral:"A política externa de Lula foi a mais ativa e ambiciosa da história brasileira. Celso Amorim — considerado o melhor chanceler do mundo pelo ranking da revista Foreign Policy em 2009 — diversificou parcerias de forma dramática, abriu 37 novas embaixadas na África e multiplicou o comércio Sul-Sul. A 'autonomia pela diversificação' apostou que um Brasil com mais parceiros seria mais autônomo — e menos dependente dos EUA e da Europa. O resultado foi uma projeção regional e global inédita, mas também críticas sobre o Acordo de Teerã.",
+  legado:[
+    "BRICS como organização política permanente — maior legado multilateral da diplomacia brasileira contemporânea.",
+    "G-20 comercial como modelo de coalizão Sul-Sul na OMC — abriu precedente para outros agrupamentos.",
+    "Explosão das relações Brasil-África: de 16 para 37 embaixadas — reversão de décadas de descaso.",
+    "'Diplomacia presidencial' de Lula: o presidente como ator diplomático de primeira linha — 700+ viagens internacionais."
+  ],
+  discursos:[
+    {who:"Celso Amorim", ctx:"OMC Cancún, setembro de 2003", txt:"'Chegamos a Cancún para negociar, não para assinar em branco. Os países em desenvolvimento têm direito a políticas agrícolas que protejam seus agricultores — não podemos aceitar um acordo que preserve os subsídios do Norte e exija abertura do Sul.'"},
+    {who:"Luiz Inácio Lula da Silva", ctx:"Cúpula do BRIC, Ecaterimburgo, junho de 2009", txt:"'O mundo mudou. Os países emergentes não são mais objeto da política internacional — são sujeitos. O BRIC é a expressão dessa mudança e o Brasil está orgulhoso de fazer parte desta nova realidade.'"}
+  ],
+  votos:[
+    {forum:"Conselho de Segurança da ONU — Sanções ao Irã (2010)", titulo:"Voto contra a resolução 1929", pos:"Brasil e Turquia votaram contra as sanções ao Irã após o Acordo de Teerã. Foi o único voto negativo de um membro não-permanente eleito. Os EUA e a UE rejeitaram o acordo — o Brasil ficou isolado diplomaticamente.", res:"con", label:"Isolamento calculado"},
+    {forum:"OMC — Rodada de Doha", titulo:"G-20 comercial vs. países ricos (2003–2008)", pos:"O Brasil liderou o G-20 comercial que bloqueou acordos agrícolas favoráveis apenas aos países ricos, exigindo redução de subsídios agrícolas do Norte como condição para abertura dos mercados do Sul.", res:"fav", label:"Defesa do Sul Global"}
+  ]
+},
+{
+  id:"pe_dilma",era:"nova",
+  per:"2011 – 2016",
+  nome:"Política Externa de Dilma — Retraimento e Turbulência",
+  sub:"Menor Ativismo · Crise Econômica · Espionagem Americana · Impeachment",
+  ideia:"Manter os eixos da política Lula com menor ativismo presidencial, priorizando o mercado interno e a agenda doméstica — resultando em perda de protagonismo externo.",
+  presidentes:["Dilma Rousseff (2011–2016)"],
+  chanceleres:["Antonio Patriota (2011–2013)","Luiz Alberto Figueiredo (2013–2014)","Mauro Vieira (2014–2016)"],
+  pilares:"Continuidade com menor intensidade. Denúncia da espionagem americana (NSA). Candidatura ao Conselho de Segurança. Aproximação com a Europa para fechar o Acordo Mercosul-UE. Crise econômica como limitador da projeção.",
+  parceiros:["Continuidade dos parceiros Lula","União Europeia (negociações do acordo Mercosul-UE)"],
+  enemies:["EUA (tensão sobre espionagem da NSA)"],
+  autores:["Tullo Vigevani","Maria Regina Soares de Lima","Oliver Stuenkel — 'Post-Western World'"],
+  eventos:[
+    {n:1, titulo:"Denúncia da Espionagem da NSA na AGNU (2013)", data:"Setembro de 2013", txt:"Dilma Rousseff foi ao púlpito da ONU denunciar que o Brasil havia sido espionado pela NSA americana — incluindo seus próprios e-mails pessoais. O discurso foi um dos mais contundentes da história brasileira na AGNU e resultou no cancelamento da visita de Estado a Washington. O Brasil propôs resolução de direitos humanos sobre privacidade digital."},
+    {n:2, titulo:"Copa do Mundo (2014) e Olimpíadas (2016) — Diplomacia Esportiva", data:"2014 e 2016", txt:"A realização da Copa do Mundo (2014) e das Olimpíadas no Rio (2016) foram momentos de projeção internacional do Brasil, mas coincidiram com a grave crise econômica e política. O country branding esportivo não compensou a perda de prestígio causada pela recessão e pela crise institucional."},
+    {n:3, titulo:"Crise do Impeachment e Isolamento Externo (2015–2016)", data:"2015–2016", txt:"A crise política que culminou no impeachment de Dilma em 2016 paralisou a política externa brasileira. O Itamaraty perdeu protagonismo, as negociações do Acordo Mercosul-UE travaram e o Brasil perdeu influência regional — ao mesmo tempo em que Argentina elegia Macri e Venezuela entrava em colapso."}
+  ],
+  geral:"A política externa de Dilma foi marcada pelo contraste entre a continuidade formal e o retraimento real. Sem o ativismo presidencial de Lula e pressionada por uma agenda doméstica cada vez mais turbulenta, a diplomacia perdeu fôlego. O episódio da espionagem da NSA foi um momento de clareza e firmeza — mas isolado. A crise econômica e o impeachment colocaram o Brasil na defensiva diplomática.",
+  legado:[
+    "Resolução da ONU sobre privacidade digital (A/RES/68/167) — coautoria com Alemanha após a espionagem da NSA.",
+    "Rio 2016 como símbolo da projeção aspiracional do Brasil — e dos limites entre imagem e substância.",
+    "A crise do impeachment como ruptura na continuidade da PEB — o que viria depois seria muito diferente."
+  ],
+  discursos:[
+    {who:"Dilma Rousseff", ctx:"Discurso na AGNU, setembro de 2013", txt:"'A espionagem de comunicações, dados e informações sobre cidadãos, empresas e membros dos poderes do Estado brasileiro representa violação do direito internacional e afronta aos princípios que devem reger as relações entre países amigos. Sem respeito à soberania, não há base para o relacionamento entre nações.'"}
+  ],
+  votos:[
+    {forum:"AGNU — Privacidade na Era Digital", titulo:"Resolução A/RES/68/167 (2013)", pos:"Brasil e Alemanha copatrocinaram resolução afirmando que os mesmos direitos que as pessoas têm off-line devem ser protegidos on-line. Resposta à espionagem da NSA.", res:"fav", label:"Soberania digital"},
+    {forum:"OEA — Venezuela", titulo:"Crise venezuelana (2015–2016)", pos:"O Brasil resistiu à ativação da Carta Democrática da OEA contra a Venezuela, priorizando o princípio de não-intervenção mesmo diante da deterioração democrática venezolana — posição que seria revertida por Temer e Bolsonaro.", res:"abs", label:"Não-intervenção mantida"}
+  ]
+},
+{
+  id:"pe_temer_bolsonaro",era:"nova",
+  per:"2016 – 2022",
+  nome:"Reorientação Conservadora",
+  sub:"Alinhamento com EUA · Ideologia · Isolamento · Meio Ambiente como Problema",
+  ideia:"Reorientar a política externa em direção ao Ocidente liberal (Temer) e depois ideológico-conservador (Bolsonaro), rompendo com o ativismo Sul-Sul e priorizando os EUA como parceiro central.",
+  presidentes:["Michel Temer (2016–2018)","Jair Bolsonaro (2019–2022)"],
+  chanceleres:["José Serra (2016)","Aloysio Nunes Ferreira (2016–2018)","Ernesto Araújo (2019–2021)","Carlos França (2021–2022)"],
+  pilares:"Alinhamento com os EUA (especialmente com Trump). Saída do Acordo de Paris (ameaça não concretizada). Crítica ao BRICS. Idealismo conservador (Ernesto Araújo). Isolamento global por questões ambientais (desmatamento). Rompimento com China (discurso sobre COVID).",
+  parceiros:["Estados Unidos (Trump)","Israel (transferência de embaixada cogitada)","Hungria (Orbán)"],
+  enemies:["China (tensão sobre COVID e 5G)","Venezuela","Cuba","Países progressistas"],
+  autores:["Ernesto Araújo — 'Trump e o Ocidente' (manifesto ideológico)","Oliver Stuenkel — crítica ao isolacionismo","Matias Spektor","Monica Herz"],
+  eventos:[
+    {n:1, titulo:"Ernesto Araújo e o 'Olavismo' na Política Externa (2019–2021)", data:"2019–2021", txt:"O chanceler Ernesto Araújo, discípulo de Olavo de Carvalho, introduziu categorias ideológicas na política externa brasileira: globalismo como inimigo, China como ameaça comunista, tradição cristã como eixo civilizacional. O resultado foi o isolamento progressivo do Brasil — inclusive de aliados tradicionais na Europa."},
+    {n:2, titulo:"Tensão com a China e a Pandemia (2020–2021)", data:"2020–2021", txt:"Bolsonaro e seus filhos fizeram declarações hostis à China durante a pandemia (responsabilizando-a pelo COVID e atacando a Huawei). Como a China era o principal fornecedor de vacinas (CoronaVac) e insumos farmacêuticos, além de principal parceiro comercial, as declarações causaram crise diplomática — resolvida apenas com a mudança de Araújo."},
+    {n:3, titulo:"COP-26 e o Isolamento Ambiental (2021)", data:"Novembro de 2021", txt:"O governo Bolsonaro chegou à COP-26 em Glasgow em posição defensiva: acusado internacionalmente pelo desmatamento recorde na Amazônia, enfrentou pressões de parceiros europeus e americanos. A política ambiental tornou-se o maior passivo da política externa do período — afastando investidores e parceiros comerciais."}
+  ],
+  geral:"O período 2016–2022 representou a maior ruptura na continuidade da PEB desde 1964. Temer tentou um 'retorno ao Ocidente' pragmático; Bolsonaro introduziu ideologia explícita e confronto na diplomacia. O resultado foi o isolamento progressivo do Brasil — de parceiros europeus (pelo desmatamento), da China (pelo discurso sobre COVID), dos países em desenvolvimento (ruptura com o Sul-Sul) e do multilateralismo (hostilidade à ONU e à OMS). A saída foi a eleição de Lula em 2022.",
+  legado:[
+    "A experiência Bolsonaro como caso de estudo em 'antimultilateralismo' e politização da política externa.",
+    "O desmatamento como ativo negativo: pela primeira vez, a política ambiental tornou-se fator de isolamento diplomático.",
+    "A ruptura com a China mostrou os limites do alinhamento com os EUA quando o principal parceiro comercial é outro.",
+    "A retomada de Lula (2023) como 'restauração' — com Celso Amorim como assessor especial e Mauro Vieira como chanceler."
+  ],
+  discursos:[
+    {who:"Ernesto Araújo", ctx:"'Trump e o Ocidente', Cadernos de Política Exterior, 2017", txt:"'O globalismo é a ideologia de nosso tempo. É a crença de que o ser humano pode e deve ser desvinculado de sua tradição, de sua cultura, de sua fé, de sua nação... O Ocidente precisa de um líder que resista a isso. Trump pode ser esse líder.'"},
+    {who:"Jair Bolsonaro", ctx:"Discurso na AGNU, setembro de 2019", txt:"'O socialismo está em voga na América do Sul, e o Brasil não pode ignorar esse movimento. A soberania amazônica é brasileira — não aceitamos que potências estrangeiras nos ditem como administrar nosso território.'"}
+  ],
+  votos:[
+    {forum:"OMS — COVID-19 e Investigação sobre a Pandemia (2020)", titulo:"Posição do Brasil na resolução de investigação da OMS", pos:"O Brasil apoiou resolução que pedia investigação independente sobre as origens da COVID — o que alinhou o Brasil com os EUA e contra a China.", res:"fav", label:"Alinhamento EUA-Trump"},
+    {forum:"AGNU — Resolução sobre Jerusalém como capital de Israel (2017)", titulo:"Posição sobre Jerusalém", pos:"Temer votou contra a resolução que pedia a retirada do reconhecimento americano de Jerusalém como capital de Israel — rompendo com a tradição brasileira de apoio à causa palestina.", res:"con", label:"Ruptura com tradição"}
+  ]
+}
+,
+{
+  id:"pe_lula3",era:"nova",
+  per:"2023 – presente",
+  nome:"Lula III — Autonomia Ativa e Diplomacia Climática",
+  sub:"Retomada · G20 · COP30 · Mercosul-UE · Sul Global · Mediação de Conflitos",
+  ideia:"Reconstruir o protagonismo internacional do Brasil após o isolamento Bolsonaro, apostando na agenda climática como eixo central, no Sul Global como parceiro estratégico e no multilateralismo como instrumento de autonomia num mundo multipolar.",
+  presidentes:["Luiz Inácio Lula da Silva (2023–2026)"],
+  chanceleres:["Mauro Vieira (chanceler)","Celso Amorim (assessor especial da Presidência — arquiteto estratégico)"],
+  pilares:"Diplomacia climática e COP30 em Belém (2025). Presidência do G20 (2024) com foco em combate à fome. Presidência do BRICS (2025). Acordo Mercosul-UE (assinado em dezembro de 2025). Mediação de conflitos (Gaza, Guiana-Venezuela). Sul Global e cooperação Sul-Sul. Multilateralismo reformado. Combate ao negacionismo e ao autoritarismo.",
+  parceiros:["União Europeia (Acordo Mercosul-UE — maior acordo comercial do mundo: 722 milhões de pessoas, US$ 22 tri de PIB)","China (maior parceiro comercial)","África (aprofundamento das relações)","India (BRICS, G20)","Países amazônicos (Cúpula de Letícia)","ONU e agências climáticas","Argentina — tensão com Milei"],
+  enemies:["Israel (crise após comparação de Gaza ao nazismo — embaixador retirado)","EUA-Trump (tarifas sobre produtos brasileiros — resolvido em nov. 2025)","Autoritarismos regionais (tensão com Venezuela de Maduro)"],
+  autores:["Celso Amorim — 'Breve História Recente da Política Externa Brasileira' e atuação direta","Carlos Milani e Diogo Ives — CEBRI-Revista, análises do governo Lula 3","Dawisson Belém Lopes — 'A política exterior no ano inaugural do governo Lula III'","Oliver Stuenkel — 'Post-Western World' e análises contemporâneas","Maria Regina Soares de Lima — análises de política externa","Tullo Vigevani — estudos sobre autonomia pela diversificação"],
+  eventos:[
+    {n:1, titulo:"Presidência do G20 e Aliança Global contra a Fome (2024)", data:"Janeiro – Novembro de 2024", txt:"O Brasil presidiu o G20 em 2024, realizando a Cúpula de Líderes no Rio de Janeiro em novembro. O principal legado foi a criação da Aliança Global contra a Fome e a Pobreza — iniciativa que reuniu mais de 200 membros (países, OI, bancos multilaterais) em torno de programas estruturantes de combate à fome, inspirada na experiência brasileira do Bolsa Família e do Fome Zero. O Brasil também liderou debates sobre IA, transição energética e trabalho decente."},
+    {n:2, titulo:"COP30 em Belém — O Pacote de Belém (novembro de 2025)", data:"10 – 21 de novembro de 2025", txt:"O Brasil sediou a 30ª Conferência das Partes da ONU sobre Clima em Belém, PA — na Amazônia. Com representantes de 195 países e 42.618 participantes, a COP30 aprovou por consenso o 'Pacote de Belém': 29 decisões climáticas sobre tecnologia, adaptação e transição justa para energias limpas. O Brasil também lançou o Fundo Florestas Tropicais para Sempre (TFFF) e um roteiro para eliminar combustíveis fósseis. Foi considerada a maior vitória multilateral do governo Lula III — o multilateralismo 'saiu vitorioso', como definiu Lula."},
+    {n:3, titulo:"Acordo Mercosul-União Europeia (dezembro de 2025)", data:"20 de dezembro de 2025", txt:"Após 25 anos de negociação, o acordo entre o Mercosul e a União Europeia foi assinado em dezembro de 2025 — o maior acordo comercial do mundo em termos de PIB combinado (US$ 22 trilhões) e população (722 milhões de pessoas). A negociação final foi conduzida pelo Brasil durante a presidência pro tempore do Mercosul. O acordo ainda precisará ser ratificado pelos parlamentos, mas sua assinatura foi a maior vitória comercial da história da integração sul-americana."}
+  ],
+  geral:"A política externa de Lula III é simultaneamente uma restauração e uma inovação. É restauração porque recuperou princípios e parcerias abandonados pelo governo Bolsonaro: multilateralismo, Sul-Sul, não-intervenção, direitos humanos. É inovação porque o contexto mudou radicalmente: a guerra na Ucrânia, a rivalidade EUA-China, a crise climática e o avanço dos autoritarismos exigem respostas novas. O eixo central e mais original do governo é a diplomacia climática — o Brasil pela primeira vez usa sua posição como guardião da Amazônia e país megadiverso como ativo estratégico central. O trio Lula-Amorim-Vieira combinou diplomacia presidencial ativa (Lula visitou mais de 20 países em 2025), expertise técnica (Amorim) e profissionalismo (Vieira). A posição sobre Gaza — comparando as ações israelenses ao nazismo e apoiando a ação da África do Sul na CIJ — foi a decisão mais controversa e custou a ruptura com Israel.",
+  legado:[
+    "COP30 em Belém como símbolo da aliança entre desenvolvimento e proteção ambiental — o Brasil como 'potência climática'.",
+    "Acordo Mercosul-UE: após 25 anos, o maior acordo comercial do mundo — legado histórico da integração sul-americana.",
+    "Aliança Global contra a Fome: exportação do modelo brasileiro de políticas sociais para o multilateralismo.",
+    "BRICS ampliado como novo eixo de multipolaridade — o Brasil como articulador do Sul Global em transição.",
+    "Diplomacia climática como nova doutrina: a Amazônia como ativo estratégico, não passivo ambiental."
+  ],
+  discursos:[
+    {who:"Luiz Inácio Lula da Silva", ctx:"Abertura da AGNU, Nova York, setembro de 2023", txt:"'O Brasil está de volta. Voltamos para dizer que a democracia venceu. Voltamos para dizer que o Brasil acredita na multilateralidade, que o Brasil acredita que os problemas do mundo têm que ser discutidos com todos os países do mundo, que o Brasil acredita que nenhum país é mais importante do que o outro.'"},
+    {who:"Luiz Inácio Lula da Silva", ctx:"COP30, Belém, novembro de 2025", txt:"'A COP30 será nossa última chance de evitar uma ruptura irreversível no sistema climático. Conto com todos para fazer de Belém a COP da virada. O multilateralismo saiu vitorioso — e isso é o que importa para o futuro da humanidade.'"},
+    {who:"Mauro Vieira", ctx:"Entrevista de balanço, dezembro de 2025", txt:"'O Brasil voltou ao mundo, deixou para trás os equívocos da gestão anterior, que resultaram em um inédito isolamento do país, e essa volta tem representado ganhos para a população brasileira e respeito de todos os nossos parceiros pela soberania que soubemos defender.'"}
+  ],
+  votos:[
+    {forum:"CIJ — Ação da África do Sul contra Israel (2024)", titulo:"Apoio formal à ação sobre genocídio em Gaza", pos:"O Brasil apoiou formalmente a ação da África do Sul na Corte Internacional de Justiça contra Israel por alegado genocídio em Gaza (jan. 2024). A decisão provocou ruptura diplomática com Israel (que convocou o embaixador) e crítica de ex-chanceler Celso Lafer, mas foi coerente com a posição de defesa do direito internacional humanitário.", res:"fav", label:"Direito Internacional Humanitário"},
+    {forum:"AGNU — Resolução sobre privacidade e soberania digital", titulo:"Regulação da comunicação virtual", pos:"O Brasil promoveu nas instâncias da ONU e do G20 debate sobre regulação das plataformas digitais e soberania sobre dados — agenda que enfrenta resistência das big techs e dos EUA.", res:"fav", label:"Soberania digital"},
+    {forum:"COP30 — Pacote de Belém (2025)", titulo:"Aprovação por consenso das 29 decisões climáticas", pos:"O Brasil presidiu e viabilizou o consenso entre 195 países sobre o Pacote de Belém — incluindo roteiro para fim dos combustíveis fósseis e Fundo Florestas Tropicais para Sempre. Considerado a maior vitória multilateral brasileira desde o Tratado de Petrópolis.", res:"fav", label:"Consenso climático histórico"},
+    {forum:"G20 Rio de Janeiro (2024)", titulo:"Aliança Global contra a Fome e a Pobreza", pos:"O Brasil incluiu na agenda do G20 o combate à fome como prioridade econômica global — revertendo décadas em que o G20 era exclusivamente um fórum econômico-financeiro. A Aliança reuniu 200+ membros.", res:"fav", label:"Sul Global na agenda"}
+  ]
+}
+]; // fim de DATA
+
+var activeId = null;
+
+/* BUILD SIDEBAR + PILLS */
+function buildSidebar(){
+  var sb = document.getElementById('sidebar');
+  var pills = document.getElementById('pills');
+  sb.innerHTML = '';
+  pills.innerHTML = '';
+  var eraShown = {};
+  DATA.forEach(function(d){
+    var era = ERAS[d.era];
+    if(!eraShown[d.era]){
+      eraShown[d.era] = true;
+      var eh = document.createElement('div');
+      eh.className='era-hdr';
+      eh.style.color = era.color;
+      eh.textContent = era.label;
+      sb.appendChild(eh);
+    }
+    var item = document.createElement('div');
+    item.className = 'ti era-'+d.era;
+    item.id = 'ti-'+d.id;
+    item.style.setProperty('--era', era.color);
+    item.innerHTML =
+      '<div class="tdot" style="border-color:'+era.color+'44;"></div>'+
+      '<div class="tc">'+
+        '<div class="tper" style="color:'+era.color+'">'+d.per+'</div>'+
+        '<div class="tnm">'+d.nome+'</div>'+
+        '<div class="tsub">'+d.sub+'</div>'+
+        '<div class="tpres">Pres.: <span>'+d.presidentes[0]+(d.presidentes.length>1?'…':'')+'</span></div>'+
+      '</div>';
+    item.onclick = (function(id){return function(){open(id);};})(d.id);
+    sb.appendChild(item);
+
+    var pill = document.createElement('div');
+    pill.className='pill'; pill.id='pill-'+d.id;
+    pill.textContent = d.per.split('–')[0].trim()+' · '+d.nome.split(' ').slice(0,3).join(' ');
+    pill.onclick = (function(id){return function(){open(id);};})(d.id);
+    pills.appendChild(pill);
+  });
+}
+buildSidebar();
+
+function open(id){
+  var d = DATA.find(function(x){return x.id===id;});
+  if(!d) return;
+  if(activeId){
+    var prev=document.getElementById('ti-'+activeId); if(prev)prev.classList.remove('active');
+    var pp=document.getElementById('pill-'+activeId); if(pp)pp.classList.remove('on');
+  }
+  activeId=id;
+  document.getElementById('ti-'+id).classList.add('active');
+  document.getElementById('pill-'+id).classList.add('on');
+  document.getElementById('ti-'+id).scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  var era = ERAS[d.era];
+
+  /* Header */
+  document.getElementById('dper').innerHTML =
+    d.per+' &nbsp;·&nbsp; '+era.label+
+    '&nbsp;<span class="era-pill" style="color:'+era.color+';border-color:'+era.color+'44;background:'+era.color+'11">'+era.label+'</span>';
+  document.getElementById('dtitle').innerHTML = d.nome.replace(/([–&])/,'<em>$1</em>');
+  document.getElementById('dideia').textContent = d.ideia;
+  document.getElementById('dhdr').className = 'dhdr on';
+
+  /* Actors row */
+  var ar = document.getElementById('actorsRow');
+  ar.innerHTML =
+    '<div class="actor-box"><div class="actor-lbl">Presidentes</div><div class="actor-list">'+
+    d.presidentes.map(function(p){return '<div class="actor-item">'+p+'</div>';}).join('')+'</div></div>'+
+    '<div class="actor-box"><div class="actor-lbl">Chanceleres</div><div class="actor-list">'+
+    d.chanceleres.map(function(c){return '<div class="actor-item">'+c+'</div>';}).join('')+'</div></div>'+
+    '<div class="actor-box"><div class="actor-lbl">Pilares da Política</div><div class="actor-list"><div class="actor-item" style="font-size:.6rem;line-height:1.6">'+d.pilares+'</div></div></div>';
+  ar.className = 'actors-row on';
+
+  /* Tabs */
+  var tabs=[
+    {k:'geral',   lb:'📋 Geral'},
+    {k:'eventos', lb:'⚡ Acontecimentos'},
+    {k:'parc',    lb:'🤝 Parceiros & Rivais'},
+    {k:'votos',   lb:'🗳 Votações em OIs'},
+    {k:'disc',    lb:'💬 Discursos'},
+    {k:'autores', lb:'📚 Autores'},
+    {k:'legado',  lb:'🏛 Legado'}
+  ];
+  document.getElementById('dtabs').innerHTML = tabs.map(function(t,i){
+    return '<div class="dtab'+(i===0?' on':'')+'" id="tab-'+t.k+'" onclick="switchTab(\''+t.k+'\')">'+t.lb+'</div>';
+  }).join('');
+  document.getElementById('dtabs').className='dtabs on';
+
+  /* Body panes */
+  var html =
+    /* GERAL */
+    '<div class="dpane on" id="pane-geral">'+
+      '<div class="stitle">Análise Geral</div><p class="prose">'+d.geral+'</p>'+
+    '</div>'+
+    /* EVENTOS */
+    '<div class="dpane" id="pane-eventos">'+
+      '<div class="stitle">3 Principais Acontecimentos</div>'+
+      '<div class="ev-list">'+d.eventos.map(function(e){
+        return '<div class="ev-item">'+
+          '<div class="ev-num">'+e.n+'</div>'+
+          '<div class="ev-body">'+
+            '<div class="ev-title">'+e.titulo+'</div>'+
+            '<div class="ev-date">'+e.data+'</div>'+
+            '<div class="ev-txt">'+e.txt+'</div>'+
+          '</div>'+
+        '</div>';
+      }).join('')+'</div>'+
+    '</div>'+
+    /* PARC */
+    '<div class="dpane" id="pane-parc">'+
+      '<div class="stitle">Principais Parceiros</div>'+
+      '<div class="tags-wrap">'+d.parceiros.map(function(p){return '<span class="tag ally">'+p+'</span>';}).join('')+'</div>'+
+      '<div class="stitle">Rivais / Tensões</div>'+
+      '<div class="tags-wrap">'+d.enemies.map(function(e){return '<span class="tag enemy">'+e+'</span>';}).join('')+'</div>'+
+    '</div>'+
+    /* VOTOS */
+    '<div class="dpane" id="pane-votos">'+
+      '<div class="stitle">Votações e Posicionamentos em Organizações Internacionais</div>'+
+      '<div class="vote-list">'+d.votos.map(function(v){
+        return '<div class="vote-item">'+
+          '<div class="vote-forum">'+v.forum+'</div>'+
+          '<div class="vote-title">'+v.titulo+'</div>'+
+          '<div class="vote-pos">'+v.pos+'</div>'+
+          '<span class="vote-res vr-'+v.res+'">'+v.label+'</span>'+
+        '</div>';
+      }).join('')+'</div>'+
+    '</div>'+
+    /* DISCURSOS */
+    '<div class="dpane" id="pane-disc">'+
+      '<div class="stitle">Discursos e Documentos Importantes</div>'+
+      '<div class="speech-list">'+d.discursos.map(function(s){
+        return '<div class="speech-item">'+
+          '<div class="speech-who">'+s.who+'</div>'+
+          '<div class="speech-ctx">'+s.ctx+'</div>'+
+          '<div class="speech-txt">"'+s.txt+'"</div>'+
+        '</div>';
+      }).join('')+'</div>'+
+    '</div>'+
+    /* AUTORES */
+    '<div class="dpane" id="pane-autores">'+
+      '<div class="stitle">Autores e Referências Bibliográficas</div>'+
+      '<div class="tags-wrap">'+d.autores.map(function(a){return '<span class="tag author">'+a+'</span>';}).join('')+'</div>'+
+    '</div>'+
+    /* LEGADO */
+    '<div class="dpane" id="pane-legado">'+
+      '<div class="stitle">Legado e Impactos de Longo Prazo</div>'+
+      d.legado.map(function(l){return '<div class="leg-item"><p class="prose">'+l+'</p></div>';}).join('')+
+    '</div>';
+
+  document.getElementById('dbody').innerHTML = html;
+  document.getElementById('dbody').className = 'dbody on';
+  document.getElementById('empty').style.display = 'none';
+  document.getElementById('detail').scrollTop = 0;
+  document.getElementById('dhdr').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function switchTab(k){
+  document.querySelectorAll('.dtab').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.dpane').forEach(function(p){p.classList.remove('on');});
+  var dt=document.getElementById('tab-'+k); if(dt)dt.classList.add('on');
+  var dp=document.getElementById('pane-'+k); if(dp)dp.classList.add('on');
+}
+
+function fechar(){
+  if(activeId){
+    var prev=document.getElementById('ti-'+activeId); if(prev)prev.classList.remove('active');
+    var pp=document.getElementById('pill-'+activeId); if(pp)pp.classList.remove('on');
+    activeId=null;
+  }
+  document.getElementById('dhdr').className='dhdr';
+  document.getElementById('dtabs').className='dtabs';
+  document.getElementById('dbody').className='dbody';
+  document.getElementById('actorsRow').className='actors-row';
+  document.getElementById('empty').style.display='flex';
+}
+
+function filterAll(){
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('fAll').classList.add('on');
+  document.querySelectorAll('.ti').forEach(function(el){el.style.display='';});
+  document.querySelectorAll('.era-hdr').forEach(function(el){el.style.display='';});
+}
+function filterEra(era){
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('f'+era.charAt(0).toUpperCase()+era.slice(1)).classList.add('on');
+  document.querySelectorAll('.ti').forEach(function(el){
+    el.style.display = el.classList.contains('era-'+era)?'':'none';
+  });
+  document.querySelectorAll('.era-hdr').forEach(function(el){el.style.display='none';});
+}
+</script>
+</body>
+</html>
