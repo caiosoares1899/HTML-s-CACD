@@ -1010,7 +1010,7 @@ function renderD3Map(uid, membros) {
     } else if (hasAfrica) {
       // Atlantico Sul: foca em Africa Ocidental + America do Sul
       // Centro no meio do Atlantico Sul ~W15, S10
-      proj = d3.geoMercator().center([-15, -8]).scale(W / 4.2).translate([W / 2, H / 2]);
+      proj = d3.geoMercator().center([-18, -5]).scale(W / 3.2).translate([W / 2, H / 2.1]);
     } else if (hasNorthAm) {
       // Americas completas: do Canada a Patagonia
       proj = d3.geoMercator().center([-83, 10]).scale(W / 3.8).translate([W / 2, H / 2]);
