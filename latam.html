@@ -985,7 +985,7 @@ const WORLD_GEO = {"type":"FeatureCollection","features":[{"type":"Feature","pro
 function buildMap(membros) {
   const uid = 'map_' + Math.random().toString(36).slice(2,8);
   setTimeout(() => renderD3Map(uid, membros), 0);
-  return `<div id="${uid}" style="width:100%;height:320px;background:#13110e;display:flex;align-items:center;justify-content:center;">
+  return `<div id="${uid}" style="width:100%;height:400px;background:#13110e;display:flex;align-items:center;justify-content:center;">
     <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#8a7f6e;letter-spacing:.12em">carregando...</span>
   </div>`;
 }
@@ -997,11 +997,10 @@ function renderD3Map(uid, membros) {
   function doRender() {
     const d3 = window.d3;
     const W = container.clientWidth || 340;
-    const H = hasNorthAm ? 320 : (hasAfrica ? 280 : 240);
-
     const hasAfrica = membros.some(c => ['NG','AO','NA','CM','GH','SN','GN','GW','CI','SL','LR','GA','CG','CD','TG','BJ','GQ','ST','CV'].includes(c));
     const hasEurope = membros.some(c => ['DE','FR','ES','PT','IT','NL','BE','AT','SE','FI','PL','IE','RO','HU','CZ','SK','BG','HR','SI'].includes(c));
     const hasNorthAm = membros.some(c => ['US','CA','MX','GT','BZ','HN','SV','NI','CR','PA','CU','HT','DO','JM','TT','BB','AG','DM','GD','KN','LC','VC','BS'].includes(c));
+    const H = hasNorthAm ? 400 : (hasAfrica ? 280 : 240);
 
     let proj;
     if (hasEurope) {
@@ -1014,11 +1013,11 @@ function renderD3Map(uid, membros) {
     } else if (hasNorthAm) {
       // Americas completas sem distorcao: geoAlbers customizado
       // parallels calibrados para cobrir Canada(70N) a Argentina(55S)
-      proj = d3.geoAlbers()
-        .center([0, -15])
-        .rotate([90, 0])
-        .parallels([40, -40])
-        .scale(W / 2.0)
+      // Natural Earth — sem distorcao, foco nas Americas
+      // centro lon=-85 (eixo das Americas), lat=5 (equilibra Canada ao N e Argentina ao S)
+      proj = d3.geoNaturalEarth1()
+        .center([-85, 5])
+        .scale(W / 1.55)
         .translate([W / 2, H / 2]);
     } else {
       // so America do Sul
