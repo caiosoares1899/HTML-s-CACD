@@ -1004,17 +1004,16 @@ function renderD3Map(uid, membros) {
     const hasNorthAm = membros.some(c => ['US','CA','MX','GT','BZ','HN','SV','NI','CR','PA','CU','HT','DO','JM','TT','BB','AG','DM','GD','KN','LC','VC','BS'].includes(c));
 
     let proj;
-    if (hasAfrica || hasEurope) {
-      // mundo: Natural Earth centrado no Atlantico
-      proj = d3.geoNaturalEarth1().scale(W / 6.5).translate([W / 2.2, H / 1.85]);
+    if (hasEurope) {
+      // Europa + Americas: mundo Natural Earth deslocado para o Atlantico
+      proj = d3.geoNaturalEarth1().rotate([20, 0]).scale(W / 5.8).translate([W / 2, H / 1.9]);
+    } else if (hasAfrica) {
+      // Atlantico Sul: foca em Africa Ocidental + America do Sul
+      // Centro no meio do Atlantico Sul ~W15, S10
+      proj = d3.geoMercator().center([-15, -8]).scale(W / 4.2).translate([W / 2, H / 2]);
     } else if (hasNorthAm) {
-      // hemisferio ocidental: Canada a Patagonia
-      proj = d3.geoConicEqualArea()
-        .parallels([15, -45])
-        .rotate([80, 0])
-        .center([0, -5])
-        .scale(W / 1.95)
-        .translate([W / 2, H / 1.85]);
+      // Americas completas: do Canada a Patagonia
+      proj = d3.geoMercator().center([-83, 10]).scale(W / 3.8).translate([W / 2, H / 2]);
     } else {
       // so America do Sul
       proj = d3.geoMercator().center([-58, -22]).scale(W / 2.1).translate([W / 2, H / 2]);
