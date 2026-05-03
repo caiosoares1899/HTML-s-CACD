@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multilateralismo na América Latina — CACD</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f0e0c; --surface:#1a1814; --surface2:#221f1a; --border:#2e2a22;
+  --gold:#c9a84c; --gold-light:#e8c97a; --cream:#f0e8d8; --muted:#8a7f6e;
+  --text:#d8cfc0; --text2:#a89f90; --accent:#8b2f2f; --accent2:#2f5a8b;
+  --green:#2f6e4a; --teal:#1d7a6e; --purple:#5a3a8b;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+
+nav{padding:14px 32px;border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted);display:flex;gap:8px;align-items:center}
+nav a{color:var(--muted);text-decoration:none}nav a:hover{color:var(--gold)}
+nav span{opacity:.4}
+
+.hero{padding:60px 48px 40px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse 60% 40% at 80% 50%,rgba(201,168,76,.04) 0%,transparent 70%);pointer-events:none}
+.hero-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:400;color:var(--cream);line-height:1.2;max-width:700px;margin-bottom:16px}
+.hero-sub{font-size:14px;color:var(--muted);max-width:560px;line-height:1.7}
+.hero-stats{display:flex;gap:32px;margin-top:32px;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;gap:4px}
+.stat-n{font-family:'Playfair Display',serif;font-size:28px;color:var(--gold)}
+.stat-l{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+
+/* ── FILTROS ── */
+.controls{padding:20px 48px;border-bottom:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.filter-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-right:4px}
+.btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;padding:6px 14px;cursor:pointer;text-transform:uppercase;transition:all .2s;border-radius:2px}
+.btn:hover,.btn.active{border-color:var(--gold);color:var(--gold)}
+.btn.active{background:rgba(201,168,76,.08)}
+.search-box{background:transparent;border:1px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:11px;padding:6px 12px;outline:none;border-radius:2px;width:200px;margin-left:auto}
+.search-box::placeholder{color:var(--muted)}
+.search-box:focus{border-color:var(--gold)}
+
+/* ── LAYOUT ── */
+.main{display:grid;grid-template-columns:1fr 380px;gap:0;min-height:calc(100vh - 200px)}
+.timeline-col{border-right:1px solid var(--border);padding:40px 48px}
+.side-col{position:sticky;top:0;height:100vh;overflow-y:auto;padding:32px 32px}
+
+/* ── TIMELINE ── */
+.era{margin-bottom:48px}
+.era-header{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.era-line{height:1px;flex:1;background:var(--border)}
+.era-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--gold);border:1px solid rgba(201,168,76,.3);padding:4px 10px;text-transform:uppercase;white-space:nowrap}
+
+.timeline-track{position:relative;padding-left:24px}
+.timeline-track::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 5%,var(--border) 95%,transparent)}
+
+.bloc{position:relative;margin-bottom:28px;cursor:pointer;transition:all .2s}
+.bloc::before{content:'';position:absolute;left:-28px;top:14px;width:9px;height:9px;border-radius:50%;border:1px solid var(--border);background:var(--bg);transition:all .2s}
+.bloc:hover::before,.bloc.active::before{border-color:var(--gold);background:var(--gold);box-shadow:0 0 12px rgba(201,168,76,.3)}
+.bloc.hidden{display:none}
+
+.bloc-inner{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:20px 24px;transition:all .2s}
+.bloc:hover .bloc-inner,.bloc.active .bloc-inner{border-color:rgba(201,168,76,.25);background:var(--surface2)}
+
+.bloc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.bloc-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--cream);line-height:1.2}
+.bloc-sigla{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--gold);background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);padding:3px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.bloc-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.meta-item{display:flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)}
+.meta-dot{width:6px;height:6px;border-radius:50%}
+.bloc-desc{font-size:13px;color:var(--text2);line-height:1.6}
+.bloc-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;padding:2px 7px;border:1px solid var(--border);color:var(--muted);text-transform:uppercase;border-radius:2px}
+.tag.comercial{border-color:rgba(47,110,74,.4);color:#5cb88a}
+.tag.segurança{border-color:rgba(47,90,139,.4);color:#7aacdb}
+.tag.politico{border-color:rgba(90,58,139,.4);color:#a48fd4}
+.tag.energia{border-color:rgba(139,69,19,.4);color:#d4914a}
+.tag.integração{border-color:rgba(139,47,47,.4);color:#d48a8a}
+.tag.ativo,.tag.inativo,.tag.transição,.tag.suspenso{border-radius:2px}
+.status-ativo{color:#5cb88a;border-color:rgba(47,110,74,.4)}
+.status-inativo{color:#888;border-color:rgba(100,100,100,.3)}
+.status-transição{color:var(--gold);border-color:rgba(201,168,76,.3)}
+.status-suspenso{color:#d48a8a;border-color:rgba(139,47,47,.3)}
+
+/* ── DETALHE ── */
+.detail-panel{background:transparent}
+.detail-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;gap:12px;opacity:.3}
+.dp-icon{font-size:32px;opacity:.4}
+.dp-text{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--muted);text-align:center}
+
+.detail-card{display:none}
+.detail-card.visible{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.dc-header{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.dc-sigla{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.dc-name{font-family:'Playfair Display',serif;font-size:22px;color:var(--cream);line-height:1.2;margin-bottom:10px}
+.dc-badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;padding:3px 8px;border:1px solid var(--border);text-transform:uppercase;border-radius:2px}
+
+.dc-section{margin-bottom:20px}
+.dc-section-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.dc-section-title::after{content:'';flex:1;height:1px;background:rgba(201,168,76,.15)}
+.dc-content{font-size:13px;color:var(--text2);line-height:1.7}
+.dc-content strong{color:var(--text);font-weight:500}
+
+.dc-members{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.member-tag{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 7px;background:var(--surface);border:1px solid var(--border);color:var(--text2);border-radius:2px;cursor:pointer;transition:all .2s}
+.member-tag:hover{border-color:var(--gold);color:var(--gold)}
+.member-tag.br{border-color:rgba(47,110,74,.4);color:#5cb88a}
+
+.dc-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.dc-mini{background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:10px 12px}
+.dc-mini-label{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.dc-mini-val{font-size:13px;color:var(--text)}
+
+/* ── MAPA ── */
+.map-section{margin-bottom:20px}
+.map-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.map-container{background:var(--surface);border:1px solid var(--border);border-radius:3px;overflow:hidden;position:relative}
+#map-svg path{fill:var(--surface2);stroke:var(--bg);stroke-width:.5px;transition:fill .3s}
+#map-svg path.highlight{fill:var(--gold)}
+#map-svg path.brasil{fill:#c9a84c !important;stroke:var(--bg)}
+.map-legend{display:flex;gap:12px;margin-top:6px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted)}
+.map-legend span{display:flex;align-items:center;gap:4px}
+.leg-dot{width:8px;height:8px;border-radius:50%}
+
+/* ── POLÊMICAS ── */
+.polemica{background:rgba(139,47,47,.06);border:1px solid rgba(139,47,47,.2);border-radius:3px;padding:10px 12px;margin-top:6px;font-size:12px;color:var(--text2);line-height:1.6}
+.polemica::before{content:'▲ ';color:#d48a8a;font-size:10px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .main{grid-template-columns:1fr}
+  .side-col{position:relative;height:auto;border-top:1px solid var(--border)}
+  .timeline-col{padding:32px 24px}
+  .hero{padding:40px 24px 32px}
+  .controls{padding:16px 24px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#">CACD</a><span>/</span>
+  <a href="#">Política Externa Brasileira</a><span>/</span>
+  <span style="color:var(--text2)">Multilateralismo na América Latina</span>
+</nav>
+
+<div class="hero">
+  <div class="hero-label">Política Externa Brasileira · Integração Regional</div>
+  <h1>Multilateralismo na América Latina e no Caribe</h1>
+  <p class="hero-sub">Linha do tempo das principais iniciativas de integração, cooperação e segurança coletiva — da ALALC ao século XXI. Clique em cada bloco para ver detalhes, participantes e atuação brasileira.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-n">20+</span><span class="stat-l">Organismos</span></div>
+    <div class="stat"><span class="stat-n">1960</span><span class="stat-l">Início ALALC</span></div>
+    <div class="stat"><span class="stat-n">33</span><span class="stat-l">Países ALC</span></div>
+    <div class="stat"><span class="stat-n">6 déc.</span><span class="stat-l">de integração</span></div>
+  </div>
+</div>
+
+<div class="controls">
+  <span class="filter-label">Filtrar:</span>
+  <button class="btn active" onclick="filterBlocs('all',this)">Todos</button>
+  <button class="btn" onclick="filterBlocs('comercial',this)">Comercial</button>
+  <button class="btn" onclick="filterBlocs('politico',this)">Político</button>
+  <button class="btn" onclick="filterBlocs('segurança',this)">Segurança</button>
+  <button class="btn" onclick="filterBlocs('integração',this)">Integração</button>
+  <button class="btn" onclick="filterBlocs('energia',this)">Energia/Infra</button>
+  <button class="btn" onclick="filterBlocs('ativo',this)">Ativos</button>
+  <input class="search-box" type="text" placeholder="Buscar sigla ou nome..." oninput="searchBlocs(this.value)">
+</div>
+
+<div class="main">
+<div class="timeline-col" id="timeline">
+
+<!-- ─────────────── ANOS 1960 ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Década de 1960</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="comercial integração" data-status="inativo" data-id="alalc" onclick="showDetail('alalc')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Associação Latino-Americana de Livre Comércio</span>
+          <span class="bloc-sigla">ALALC</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#888"></span>1960–1980</span>
+          <span class="meta-item">Tratado de Montevidéu (1960)</span>
+          <span class="meta-item tag status-inativo">Encerrada</span>
+        </div>
+        <p class="bloc-desc">Primeira grande iniciativa de integração econômica da América Latina, criada pelo Tratado de Montevidéu. Buscava criar uma zona de livre comércio entre os membros em 12 anos, precursora da ALADI.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="politico integração segurança" data-status="ativo" data-id="oea" onclick="showDetail('oea')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Organização dos Estados Americanos</span>
+          <span class="bloc-sigla">OEA</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1948 (América Latina desde fundação)</span>
+          <span class="meta-item">Carta de Bogotá</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Principal organismo político hemisférico, sediado em Washington. Missões eleitorais, Comissão Interamericana de Direitos Humanos (CIDH), resolução de conflitos. Relação tensa com certos governos sul-americanos.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag segurança">Segurança</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial integração" data-status="ativo" data-id="can" onclick="showDetail('can')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Comunidade Andina de Nações</span>
+          <span class="bloc-sigla">CAN</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1969 (Pacto Andino)</span>
+          <span class="meta-item">Acordo de Cartagena</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Bloco sub-regional andino fundado como Pacto Andino. Integração comercial, política migratória andina, parlamento supranacional (Parlandino), Tribunal de Justiça Andino. Venezuela saiu em 2006.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────── ANOS 1970–80 ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Décadas de 1970–80</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="segurança" data-status="ativo" data-id="zopacas" onclick="showDetail('zopacas')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Zona de Paz e Cooperação do Atlântico Sul</span>
+          <span class="bloc-sigla">ZOPACAS</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1986</span>
+          <span class="meta-item">Res. 41/11 ONU</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Iniciativa brasileira por excelência: desnuclearização do Atlântico Sul, exclusão de potências extrarregionais, cooperação sul-sul. Reúne 24 países (costa ocidental africana + América do Sul/Central atlântica). Papel estratégico do pré-sal.</p>
+        <div class="bloc-tags"><span class="tag segurança">Segurança</span><span class="tag politico">Político</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial integração" data-status="ativo" data-id="aladi" onclick="showDetail('aladi')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Associação Latino-Americana de Integração</span>
+          <span class="bloc-sigla">ALADI</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1980</span>
+          <span class="meta-item">Tratado de Montevidéu II</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Substituiu a ALALC com objetivos mais flexíveis: área de preferências econômicas em vez de livre comércio automático. 13 membros, sede em Montevidéu. Estrutura de AAPs (Acordos de Alcance Parcial) e ACEs (Complementação Econômica).</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────── ANOS 1990 ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Década de 1990</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="comercial integração politico" data-status="ativo" data-id="mercosul" onclick="showDetail('mercosul')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Mercado Comum do Sul</span>
+          <span class="bloc-sigla">MERCOSUL</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1991</span>
+          <span class="meta-item">Tratado de Assunção</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Principal bloco regional sul-americano. Brasil, Argentina, Uruguai, Paraguai (suspenso 2012, retornou 2013). Venezuela: admitida 2012, suspensa 2017 por violação democrática. Zona de livre comércio + União Aduaneira imperfeita (TEC). Acordo com UE negociado em 2019, ainda pendente.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span><span class="tag politico">Político</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial" data-status="inativo" data-id="alca" onclick="showDetail('alca')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Área de Livre Comércio das Américas</span>
+          <span class="bloc-sigla">ALCA</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#888"></span>1994–2005</span>
+          <span class="meta-item">Cúpula Miami 1994</span>
+          <span class="meta-item tag status-inativo">Fracassada</span>
+        </div>
+        <p class="bloc-desc">Proposta dos EUA para zona de livre comércio hemisférica de 34 países. Fracassou em Mar del Plata (2005) por oposição de Brasil, Venezuela e Argentina. Brasil defendeu reciprocidade e rejeição de agenda "ALCA-plus" sobre serviços, propriedade intelectual e compras governamentais.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial integração" data-status="ativo" data-id="caricom" onclick="showDetail('caricom')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Comunidade do Caribe</span>
+          <span class="bloc-sigla">CARICOM</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1973 (Tratado de Chaguaramas)</span>
+          <span class="meta-item">15 membros</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Integração econômica e política do Caribe anglófono e alguns países. Mercado Único do Caribe (CSME). Cooperação educacional, saúde, segurança. Brasil tem histórico de aproximação via fundo de cooperação.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="politico integração segurança" data-status="ativo" data-id="sica" onclick="showDetail('sica')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Sistema de Integração Centro-Americana</span>
+          <span class="bloc-sigla">SICA</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1991</span>
+          <span class="meta-item">Protocolo de Tegucigalpa</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Integração política, econômica e de segurança da América Central. Reúne 8 membros plenos. Foro de Diálogo com México e EUA. Presença brasileira reduzida mas crescente em temas de segurança democrática.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag segurança">Segurança</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────── 2000s ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Década de 2000 — Era do Regionalismo Pós-Liberal</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="energia integração" data-status="transição" data-id="iirsa" onclick="showDetail('iirsa')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Iniciativa para a Integração da Infraestrutura Regional Sul-Americana</span>
+          <span class="bloc-sigla">IIRSA</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:var(--gold)"></span>2000</span>
+          <span class="meta-item">Cúpula de Brasília</span>
+          <span class="meta-item tag status-transição">Incorporada COSIPLAN</span>
+        </div>
+        <p class="bloc-desc">Carteira de projetos de infraestrutura física: transportes, energia, telecomunicações. 12 eixos de integração. Brasil como financiador principal via BNDES e protagonista político. Incorporada ao COSIPLAN/UNASUL em 2009. Portfólio atual: mais de 560 projetos.</p>
+        <div class="bloc-tags"><span class="tag energia">Energia/Infra</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial politico" data-status="ativo" data-id="alba" onclick="showDetail('alba')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Aliança Bolivariana para os Povos da Nossa América</span>
+          <span class="bloc-sigla">ALBA-TCP</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>2004</span>
+          <span class="meta-item">Cuba–Venezuela</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Alternativa bolivariana à ALCA, proposta por Chávez e Castro. Cooperação solidária: petróleo subsidiado (Petrocaribe), troca de serviços (médicos cubanos por petróleo). Ideologia anti-imperialista explícita. Brasil nunca aderiu. 11 membros.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag politico">Político</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="politico integração segurança" data-status="suspenso" data-id="unasul" onclick="showDetail('unasul')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">União de Nações Sul-Americanas</span>
+          <span class="bloc-sigla">UNASUL</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#d48a8a"></span>2008–2019 (ativo)</span>
+          <span class="meta-item">Tratado de Brasília</span>
+          <span class="meta-item tag status-suspenso">Esvaziada</span>
+        </div>
+        <p class="bloc-desc">Projeto de integração política sul-americana mais ambicioso. 12 membros. CDS (Defesa), CSS (Saúde), COSIPLAN. Sede em Quito. Papel crucial em crises (Bolívia 2008, Equador 2010). Esvaziada com saída de Argentina, Brasil, Chile, Colômbia, Equador, Paraguai (2019) que fundaram PROSUL.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag segurança">Segurança</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="politico integração" data-status="ativo" data-id="celac" onclick="showDetail('celac')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Comunidade de Estados Latino-Americanos e Caribenhos</span>
+          <span class="bloc-sigla">CELAC</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>2010/2011</span>
+          <span class="meta-item">Substitui Grupo Rio + CALC</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">33 países da América Latina e Caribe — sem EUA e Canadá. Foro político de alto nível alternativo à OEA. Presidência pro tempore rotativa. Brasil retornou em 2023 após afastamento Bolsonaro. Sede itinerante. Diálogo CELAC-UE reativado.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────── 2010s ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Década de 2010 — Fragmentação e Novas Alianças</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="comercial integração" data-status="ativo" data-id="alianca" onclick="showDetail('alianca')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Aliança do Pacífico</span>
+          <span class="bloc-sigla">AP</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>2011</span>
+          <span class="meta-item">Chile, Colômbia, México, Peru</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Bloco de orientação liberal, integração profunda com viés Pacífico e Ásia. Livre circulação de pessoas, bens, serviços e capitais. 60+ membros observadores. Contraponto ideológico ao MERCOSUL. Brasil como observador desde 2012.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="politico segurança" data-status="ativo" data-id="prosul" onclick="showDetail('prosul')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Fórum para o Progresso da América do Sul</span>
+          <span class="bloc-sigla">PROSUL</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>2019</span>
+          <span class="meta-item">Declaração de Santiago</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Criado pelos governos de direita como alternativa à UNASUL esvaziada. Estrutura mais leve, sem sede fixa. Brasil Bolsonaro foi fundador e ativo. Governo Lula mantém participação mas com menor entusiasmo. Coexiste com reaproximação à UNASUL.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag segurança">Segurança</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial integração" data-status="ativo" data-id="mercosul-assoc" onclick="showDetail('mercosul-assoc')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Acordo MERCOSUL–União Europeia</span>
+          <span class="bloc-sigla">MERCO-UE</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:var(--gold)"></span>Negociado 2019</span>
+          <span class="meta-item">Pendente ratificação</span>
+          <span class="meta-item tag status-transição">Em processo</span>
+        </div>
+        <p class="bloc-desc">Maior acordo birregional do mundo em potencial: ~800 milhões de pessoas. Negociado após 20 anos. Objeções europeias: desmatamento amazônico, critérios ambientais. Acordo atualizado em 2024. Ratificação depende de unanimidade no Conselho Europeu. Principal projeto do MERCOSUL atual.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────── 2020s ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Década de 2020 — Relançamentos e Novas Dinâmicas</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="politico integração segurança" data-status="transição" data-id="unasul2" onclick="showDetail('unasul2')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Relançamento da UNASUL / Nova Agenda Sul-Americana</span>
+          <span class="bloc-sigla">UNASUL 2.0</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:var(--gold)"></span>2023–</span>
+          <span class="meta-item">Governo Lula III</span>
+          <span class="meta-item tag status-transição">Em reativação</span>
+        </div>
+        <p class="bloc-desc">Lula fez da reintegração sul-americana prioridade. Cúpula de Brasília (maio 2023) reuniu todos os presidentes sul-americanos. Discussão sobre nova arquitetura regional — reformar UNASUL, fortalecer CELAC, integrar Aliança do Pacífico e MERCOSUL.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="energia integração" data-status="ativo" data-id="cosiplan" onclick="showDetail('cosiplan')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Conselho Sul-Americano de Infraestrutura e Planejamento</span>
+          <span class="bloc-sigla">COSIPLAN</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>2009</span>
+          <span class="meta-item">No âmbito da UNASUL</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Incorporou a IIRSA. Planeja e coordena projetos de infraestrutura sul-americana. Portfólio de mais de 560 projetos. Financiado pelo CAF, BID e BNDES. Corredor Bioceânico Brasil–Peru como projeto emblemático atual.</p>
+        <div class="bloc-tags"><span class="tag energia">Energia/Infra</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial integração" data-status="ativo" data-id="mercosul-ampliado" onclick="showDetail('mercosul-ampliado')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Convergência MERCOSUL–Aliança do Pacífico</span>
+          <span class="bloc-sigla">MERCO-AP</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:var(--gold)"></span>2014–presente</span>
+          <span class="meta-item">Agenda de aproximação</span>
+          <span class="meta-item tag status-transição">Em desenvolvimento</span>
+        </div>
+        <p class="bloc-desc">Processo gradual de aproximação entre os dois principais blocos sul-americanos. Argentina, Brasil e Uruguai como observadores na AP. Propostas de harmonização normativa, facilitação aduaneira. Visão de mercado integrado de 500+ milhões de pessoas.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span><span class="tag integração">Integração</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ─────────────── TEMÁTICOS ─────────────── -->
+<div class="era">
+  <div class="era-header"><div class="era-line"></div><div class="era-badge">Organismos Financeiros e Temáticos</div><div class="era-line"></div></div>
+  <div class="timeline-track">
+
+    <div class="bloc" data-tags="comercial energia" data-status="ativo" data-id="caf" onclick="showDetail('caf')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Banco de Desenvolvimento da América Latina</span>
+          <span class="bloc-sigla">CAF</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1970</span>
+          <span class="meta-item">Caracas</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Principal banco de desenvolvimento regional. 21 países membros + 14 bancos privados. Financia projetos de infraestrutura, saúde, educação. Brasil é um dos maiores acionistas e tomadores. Atuação intensa no portfólio IIRSA/COSIPLAN.</p>
+        <div class="bloc-tags"><span class="tag energia">Energia/Infra</span><span class="tag comercial">Comercial</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="comercial" data-status="ativo" data-id="bid" onclick="showDetail('bid')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Banco Interamericano de Desenvolvimento</span>
+          <span class="bloc-sigla">BID</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1959</span>
+          <span class="meta-item">Washington D.C.</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">Principal fonte de financiamento multilateral da América Latina e Caribe. EUA como maior acionista. Brasil 2º maior tomador histórico. Foco em infraestrutura, desenvolvimento social, comércio. BID Invest para setor privado.</p>
+        <div class="bloc-tags"><span class="tag comercial">Comercial</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="politico segurança" data-status="ativo" data-id="otca" onclick="showDetail('otca')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Organização do Tratado de Cooperação Amazônica</span>
+          <span class="bloc-sigla">OTCA</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#5cb88a"></span>1995</span>
+          <span class="meta-item">TCA 1978</span>
+          <span class="meta-item tag status-ativo">Ativo</span>
+        </div>
+        <p class="bloc-desc">8 países amazônicos (Brasil, Peru, Colômbia, Equador, Bolívia, Venezuela, Suriname, Guiana). Gestão sustentável da Amazônia, cooperação científica, questões indígenas. Brasil como sede (Brasília) e principal força motriz. Relevância crescente com agenda climática.</p>
+        <div class="bloc-tags"><span class="tag politico">Político</span><span class="tag segurança">Segurança</span></div>
+      </div>
+    </div>
+
+    <div class="bloc" data-tags="segurança politico" data-status="ativo" data-id="tiar" onclick="showDetail('tiar')">
+      <div class="bloc-inner">
+        <div class="bloc-top">
+          <span class="bloc-name">Tratado Interamericano de Assistência Recíproca</span>
+          <span class="bloc-sigla">TIAR</span>
+        </div>
+        <div class="bloc-meta">
+          <span class="meta-item"><span class="meta-dot" style="background:#d48a8a"></span>1947</span>
+          <span class="meta-item">Rio de Janeiro</span>
+          <span class="meta-item tag status-suspenso">Enfraquecido</span>
+        </div>
+        <p class="bloc-desc">Pacto de defesa coletiva hemisférico: ataque a um = ataque a todos. Falklands (1982) evidenciou suas limitações (EUA apoiou UK). Vários países saíram (Cuba, México, Equador, Venezuela, Bolívia, Nicarágua). Brasil mantém adesão formal mas com baixa importância prática.</p>
+        <div class="bloc-tags"><span class="tag segurança">Segurança</span><span class="tag politico">Político</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /timeline-col -->
+
+<!-- ─────────────── PAINEL LATERAL ─────────────── -->
+<div class="side-col">
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-placeholder" id="detail-placeholder">
+      <div class="dp-icon">◈</div>
+      <div class="dp-text">Clique em um organismo<br>para ver os detalhes</div>
+    </div>
+    <div id="detail-content"></div>
+  </div>
+</div>
+</div>
+
+<!-- ─────────────── DADOS DAS INICIATIVAS ─────────────── -->
+<script>
+const DATA = {
+  alalc:{
+    sigla:"ALALC",name:"Associação Latino-Americana de Livre Comércio",
+    status:"Encerrada",periodo:"1960–1980",sede:"Montevidéu",
+    fundacao:"Tratado de Montevidéu, 18 fev. 1960",
+    objetivo:"Criar zona de livre comércio entre membros da América Latina em 12 anos, eliminando gradualmente tarifas e restrições ao comércio intrarregional.",
+    membros:["Argentina","Brasil","Chile","México","Paraguai","Peru","Uruguai","Venezuela","Colômbia","Equador","Bolívia"],
+    estrutura:"Conferência das Partes (máximo), Comitê Executivo (permanente), Comitê Consultivo. Sem poder supranacional. Decisões por consenso.",
+    br:"Brasil foi membro fundador e promotor ativo. Defendeu o modelo de integração como via de industrialização via substituição de importações. A ALALC serviu de base para futuras negociações bilaterais e multilaterais do Brasil na região.",
+    polemica:"Não atingiu metas: liberalização muito lenta, assimetrias entre economias grandes (BR, AR, MX) e pequenas. Produtos 'sensíveis' foram sistematicamente excluídos. Substituída pela ALADI em 1980.",
+    tags:["Comercial","Integração"],
+    mapa:["AR","BO","BR","CL","CO","EC","MX","PY","PE","UY","VE"]
+  },
+  oea:{
+    sigla:"OEA",name:"Organização dos Estados Americanos",
+    status:"Ativo",periodo:"1948–presente",sede:"Washington D.C.",
+    fundacao:"Carta de Bogotá, 30 abr. 1948 (IX Conferência Interamericana)",
+    objetivo:"Fortalecer a paz, democracia, direitos humanos e desenvolvimento na região. Foro político hemisférico. Missões eleitorais, mediação de conflitos, CIDH.",
+    membros:["Todos os 35 países americanos (Cuba suspensa 1962–2009, retirou-se ativa)"],
+    estrutura:"Assembleia Geral, Reunião de Consulta dos MRE, Conselho Permanente, CIDH, Corte IDH, SG (indicado pela AG). Secretário-Geral: Luis Almagro (Uruguai).",
+    br:"Brasil é membro fundador e mantém relações com ressalvas. Crítico da politização da CIDH e de interferências nos assuntos internos. Participou ativamente de missões eleitorais. Tensão com a postura da OEA na crise boliviana de 2019.",
+    polemica:"Tensão estrutural sobre autonomia vs. ingerência. Crise 2019: relatório da OEA sobre fraude nas eleições bolivianas contestado por vários estudos. Bolívia e Venezuela questionam legitimidade. Cuba foi expulsa em 1962 e readmitida em 2009 mas não retornou.",
+    tags:["Político","Segurança"],
+    mapa:["CA","MX","GT","BZ","HN","SV","NI","CR","PA","CU","JM","HT","DO","TT","BB","GY","SR","VE","CO","EC","PE","BO","BR","PY","CL","AR","UY","US","CA"]
+  },
+  can:{
+    sigla:"CAN",name:"Comunidade Andina de Nações",
+    status:"Ativo",periodo:"1969–presente (como Pacto Andino até 1996)",sede:"Lima",
+    fundacao:"Acordo de Cartagena, 26 mai. 1969",
+    objetivo:"Integração sub-regional andina: zona de livre comércio, União Aduaneira (não consolidada), mobilidade de pessoas, cooperação política. Mercado andino.",
+    membros:["Bolívia","Colômbia","Equador","Peru"],
+    estrutura:"Conselho Presidencial Andino, Conselho de MRE, Comissão (legislativa), Secretaria Geral, Tribunal de Justiça Andino, Parlandino, CAF, FLAR.",
+    br:"Brasil não é membro mas tem relações via acordos MERCOSUL-CAN (ACE-59, 2003). Negocia convergência comercial. A Bolívia pediu adesão ao MERCOSUL em 2012 e protocolo de adesão assinou em 2015.",
+    polemica:"Venezuela saiu em 2006 alegando que acordos de livre comércio de Colômbia e Peru com EUA feriam os princípios do bloco. Debates sobre aprofundamento vs. abertura. TEC andino nunca consolidado.",
+    tags:["Comercial","Integração"],
+    mapa:["BO","CO","EC","PE"]
+  },
+  zopacas:{
+    sigla:"ZOPACAS",name:"Zona de Paz e Cooperação do Atlântico Sul",
+    status:"Ativo",periodo:"1986–presente",sede:"Sem sede fixa (presidência rotativa)",
+    fundacao:"Resolução 41/11 da AGONU, proposta pelo Brasil, 27 out. 1986",
+    objetivo:"Desnuclearização e desmilitarização do Atlântico Sul. Exclusão de potências extrarregionais. Cooperação econômica, científica e ambiental entre países ribeirinhos sul-americanos e africanos.",
+    membros:["Brasil","Argentina","Uruguai","Namíbia","Angola","Congo","RDC","Gabão","Camarões","Nigéria","Benin","Togo","Gana","Costa do Marfim","Libéria","Serra Leoa","Guiné","Guiné-Bissau","Senegal","Cabo Verde","Guiné Equatorial","São Tomé e Príncipe","e outros costeiros atlânticos"],
+    estrutura:"Reuniões ministeriais periódicas. Presidência pro tempore. Sem secretariado permanente. Declarações políticas consensuais.",
+    br:"Brasil é o idealizador e principal impulsionador. Vínculo direto com a doutrina de segurança atlântica brasileira e com a proteção do pré-sal. Ministério da Defesa e Marinha com papel central. Presidente Lula reativou agenda ZOPACAS.",
+    polemica:"Debate sobre pertinência de ampliar competências vs. manter perfil político. Tensão com presença militar dos EUA (base em Ascensão). Crítica de ser fórum esvaziado nos períodos Temer/Bolsonaro. Discussão sobre soberania do pré-sal.",
+    tags:["Segurança","Político"],
+    mapa:["BR","AR","UY","NG","AO","NA","CM","GH","SN","GN","GW","CI","SL","LR","GA","CG","CD","TG","BJ","GQ","ST","CV"]
+  },
+  aladi:{
+    sigla:"ALADI",name:"Associação Latino-Americana de Integração",
+    status:"Ativo",periodo:"1980–presente",sede:"Montevidéu",
+    fundacao:"Tratado de Montevidéu II, 12 ago. 1980",
+    objetivo:"Área de preferências econômicas (não livre comércio automático). Arcabouço para acordos bilaterais e sub-regionais. Preferência Tarifária Regional (PTR), Acordos de Alcance Parcial (AAP), Acordos de Complementação Econômica (ACE).",
+    membros:["Argentina","Bolívia","Brasil","Chile","Colômbia","Cuba","Equador","México","Panamá","Paraguai","Peru","Uruguai","Venezuela"],
+    estrutura:"Conselho de Ministros (máximo), Conferência, Comitê de Representantes (permanente), Secretaria-Geral. 13 membros plenos.",
+    br:"Brasil usa a ALADI como arcabouço legal para acordos bilaterais e o MERCOSUL está baseado no ACE nº 18 da ALADI. Principal instrumento de formalização de acordos preferenciais da região.",
+    polemica:"Crítica de ser muito permissiva (cada país pode ter acordos diferentes, quebrando preferências). Baixa visibilidade pública apesar de importância jurídica. Coexistência com acordos sobrepostos.",
+    tags:["Comercial","Integração"],
+    mapa:["AR","BO","BR","CL","CO","CU","EC","MX","PA","PY","PE","UY","VE"]
+  },
+  mercosul:{
+    sigla:"MERCOSUL",name:"Mercado Comum do Sul",
+    status:"Ativo",periodo:"1991–presente",sede:"Montevidéu (Secretaria)",
+    fundacao:"Tratado de Assunção, 26 mar. 1991",
+    objetivo:"Mercado comum: livre circulação de bens, serviços, capitais e pessoas. Política macroeconômica coordenada. Tarifa Externa Comum (TEC). União Aduaneira — ainda incompleta.",
+    membros:["Brasil","Argentina","Uruguai","Paraguai (suspenso jun-ago 2012)","Venezuela (suspensa 2017)"],
+    estrutura:"CMC (Conselho Mercado Comum, presidentes), GMC (Grupo Mercado Comum, min.), CCM (Comissão Comércio), PARLASUL, Tribunal Permanente de Revisão (TPR), FOCEM (Fundo Convergência Estrutural).",
+    br:"Brasil é o maior membro (70%+ do PIB bloco). Defensor histórico do MERCOSUL como plataforma geopolítica. Presidência pro tempore brasileira tem sido ativa. Negociação MERCOSUL-UE foi prioridade de Itamaraty. Debate interno sobre aprofundamento vs. abertura a novos parceiros.",
+    polemica:"TEC com muitas exceções (imperfeita). Venezuela: admissão em 2012 contestada por Argentina/Paraguai na época; suspensa em 2017. Paraguai suspenso em 2012 (golpe parlamentar). Acordo com UE: debate sobre regras ambientais, exigências europeias de cláusula de sustainability. Pressão de Milei (AR) por reforma radical.",
+    tags:["Comercial","Integração","Político"],
+    mapa:["BR","AR","UY","PY"]
+  },
+  alca:{
+    sigla:"ALCA",name:"Área de Livre Comércio das Américas",
+    status:"Fracassada",periodo:"1994–2005",sede:"—",
+    fundacao:"I Cúpula das Américas, Miami, dez. 1994 (proposta Clinton)",
+    objetivo:"Zona de livre comércio hemisférica de 34 países (exceto Cuba). Eliminar barreiras comerciais da Alasca à Terra do Fogo até 2005.",
+    membros:["34 países americanos (proposta)"],
+    estrutura:"Rodadas de negociação. Comitê de Negociações Comerciais (CNC). Co-presidências EUA e Brasil na fase final (2002–2005).",
+    br:"Brasil foi o maior obstáculo à ALCA como proposta pelos EUA. O Itamaraty, sob Celso Lafer e depois Celso Amorim, exigiu reciprocidade: abertura de subsídios agrícolas dos EUA, acesso a mercado americano, rejeição da agenda 'ALCA-plus' (serviços, propriedade intelectual, compras governamentais). A cúpula de Mar del Plata (nov. 2005) foi o 'enterro' da ALCA, com Brasil, Venezuela e Argentina bloqueando o consenso.",
+    polemica:"Principal polêmica: agenda assimétrica dos EUA. Brasil e Venezuela foram vistos como os 'sabotadores'. Bush pressionou por acordo 'ALCA lite'. Impacto da eleição de Lula (2002) e Chávez (1998): reorientação da política externa.",
+    tags:["Comercial"],
+    mapa:["US","CA","MX","GT","BZ","HN","SV","NI","CR","PA","JM","HT","DO","TT","CO","VE","EC","PE","BO","BR","PY","CL","AR","UY","GY","SR","BB","LC","VC","AG","DM","GD","KN"]
+  },
+  caricom:{
+    sigla:"CARICOM",name:"Comunidade do Caribe",
+    status:"Ativo",periodo:"1973–presente",sede:"Georgetown, Guiana",
+    fundacao:"Tratado de Chaguaramas, 4 jul. 1973",
+    objetivo:"Integração econômica caribenha. Mercado Único do Caribe (CSME). Cooperação em política externa, segurança, saúde, educação. Moeda comum em debate.",
+    membros:["Antígua e Barbuda","Bahamas","Barbados","Belize","Dominica","Granada","Guiana","Haiti","Jamaica","Montserrat","São Cristóvão e Névis","Santa Lúcia","São Vicente","Suriname","Trinidad e Tobago"],
+    estrutura:"Conferência dos Chefes de Governo, Conselho de Comércio e Desenvolvimento Econômico (COTED), Secretariado (Georgetown).",
+    br:"Brasil criou fundo especial de cooperação Brasil-CARICOM (US$50 mi). Acordos de cooperação técnica em saúde e educação. Interlocução com Haiti foi relevante (MINUSTAH). Visitas presidenciais de Lula I expandiram relações.",
+    polemica:"Haiti: instabilidade crônica e dependência de ajuda externa questiona funcionamento do bloco. Divisões internas sobre relações com Cuba e Venezuela. CSME ainda não completamente implementado.",
+    tags:["Comercial","Integração"],
+    mapa:["AG","BB","BZ","DM","GD","GY","HT","JM","KN","LC","SR","TT","VC","BS"]
+  },
+  sica:{
+    sigla:"SICA",name:"Sistema de Integração Centro-Americana",
+    status:"Ativo",periodo:"1991–presente",sede:"San Salvador",
+    fundacao:"Protocolo de Tegucigalpa, 13 dez. 1991",
+    objetivo:"Integração política, econômica, social, cultural e ambiental da América Central. Democracia, desenvolvimento sustentável, segurança regional.",
+    membros:["Guatemala","Belize","Honduras","El Salvador","Nicarágua","Costa Rica","Panamá","República Dominicana"],
+    estrutura:"Reuniões Presidenciais, Conselho de Ministros, Parlamento Centro-Americano (PARLACEN), Corte Centro-Americana de Justiça, Secretaria-Geral.",
+    br:"Brasil tem status de observador regional. Cooperação técnica via ABC. Participação em missões de paz (MINUSTAH). Crescente interesse comercial na sub-região.",
+    polemica:"Crise migratória centroamericana. Regimes autoritários (Ortega na Nicarágua) tensionam o bloco. Honduras pós-golpe 2009 criou divisão interna.",
+    tags:["Político","Segurança"],
+    mapa:["GT","BZ","HN","SV","NI","CR","PA","DO"]
+  },
+  iirsa:{
+    sigla:"IIRSA",name:"Iniciativa para a Integração da Infraestrutura Regional Sul-Americana",
+    status:"Incorporada ao COSIPLAN",periodo:"2000–2009 (autônoma)",sede:"—",
+    fundacao:"I Cúpula Sul-Americana, Brasília, ago. 2000",
+    objetivo:"Planejamento e financiamento da infraestrutura física sul-americana: transportes, energia e telecomunicações. 12 eixos de integração e desenvolvimento.",
+    membros:["12 países sul-americanos"],
+    estrutura:"Comitê de Direção Executiva (ministros), Comitê de Coordenação Técnica (CAF, BID, FONPLATA). Incorporada ao COSIPLAN/UNASUL em 2009.",
+    br:"Brasil como motor financeiro e político. BNDES financiou dezenas de projetos. Corredor Bioceânico, integração elétrica com Argentina e Paraguai, fibra óptica. Itamaraty e BNDES como dupla de impulsionamento.",
+    polemica:"Crítica de ONG e povos indígenas: projetos ignoram impactos socioambientais. BR-319 (Manaus-Porto Velho). Represa Belo Monte no contexto energético. Benefício predominante para multinacionais e países de maior PIB.",
+    tags:["Energia/Infra","Integração"],
+    mapa:["BR","AR","BO","CL","CO","EC","GY","PY","PE","SR","UY","VE"]
+  },
+  alba:{
+    sigla:"ALBA-TCP",name:"Aliança Bolivariana para os Povos da Nossa América",
+    status:"Ativo",periodo:"2004–presente",sede:"Caracas",
+    fundacao:"Declaração conjunta Cuba-Venezuela, 14 dez. 2004",
+    objetivo:"Alternativa à ALCA. Integração solidária baseada em complementaridade, não competição. Petróleo subsidiado (Petrocaribe), troca de serviços profissionais, cooperação sul-sul.",
+    membros:["Cuba","Venezuela","Bolívia","Nicarágua","Equador (saiu 2018)","Dominica","São Vicente e Granadinas","Antígua e Barbuda","Granada","São Cristóvão e Névis"],
+    estrutura:"Conselho de Presidentes (máximo), Conselho Político, Conselho dos Movimentos Sociais. Sistema de projetos grannacionais. SUCRE (moeda virtual de compensação).",
+    br:"Brasil nunca aderiu. Postura: reconhece mas não endossa o modelo. Durante Lula I/II, relação cordial com Venezuela/Cuba sem adesão. Bolsonaro: antagonismo. Lula III: reaproximação com Cuba e Venezuela, mas sem adesão ao ALBA.",
+    polemica:"Dependência do petróleo venezuelano: crise de Maduro reduziu capacidade do bloco. Petrocaribe em dificuldades. Crítica de ser instrumento de política externa chavista disfarçado de integração. Saída do Equador (Moreno, 2018).",
+    tags:["Comercial","Político"],
+    mapa:["CU","VE","BO","NI","DM","VC","AG","GD","KN"]
+  },
+  unasul:{
+    sigla:"UNASUL",name:"União de Nações Sul-Americanas",
+    status:"Esvaziada/Em reativação",periodo:"2008–2019 (ativo)",sede:"Quito",
+    fundacao:"Tratado Constitutivo, Brasília, 23 mai. 2008",
+    objetivo:"Integração política, social, cultural, econômica e de defesa da América do Sul. 12 nações. Arquitetura de segurança própria (CDS). Superação da dicotomia MERCOSUL vs. CAN.",
+    membros:["Argentina","Bolívia","Brasil","Chile","Colômbia","Equador","Guiana","Paraguai","Peru","Suriname","Uruguai","Venezuela"],
+    estrutura:"Conselho de Chefes de Estado, Conselho de Ministros, Conselho de Delegados, SG (rotativa). CDS (Defesa), CSS (Saúde), COSIPLAN (Infra), CSE (Educação).",
+    br:"Brasil foi o principal arquiteto (presidência Lula). Celso Amorim concebeu o projeto. Sede em Quito, SG brasileira (Maria Emma Mejía 2011-12). Esvaziamento no governo Temer. Bolsonaro saiu em 2019.",
+    polemica:"Crise Venezuela: bloqueio de reconhecimento de Guaidó dividiu o bloco. Saída de 6 países em 2019 que fundaram o PROSUL. Debate sobre se a UNASUL era instrumentalizada pelo eixo Caracas-Brasília-Buenos Aires. Sede fechada em Quito.",
+    tags:["Político","Segurança","Integração"],
+    mapa:["AR","BO","BR","CL","CO","EC","GY","PY","PE","SR","UY","VE"]
+  },
+  celac:{
+    sigla:"CELAC",name:"Comunidade de Estados Latino-Americanos e Caribenhos",
+    status:"Ativo",periodo:"2010/2011–presente",sede:"Itinerante (presidência pro tempore)",
+    fundacao:"Cúpula da Unidade, Riviera Maya (México), fev. 2010; constituição formal Caracas, dez. 2011",
+    objetivo:"Foro político de alto nível dos 33 países da ALC sem EUA e Canadá. Diálogo com UE, China, Rússia. Missões eleitorais, declarações políticas, cooperação técnica.",
+    membros:["33 países da América Latina e Caribe"],
+    estrutura:"Cúpula de Chefes de Estado, Reunião Ministerial, Presidência Pro Tempore (rotativa). Sem secretariado permanente. Foros especializados.",
+    br:"Membro fundador ativo. Brasil afastou-se sob Bolsonaro (2020-2022). Lula III: retorno imediato e reafirmação do papel da CELAC como alternativa à OEA. Cúpula Buenos Aires 2023: Lula propôs agenda comum.",
+    polemica:"Debates sobre como lidar com Venezuela e Cuba (sem cláusula democrática como na OEA). Almagro (OEA) vs. CELAC como disputa de narrativa. Crítica de ser declaratória sem implementação. Bolsonaro chamou de 'clube de ditadores'.",
+    tags:["Político","Integração"],
+    mapa:["MX","GT","BZ","HN","SV","NI","CR","PA","CU","JM","HT","DO","TT","BB","GY","SR","VE","CO","EC","PE","BO","BR","PY","CL","AR","UY","AG","DM","GD","KN","LC","VC","BS","TC"]
+  },
+  alianca:{
+    sigla:"AP",name:"Aliança do Pacífico",
+    status:"Ativo",periodo:"2011–presente",sede:"Presidência rotativa",
+    fundacao:"Declaração de Lima, 28 abr. 2011",
+    objetivo:"Integração profunda de livre comércio com orientação liberal e viés Pacífico-Asiático. Livre circulação de bens, serviços, capitais e pessoas entre os 4 membros. Mercados de capitais integrados (MILA).",
+    membros:["Chile","Colômbia","México","Peru"],
+    estrutura:"Cúpula Presidencial (anual), Conselho de Ministros, Grupos Técnicos. Sem secretariado permanente. 60+ países observadores.",
+    br:"Brasil é observador associado desde 2013. Relação ambivalente: disputa indireta com o MERCOSUL por modelo de integração. Acordo MERCOSUL-AP em debate. Aliança vista pelo Itamaraty com cautela — excesso de liberalismo?",
+    polemica:"Coexistência com MERCOSUL: debate sobre modelo de integração regional (liberal vs. desenvolvimentista). Golpe Peru (Castillo 2022) gerou instabilidade. Entrada do Equador em processo. Qual é o projeto político?",
+    tags:["Comercial","Integração"],
+    mapa:["CL","CO","MX","PE"]
+  },
+  prosul:{
+    sigla:"PROSUL",name:"Fórum para o Progresso da América do Sul",
+    status:"Ativo",periodo:"2019–presente",sede:"Santiago (Secretaria Técnica)",
+    fundacao:"Declaração de Santiago, 22 mar. 2019",
+    objetivo:"Alternativa à UNASUL: integração pragmática, sem ideologia, foco em democracia e governança. Infraestrutura, saúde, segurança, combate ao crime organizado.",
+    membros:["Argentina (saiu 2020, voltou 2024)","Brasil","Chile","Colômbia","Equador","Guiana","Paraguai","Peru","Suriname","Uruguai"],
+    estrutura:"Cúpulas presidenciais, grupos técnicos. Sem burocracia permanente. Secretaria técnica em Santiago.",
+    br:"Brasil Bolsonaro foi fundador e entusiasta. Governo Lula mantém participação com menor visibilidade — não quis romper mas não promove. Coexistência tensa com agenda de reativação da UNASUL.",
+    polemica:"Criado no calor da crise Venezuela/UNASUL: visto como bloco de direita. Argentina de Fernández saiu em 2020. Milei reconduziu a Argentina. Duplicação de esforços com UNASUL?",
+    tags:["Político","Segurança"],
+    mapa:["AR","BR","CL","CO","EC","GY","PY","PE","SR","UY"]
+  },
+  "mercosul-assoc":{
+    sigla:"MERCO-UE",name:"Acordo MERCOSUL–União Europeia",
+    status:"Em processo de ratificação",periodo:"Negociado 1999–2019, atualizado 2024",sede:"—",
+    fundacao:"Acordo político anunciado 28 jun. 2019 (Osaka). Texto atualizado dez. 2024.",
+    objetivo:"Zona de livre comércio birregional. Acesso de produtos agropecuários do MERCOSUL ao mercado europeu. Abertura do MERCOSUL a manufaturados e serviços europeus. ~800 milhões de pessoas.",
+    membros:["MERCOSUL (BR, AR, UY, PY) + 27 países UE"],
+    estrutura:"Parte Comercial (OMC+). Parte Política e de Cooperação. Comitês técnicos bilaterais. Ratificação exige unanimidade no Conselho Europeu e aprovação pelo Parlamento Europeu.",
+    br:"Principal prioritário do Itamaraty nas últimas décadas. Celso Amorim iniciou, negociadores de múltiplas gestões. Lula III reabriu negociação e obteve acordo atualizado. Argumento: diversificação de parceiros, reindustrialização.",
+    polemica:"Objeções europeias: desmatamento amazônico (França lidera), critérios de sustentabilidade, competição com agricultores europeus. Cláusula ambiental adicional incluída em 2024. França e Irlanda como principais opositores. Debate interno no BR: setor industrial teme concorrência.",
+    tags:["Comercial"],
+    mapa:["BR","AR","UY","PY","FR","DE","IT","ES","PT","NL","BE","AT","SE","FI","DK","IE","LU","EL","CY","MT","EE","LV","LT","PL","CZ","SK","HU","RO","BG","HR","SI"]
+  },
+  unasul2:{
+    sigla:"UNASUL 2.0",name:"Relançamento UNASUL / Nova Agenda Sul-Americana",
+    status:"Em reativação",periodo:"2023–presente",sede:"—",
+    fundacao:"Cúpula de Brasília, 30 mai. 2023",
+    objetivo:"Reencontro dos líderes sul-americanos pós-polarização. Discussão de nova arquitetura regional: reformar ou substituir a UNASUL. Integração produtiva, transição energética, combate ao crime transnacional.",
+    membros:["12 países sul-americanos"],
+    estrutura:"Processo em construção. Grupos de trabalho técnicos. Presidências pro tempore. Sem definição formal de estrutura.",
+    br:"Lula III como principal motor do relançamento. Cúpula de Brasília foi sua iniciativa pessoal. Agenda: amazônia, integração energética, defesa da democracia, corredor bioceânico.",
+    polemica:"Como conciliar países com governos de perfis opostos (Milei × Petro, por exemplo)? Coexistência com PROSUL. Debate sobre qual organismo deve ser a 'casa' do diálogo sul-americano.",
+    tags:["Político","Integração"],
+    mapa:["AR","BO","BR","CL","CO","EC","GY","PY","PE","SR","UY","VE"]
+  },
+  cosiplan:{
+    sigla:"COSIPLAN",name:"Conselho Sul-Americano de Infraestrutura e Planejamento",
+    status:"Ativo",periodo:"2009–presente",sede:"No âmbito da UNASUL",
+    fundacao:"Criado pela UNASUL, dez. 2009; incorporou a IIRSA",
+    objetivo:"Planejar e coordenar infraestrutura física sul-americana. Portfólio de projetos de transporte, energia e telecomunicações. Carteira de + 560 projetos, US$200 bi+.",
+    membros:["12 países da UNASUL"],
+    estrutura:"Reunião de Ministros, Comitê Coordenador, Grupos Técnicos Executivos. IIRSA como foro técnico. Parceria BID, CAF, FONPLATA.",
+    br:"Brasil como principal financiador (BNDES). Corredor Bioceânico (Mato Grosso–Pacífico peruano) como projeto estratégico. Hidrelétrica de Itaipu no contexto. Interligação elétrica na pauta.",
+    polemica:"Projetos em áreas indígenas e biomas sensíveis. Financiamento via BNDES de projetos polêmicos (ex.: estradas no Equador). Sobreposição de financiamento entre CAF, BID e BNDES.",
+    tags:["Energia/Infra","Integração"],
+    mapa:["AR","BO","BR","CL","CO","EC","GY","PY","PE","SR","UY","VE"]
+  },
+  "mercosul-ampliado":{
+    sigla:"MERCO-AP",name:"Convergência MERCOSUL–Aliança do Pacífico",
+    status:"Em desenvolvimento",periodo:"2014–presente",sede:"—",
+    fundacao:"Declarações de intenção desde 2014; grupo de trabalho conjunto desde 2019",
+    objetivo:"Aproximação gradual entre os dois principais blocos sul-americanos. Harmonização normativa, facilitação aduaneira. Visão de mercado integrado de 500+ milhões.",
+    membros:["MERCOSUL (BR, AR, UY, PY) + AP (CL, CO, MX, PE)"],
+    estrutura:"Grupos técnicos bilaterais. Observadores cruzados. Sem estrutura formal consolidada.",
+    br:"Brasil observador da AP desde 2013. Visão estratégica: convergência facilita exportações. Lula III: interesse em aprofundamento. Chile e Peru como pontes naturais.",
+    polemica:"Diferenças de modelo: AP prefere acordos com EUA/Ásia; MERCOSUL mais protecionista. Eleição de Petro (CO) e Boric (CH) reduziram diferenças ideológicas. Como conciliar a TEC do MERCOSUL com o livre-cambismo da AP?",
+    tags:["Comercial","Integração"],
+    mapa:["BR","AR","UY","PY","CL","CO","MX","PE"]
+  },
+  caf:{
+    sigla:"CAF",name:"Banco de Desenvolvimento da América Latina e Caribe",
+    status:"Ativo",periodo:"1970–presente",sede:"Caracas (também escritórios em capitais)",
+    fundacao:"Convênio Constitutivo, 7 fev. 1968 (operações 1970)",
+    objetivo:"Financiamento do desenvolvimento sustentável e integração. Projetos de infraestrutura, saúde, educação, setor privado. Principal banco de desenvolvimento regional.",
+    membros:["21 países membros plenos (ALC + Espanha e Portugal) + 14 bancos privados"],
+    estrutura:"Assembleia de Acionistas, Diretório, Presidente (eleito). Capital subscrito US$15 bi+. AAA em mercados internacionais.",
+    br:"Brasil: acionista (Série B) e grande tomador. BNDES e CAF frequentemente cofinanciam projetos IIRSA/COSIPLAN. Parceria estratégica em projetos de infraestrutura e energia renovável.",
+    polemica:"Questionamentos sobre projetos financiados em áreas sensíveis. Sede em Caracas — debates sobre influência venezuelana. Governança e transparência na avaliação ambiental.",
+    tags:["Energia/Infra","Comercial"],
+    mapa:["AR","BO","BR","CL","CO","CR","CU","DO","EC","SV","GT","HN","MX","NI","PA","PY","PE","PT","ES","TT","UY","VE"]
+  },
+  bid:{
+    sigla:"BID",name:"Banco Interamericano de Desenvolvimento",
+    status:"Ativo",periodo:"1959–presente",sede:"Washington D.C.",
+    fundacao:"Tratado de Banco Interamericano de Desenvolvimento, 8 abr. 1959",
+    objetivo:"Principal fonte de financiamento multilateral da ALC. Projetos de infraestrutura, desenvolvimento social, saúde, educação, setor privado (BID Invest), integração regional.",
+    membros:["48 países membros (26 latino-americanos e caribenhos + 22 extra-regionais incluindo EUA, Japão, Europa)"],
+    estrutura:"Assembleia de Governadores, Diretório Executivo, Presidente. EUA: ~30% do capital. BID Invest para setor privado. Laboratório de Inovação.",
+    br:"2º maior tomador da história do BID (atrás do México). Projetos de infraestrutura urbana, saúde, educação. Peso político proporcional ao capital subscrito. Marcos Troyjo foi candidato brasileiro à presidência (2020).",
+    polemica:"Estrutura de votação favorece países desenvolvidos. Candidatura de Mauricio Claver-Carone (EUA, 2020): primeira vez que americano do Norte presidiu o banco, criticada por tradição de presidente latino-americano. Saiu por escândalo em 2022.",
+    tags:["Comercial"],
+    mapa:["AR","BO","BR","CL","CO","CR","CU","DO","EC","SV","GT","HN","MX","NI","PA","PY","PE","TT","UY","VE","BB","JM","GY","SR","TT","US","CA"]
+  },
+  otca:{
+    sigla:"OTCA",name:"Organização do Tratado de Cooperação Amazônica",
+    status:"Ativo",periodo:"1995 (TCA desde 1978)",sede:"Brasília",
+    fundacao:"Tratado de Cooperação Amazônica, 3 jul. 1978; OTCA como organização desde 1995",
+    objetivo:"Gestão sustentável da Amazônia. Cooperação científica e tecnológica. Proteção de populações indígenas. Combate ao desmatamento e queimadas. Preservação da biodiversidade.",
+    membros:["Bolívia","Brasil","Colômbia","Equador","Guiana","Peru","Suriname","Venezuela"],
+    estrutura:"Reunião de Ministros das RI (máximo), Conselho de Cooperação Amazônica, Comissões Nacionais Permanentes, SG em Brasília.",
+    br:"Brasil: sede e principal financiador. Tensão histórica entre agenda desenvolvimentista e conservacionista. Governo Lula III: OTCA como vitrine diplomática ambiental. Cúpula de Belém (ago. 2023) sobre Amazônia.",
+    polemica:"Soberania vs. internacionalização da Amazônia: argumento recorrente na política externa brasileira. Diferenças entre países membros sobre extração mineral. Cúpula de Belém 2023: países não chegaram a acordo sobre fim do petróleo na Amazônia.",
+    tags:["Político","Segurança"],
+    mapa:["BO","BR","CO","EC","GY","PE","SR","VE"]
+  },
+  tiar:{
+    sigla:"TIAR",name:"Tratado Interamericano de Assistência Recíproca",
+    status:"Enfraquecido",periodo:"1947–presente (formal)",sede:"Washington (OEA)",
+    fundacao:"Conferência Interamericana para Manutenção da Paz e Segurança, Rio de Janeiro, 2 set. 1947",
+    objetivo:"Defesa coletiva hemisférica: ataque armado a qualquer Estado americano = ataque a todos. Consulta obrigatória em casos de agressão.",
+    membros:["Membros originais + modificações. Saídas: Cuba, México, Equador, Venezuela, Bolívia, Nicarágua"],
+    estrutura:"Órgão de Consulta (reunião de MRE ou AG OEA). Sem força militar integrada. Decisões por votação (⅔).",
+    br:"Brasil foi co-fundador. Invocação durante a Guerra das Falklands (1982): EUA não ativou o TIAR em defesa da Argentina — expôs as limitações do mecanismo. Manutenção formal mas baixa relevância prática.",
+    polemica:"Falklands 1982: EUA apoiou o Reino Unido, aliado da OTAN, em detrimento da Argentina, membro do TIAR — demonstrou que o tratado não funcionava quando havia conflito de interesses com a potência hegemônica. Bolsonaro invocou o TIAR contra Venezuela em 2019, com pouco efeito prático.",
+    tags:["Segurança","Político"],
+    mapa:["AR","BR","BO","CL","CO","CR","DO","EC","SV","GT","HN","PA","PY","PE","TT","UY","US"]
+  }
+};
+
+// ─── PAÍSES PARA O MAPA SVG (ISO 2) → ID do path ───
+// Abaixo está o mapa SVG simplificado da América do Sul + Central + Caribe + parte da África/EUA
+// Usaremos um conjunto de paths inline baseado em projeções
+
+function showDetail(id) {
+  const d = DATA[id];
+  if(!d) return;
+  document.querySelectorAll('.bloc').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.bloc[data-id="'+id+'"]').forEach(b=>b.classList.add('active'));
+  document.getElementById('detail-placeholder').style.display='none';
+  
+  const statusColor = {
+    'Ativo':'#5cb88a','Encerrada':'#888','Fracassada':'#888',
+    'Esvaziada/Em reativação':'#d48a8a','Enfraquecido':'#d48a8a',
+    'Em reativação':'var(--gold)','Em processo de ratificação':'var(--gold)',
+    'Em desenvolvimento':'var(--gold)','Incorporada ao COSIPLAN':'var(--gold)'
+  }[d.status] || 'var(--gold)';
+
+  const membersHTML = d.membros.map(m=>{
+    const br = m.includes('Brasil');
+    return `<span class="member-tag ${br?'br':''}" onclick="highlightCountry('${m}')">${m}</span>`;
+  }).join('');
+
+  const mapCountries = (d.mapa||[]).map(c=>`<span class="member-tag" style="font-size:9px">${c}</span>`).join('');
+
+  document.getElementById('detail-content').innerHTML = `
+    <div class="detail-card visible">
+      <div class="dc-header">
+        <div class="dc-sigla">${d.sigla}</div>
+        <div class="dc-name">${d.name}</div>
+        <div class="dc-badges">
+          <span class="badge" style="color:${statusColor};border-color:${statusColor}40">${d.status}</span>
+          ${(d.tags||[]).map(t=>`<span class="badge tag ${t.toLowerCase().replace('/','')}">${t}</span>`).join('')}
+        </div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-section-title">Identificação</div>
+        <div class="dc-row">
+          <div class="dc-mini"><div class="dc-mini-label">Período</div><div class="dc-mini-val">${d.periodo}</div></div>
+          <div class="dc-mini"><div class="dc-mini-label">Sede</div><div class="dc-mini-val">${d.sede}</div></div>
+        </div>
+        <div class="dc-mini" style="margin-top:8px"><div class="dc-mini-label">Fundação</div><div class="dc-mini-val" style="font-size:12px">${d.fundacao}</div></div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-section-title">Objetivo</div>
+        <div class="dc-content">${d.objetivo}</div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-section-title">Países membros</div>
+        <div class="dc-members">${membersHTML}</div>
+      </div>
+
+      <div class="dc-section map-section">
+        <div class="map-title">Mapa de Membros</div>
+        <div class="map-container" id="map-container-${id}">
+          ${buildMap(d.mapa||[])}
+        </div>
+        <div class="map-legend">
+          <span><span class="leg-dot" style="background:var(--gold)"></span>Membro</span>
+          <span><span class="leg-dot" style="background:#c9a84c"></span>Brasil</span>
+          <span><span class="leg-dot" style="background:var(--surface2)"></span>Não-membro</span>
+        </div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-section-title">Estrutura Governamental</div>
+        <div class="dc-content">${d.estrutura}</div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-section-title">Atuação Brasileira</div>
+        <div class="dc-content">${d.br}</div>
+      </div>
+
+      <div class="dc-section">
+        <div class="dc-section-title">Polêmicas e Limitações</div>
+        <div class="polemica">${d.polemica}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── MAPA SVG SIMPLIFICADO ───
+// Coordenadas aproximadas em viewBox 320x400 para América Latina + parte África
+function buildMap(membros) {
+  const countries = {
+    // América do Sul
+    BR:{x:155,y:185,w:80,h:70,label:"BR"},
+    AR:{x:130,y:265,w:45,h:70,label:"AR"},
+    CL:{x:108,y:220,w:16,h:80,label:"CL"},
+    UY:{x:157,y:265,w:20,h:18,label:"UY"},
+    PY:{x:147,y:248,w:22,h:22,label:"PY"},
+    BO:{x:130,y:215,w:35,h:38,label:"BO"},
+    PE:{x:105,y:185,w:42,h:42,label:"PE"},
+    EC:{x:96,y:170,w:24,h:22,label:"EC"},
+    CO:{x:107,y:148,w:40,h:36,label:"CO"},
+    VE:{x:138,y:138,w:38,h:24,label:"VE"},
+    GY:{x:172,y:143,w:14,h:22,label:"GY"},
+    SR:{x:183,y:144,w:12,h:20,label:"SR"},
+    // América Central e Caribe
+    MX:{x:56,y:95,w:54,h:38,label:"MX"},
+    GT:{x:75,y:125,w:14,h:14,label:"GT"},
+    BZ:{x:88,y:120,w:10,h:12,label:"BZ"},
+    HN:{x:80,y:133,w:20,h:12,label:"HN"},
+    SV:{x:78,y:142,w:14,h:9,label:"SV"},
+    NI:{x:82,y:148,w:20,h:14,label:"NI"},
+    CR:{x:83,y:159,w:14,h:10,label:"CR"},
+    PA:{x:90,y:163,w:16,h:8,label:"PA"},
+    CU:{x:105,y:105,w:30,h:10,label:"CU"},
+    HT:{x:135,y:108,w:10,h:10,label:"HT"},
+    DO:{x:144,y:108,w:12,h:10,label:"DO"},
+    JM:{x:120,y:112,w:12,h:8,label:"JM"},
+    TT:{x:172,y:130,w:9,h:9,label:"TT"},
+    BB:{x:180,y:125,w:8,h:8,label:"BB"},
+    AG:{x:185,y:116,w:8,h:7,label:"AG"},
+    DM:{x:183,y:121,w:8,h:7,label:"DM"},
+    GD:{x:181,y:127,w:8,h:7,label:"GD"},
+    KN:{x:188,y:113,w:8,h:7,label:"KN"},
+    LC:{x:184,y:124,w:8,h:7,label:"LC"},
+    VC:{x:182,y:129,w:8,h:7,label:"VC"},
+    BS:{x:115,y:100,w:14,h:10,label:"BS"},
+    // América do Norte
+    US:{x:28,y:48,w:70,h:50,label:"EUA"},
+    CA:{x:20,y:18,w:80,h:34,label:"CA"},
+    // África Ocidental (ZOPACAS)
+    NG:{x:222,y:148,w:24,h:22,label:"NG"},
+    AO:{x:228,y:175,w:24,h:26,label:"AO"},
+    NA:{x:224,y:200,w:22,h:22,label:"NA"},
+    CM:{x:228,y:140,w:16,h:18,label:"CM"},
+    GH:{x:210,y:144,w:14,h:16,label:"GH"},
+    SN:{x:195,y:128,w:14,h:12,label:"SN"},
+    GN:{x:195,y:137,w:14,h:12,label:"GN"},
+    GW:{x:192,y:133,w:10,h:8,label:"GW"},
+    CI:{x:202,y:140,w:14,h:14,label:"CI"},
+    SL:{x:194,y:142,w:10,h:10,label:"SL"},
+    LR:{x:198,y:147,w:10,h:10,label:"LR"},
+    GA:{x:228,y:160,w:16,h:16,label:"GA"},
+    CG:{x:233,y:168,w:14,h:14,label:"CG"},
+    CD:{x:242,y:162,w:26,h:28,label:"CD"},
+    TG:{x:215,y:140,w:9,h:14,label:"TG"},
+    BJ:{x:218,y:138,w:9,h:14,label:"BJ"},
+    GQ:{x:228,y:155,w:10,h:8,label:"GQ"},
+    ST:{x:232,y:157,w:7,h:7,label:"ST"},
+    CV:{x:188,y:122,w:8,h:8,label:"CV"},
+    // Europa (para acordo MERCO-UE, simplificado)
+    DE:{x:270,y:54,w:16,h:16,label:"DE"},
+    FR:{x:260,y:58,w:16,h:16,label:"FR"},
+    ES:{x:250,y:68,w:18,h:14,label:"ES"},
+    PT:{x:242,y:68,w:10,h:14,label:"PT"},
+    IT:{x:278,y:64,w:14,h:18,label:"IT"},
+    NL:{x:272,y:50,w:10,h:10,label:"NL"},
+    BE:{x:270,y:55,w:10,h:8,label:"BE"},
+    AT:{x:280,y:60,w:12,h:10,label:"AT"},
+    SE:{x:278,y:38,w:12,h:16,label:"SE"},
+    FI:{x:288,y:30,w:12,h:16,label:"FI"},
+    PL:{x:288,y:54,w:14,h:14,label:"PL"},
+    IE:{x:250,y:46,w:10,h:10,label:"IE"},
+    // Oceano e área vazia para compor o visual
+  };
+
+  let paths = '';
+  const allCodes = Object.keys(countries);
+  allCodes.forEach(code => {
+    const c = countries[code];
+    const isMember = membros.includes(code);
+    const isBR = code === 'BR';
+    const fill = isBR ? '#c9a84c' : isMember ? 'rgba(201,168,76,0.55)' : '#2a2720';
+    const stroke = '#1a1814';
+    paths += `<rect class="country ${isMember?'highlight':''} ${isBR?'brasil':''}" 
+      data-code="${code}" x="${c.x}" y="${c.y}" width="${c.w}" height="${c.h}" 
+      rx="2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"
+      title="${code}">
+      <title>${code}</title>
+    </rect>`;
+    // label pequena
+    if(isMember || isBR) {
+      paths += `<text x="${c.x + c.w/2}" y="${c.y + c.h/2 + 3}" 
+        text-anchor="middle" font-size="${c.w>18?8:6}px" fill="${isBR?'#1a1814':'rgba(30,24,16,0.85)'}"
+        font-family="IBM Plex Mono,monospace" font-weight="500" pointer-events="none">${code}</text>`;
+    }
+  });
+
+  return `<svg viewBox="0 0 320 290" width="100%" style="display:block;background:#13110e">
+    <defs>
+      <pattern id="ocean" patternUnits="userSpaceOnUse" width="4" height="4">
+        <rect width="4" height="4" fill="#13110e"/>
+      </pattern>
+    </defs>
+    <rect width="320" height="290" fill="#13110e"/>
+    ${paths}
+  </svg>`;
+}
+
+// ─── FILTROS ───
+function filterBlocs(tag, btn) {
+  document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.bloc').forEach(b=>{
+    const tags = b.dataset.tags||'';
+    const status = b.dataset.status||'';
+    if(tag==='all') b.classList.remove('hidden');
+    else if(tag==='ativo') b.classList.toggle('hidden', !status.includes('ativo'));
+    else b.classList.toggle('hidden', !tags.includes(tag));
+  });
+}
+
+function searchBlocs(val) {
+  const q = val.toLowerCase();
+  document.querySelectorAll('.bloc').forEach(b=>{
+    const text = b.textContent.toLowerCase();
+    b.classList.toggle('hidden', q.length > 0 && !text.includes(q));
+  });
+}
+</script>
+</body>
+</html>
