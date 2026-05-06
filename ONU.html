@@ -37,7 +37,7 @@ nav a{color:var(--mt);text-decoration:none}nav a:hover{color:var(--gold)}nav spa
 .tly{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--mt)}.tln{font-size:9px;color:var(--tx2);font-weight:500}
 
 /* 3-COL LAYOUT */
-.main{display:grid;grid-template-columns:200px minmax(0,1fr) 360px;flex:1;overflow:hidden;min-height:0}
+.main{display:grid;grid-template-columns:200px minmax(0,1fr) 360px;flex:1;overflow:hidden;min-height:0;height:100%}
 
 /* SIDEBAR */
 .sb{border-right:1px solid var(--bd);overflow-y:auto;height:100%}
@@ -57,26 +57,31 @@ nav a{color:var(--mt);text-decoration:none}nav a:hover{color:var(--gold)}nav spa
 .sbi.active .sbi-d{background:var(--blue)}
 
 /* CENTER MAP */
-.center{display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.center{display:flex;flex-direction:column;overflow:hidden;background:var(--bg);min-height:0;height:100%}
 
 /* CAMPUS / FLOOR TABS */
-.map-tabs{display:flex;align-items:stretch;border-bottom:1px solid var(--bd);flex-shrink:0;gap:0}
-.campus-tabs{display:flex;border-right:1px solid var(--bd)}
+/* map-tabs → campus-tabs-bar */
+.campus-tabs-bar{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0;overflow-x:auto;scrollbar-width:none;background:var(--s1)}
+.campus-tabs-bar::-webkit-scrollbar{display:none}
 .ctab{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.07em;padding:7px 13px;color:var(--mt);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:6px}
 .ctab:hover{color:var(--tx2);background:var(--s1)}
 .ctab.active{color:var(--blue);border-bottom-color:var(--blue);background:var(--s2)}
 .ctab .cdot{width:6px;height:6px;border-radius:50%}
-.floor-tabs{display:flex;flex:1;overflow-x:auto;scrollbar-width:none}
-.floor-tabs::-webkit-scrollbar{display:none}
+.floor-tabs-bar{border-top:1px solid var(--bd);flex-shrink:0;background:var(--s2);display:flex;align-items:center}
+.floor-tabs-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.1em;color:var(--mt);padding:0 10px;flex-shrink:0;text-transform:uppercase}
+.floor-tabs-scroll{display:flex;flex:1;overflow-x:auto;scrollbar-width:thin}
+.floor-tabs-scroll::-webkit-scrollbar{height:3px}.floor-tabs-scroll::-webkit-scrollbar-thumb{background:var(--bd2)}
 .ftab{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:.07em;padding:7px 11px;color:var(--mt);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;white-space:nowrap;transition:all .15s}
 .ftab:hover{color:var(--tx2)}.ftab.active{color:var(--gold);border-bottom-color:var(--gold)}
-.ftab-sep{width:1px;background:var(--bd);align-self:stretch;margin:4px 0}
 
-.map-wrap{flex:1;overflow:hidden;display:flex;align-items:stretch;justify-content:stretch;padding:10px}
-#mapwrap svg{width:100%;height:100%;display:block}
+
+.map-wrap{flex:1;overflow:hidden;display:flex;align-items:stretch;justify-content:stretch;padding:0;min-height:0;background:var(--bg)}
+#mapwrap svg{width:100%;height:100%;display:block;preserveAspectRatio:xMidYMid meet}
 .map-plan{display:none;width:100%;height:100%}
+#mapwrap text{font-family:'IBM Plex Mono',monospace}
+#mapwrap text.lbl{fill:#8a9ab0}
 .map-plan.active{display:flex;align-items:center;justify-content:center}
-.map-hint{padding:5px 16px;font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--mt);letter-spacing:.1em;text-align:center;border-top:1px solid var(--bd);flex-shrink:0}
+.map-hint{padding:6px 16px;font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:var(--mt);letter-spacing:.1em;text-align:center;border-top:1px solid var(--bd);flex-shrink:0}
 
 /* Organ zones */
 .oz{cursor:pointer}
@@ -186,7 +191,7 @@ nav a{color:var(--mt);text-decoration:none}nav a:hover{color:var(--gold)}nav spa
   <div class="tlb onu" onclick="S('cij')"><div class="tly">1945–</div><div class="tln">CIJ · Haia</div></div>
   <div class="tlb onu" onclick="S('oms')"><div class="tly">1948–</div><div class="tln">OMS</div></div>
   <div class="tlb ref" onclick="S('veto')"><div class="tly">1945–</div><div class="tln">Poder de Veto</div></div>
-  <div class="tlb ref" onclick="S('reforma')"><div class="tly">1990s–</div><div class="tln">Reforma do CS</div></div>
+  <div class="tlb ref" onclick="S('reforma')"><div class="tly">1990s–</div><div class="tln">Reforma do CSNU</div></div>
   <div class="tlb ref" onclick="S('r2p')"><div class="tly">2005–</div><div class="tln">R2P · RwP</div></div>
 </div></div>
 
@@ -196,28 +201,31 @@ nav a{color:var(--mt);text-decoration:none}nav a:hover{color:var(--gold)}nav spa
   <div class="sbs"><div class="sbh" onclick="TS('s-liga',this)"><div class="sbd" style="background:var(--pur)"></div><span class="sbt">Liga das Nações</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-liga"><div class="sbi" onclick="S('liga')"><div class="sbi-d"></div>Visão Geral &amp; Colapso</div><div class="sbi" onclick="S('brasil-liga')"><div class="sbi-d"></div>Brasil na Liga</div></div></div>
   <div class="sbs"><div class="sbh" onclick="TS('s-fund',this)"><div class="sbd" style="background:var(--blue)"></div><span class="sbt">Fundação ONU</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-fund"><div class="sbi" onclick="S('carta')"><div class="sbi-d"></div>Carta de São Francisco</div><div class="sbi" onclick="S('principios')"><div class="sbi-d"></div>Propósitos e Princípios</div></div></div>
   <div class="sbs"><div class="sbh" onclick="TS('s-org',this)"><div class="sbd" style="background:var(--blue)"></div><span class="sbt">6 Órgãos Principais</span><span class="sba open">›</span></div><div class="sbi-wrap open" id="s-org"><div class="sbi" onclick="S('ag')"><div class="sbi-d"></div>Assembleia Geral</div><div class="sbi" onclick="S('cs')"><div class="sbi-d"></div>Conselho de Segurança</div><div class="sbi" onclick="S('ecosoc')"><div class="sbi-d"></div>ECOSOC</div><div class="sbi" onclick="S('cij')"><div class="sbi-d"></div>Corte Int. de Justiça</div><div class="sbi" onclick="S('secgeral')"><div class="sbi-d"></div>Secretaria-Geral</div><div class="sbi" onclick="S('tc')"><div class="sbi-d"></div>Conselho de Tutela</div></div></div>
-  <div class="sbs"><div class="sbh" onclick="TS('s-ag',this)"><div class="sbd" style="background:var(--grn)"></div><span class="sbt">Agências Especializadas</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-ag"><div class="sbi" onclick="S('oms')"><div class="sbi-d"></div>OMS — Saúde</div><div class="sbi" onclick="S('oit')"><div class="sbi-d"></div>OIT — Trabalho</div><div class="sbi" onclick="S('fao')"><div class="sbi-d"></div>FAO — Alimentação</div><div class="sbi" onclick="S('unesco')"><div class="sbi-d"></div>UNESCO</div><div class="sbi" onclick="S('fmi')"><div class="sbi-d"></div>FMI</div><div class="sbi" onclick="S('bird')"><div class="sbi-d"></div>Banco Mundial</div><div class="sbi" onclick="S('aiea')"><div class="sbi-d"></div>AIEA</div></div></div>
+  <div class="sbs"><div class="sbh" onclick="TS('s-ag',this)"><div class="sbd" style="background:var(--grn)"></div><span class="sbt">Agências Especializadas</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-ag"><div class="sbi" onclick="S('oms')"><div class="sbi-d"></div>OMS — Saúde</div><div class="sbi" onclick="S('oit')"><div class="sbi-d"></div>OIT — Trabalho</div><div class="sbi" onclick="S('fao')"><div class="sbi-d"></div>FAO — Alimentação</div><div class="sbi" onclick="S('unesco')"><div class="sbi-d"></div>UNESCO</div><div class="sbi" onclick="S('fmi')"><div class="sbi-d"></div>FMI</div><div class="sbi" onclick="S('bird')"><div class="sbi-d"></div>Banco Mundial</div><div class="sbi" onclick="S('aiea')"><div class="sbi-d"></div>AIEA — Energia Atômica</div>
+      <div class="sbi" onclick="S('unodc')"><div class="sbi-d"></div>UNODC — Crime e Drogas</div>
+      <div class="sbi" onclick="S('unoosa')"><div class="sbi-d"></div>UNOOSA — Espaço Exterior</div>
+      <div class="sbi" onclick="S('unido')"><div class="sbi-d"></div>UNIDO — Desenvolvimento</div></div></div>
   <div class="sbs"><div class="sbh" onclick="TS('s-fp',this)"><div class="sbd" style="background:var(--org)"></div><span class="sbt">Fundos e Programas</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-fp"><div class="sbi" onclick="S('unicef')"><div class="sbi-d"></div>UNICEF</div><div class="sbi" onclick="S('pnud')"><div class="sbi-d"></div>PNUD + IDH</div><div class="sbi" onclick="S('acnur')"><div class="sbi-d"></div>ACNUR</div><div class="sbi" onclick="S('pnuma')"><div class="sbi-d"></div>PNUMA</div><div class="sbi" onclick="S('pam')"><div class="sbi-d"></div>PAM — Nobel 2020</div></div></div>
   <div class="sbs"><div class="sbh" onclick="TS('s-jus',this)"><div class="sbd" style="background:var(--red)"></div><span class="sbt">Justiça Internacional</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-jus"><div class="sbi" onclick="S('cij')"><div class="sbi-d"></div>CIJ — Corte Int.</div><div class="sbi" onclick="S('tpi')"><div class="sbi-d"></div>TPI — Tribunal Penal</div></div></div>
-  <div class="sbs"><div class="sbh" onclick="TS('s-ref',this)"><div class="sbd" style="background:var(--gold)"></div><span class="sbt">Reforma e Debates</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-ref"><div class="sbi" onclick="S('veto')"><div class="sbi-d"></div>O Poder de Veto</div><div class="sbi" onclick="S('reforma')"><div class="sbi-d"></div>Reforma do CS + G4</div><div class="sbi" onclick="S('brasil-cs')"><div class="sbi-d"></div>Brasil no CS</div><div class="sbi" onclick="S('r2p')"><div class="sbi-d"></div>R2P &amp; RwP</div></div></div>
+  <div class="sbs"><div class="sbh" onclick="TS('s-auto',this)"><div class="sbd" style="background:#4a7040"></div><span class="sbt">Organismos Autônomos</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-auto"><div class="sbi" onclick="S('fmi')"><div class="sbi-d"></div>FMI — Fundo Monetário Int.</div><div class="sbi" onclick="S('bird')"><div class="sbi-d"></div>Banco Mundial (BIRD)</div></div></div>
+  <div class="sbs"><div class="sbh" onclick="TS('s-ref',this)"><div class="sbd" style="background:var(--gold)"></div><span class="sbt">Reforma e Debates</span><span class="sba">›</span></div><div class="sbi-wrap" id="s-ref"><div class="sbi" onclick="S('veto')"><div class="sbi-d"></div>O Poder de Veto</div><div class="sbi" onclick="S('reforma')"><div class="sbi-d"></div>Reforma do CSNU + G4</div><div class="sbi" onclick="S('brasil-cs')"><div class="sbi-d"></div>Brasil no CSNU</div><div class="sbi" onclick="S('r2p')"><div class="sbi-d"></div>R2P &amp; RwP</div></div></div>
 </div>
 
 <!-- CENTER -->
 <div class="center">
-  <!-- CAMPUS TABS + FLOOR TABS -->
-  <div class="map-tabs">
-    <div class="campus-tabs">
-      <div class="ctab active" id="ct-ny" onclick="setCampus('ny')"><span class="cdot" style="background:#4a90d9"></span>Nova York · HQ</div>
-      <div class="ctab" id="ct-ge" onclick="setCampus('ge')"><span class="cdot" style="background:#4a9060"></span>Genebra</div>
-      <div class="ctab" id="ct-ha" onclick="setCampus('ha')"><span class="cdot" style="background:#c07840"></span>Haia</div>
-      <div class="ctab" id="ct-vi" onclick="setCampus('vi')"><span class="cdot" style="background:#8060a0"></span>Viena</div>
-      <div class="ctab" id="ct-na" onclick="setCampus('na')"><span class="cdot" style="background:#4a9060"></span>Nairóbi</div>
-      <div class="ctab" id="ct-ro" onclick="setCampus('ro')"><span class="cdot" style="background:#c0454a"></span>Roma</div>
-    </div>
-    <div class="floor-tabs" id="floor-tabs"><!-- populated by JS --></div>
+  <div class="campus-tabs-bar">
+    <div class="ctab active" id="ct-ny" onclick="setCampus('ny')"><span class="cdot" style="background:#4a90d9"></span>Nova York · HQ</div>
+    <div class="ctab" id="ct-ge" onclick="setCampus('ge')"><span class="cdot" style="background:#4a9060"></span>Genebra</div>
+    <div class="ctab" id="ct-ha" onclick="setCampus('ha')"><span class="cdot" style="background:#c07840"></span>Haia</div>
+    <div class="ctab" id="ct-vi" onclick="setCampus('vi')"><span class="cdot" style="background:#8060a0"></span>Viena</div>
+    <div class="ctab" id="ct-na" onclick="setCampus('na')"><span class="cdot" style="background:#4a9060"></span>Nairóbi</div>
+    <div class="ctab" id="ct-ro" onclick="setCampus('ro')"><span class="cdot" style="background:#c0454a"></span>Roma</div>
   </div>
-
-  <div class="map-wrap" id="mapwrap"><!-- SVGs injected by JS --></div>
+  <div class="map-wrap" id="mapwrap"></div>
+  <div class="floor-tabs-bar">
+    <div class="floor-tabs-label">Planta:</div>
+    <div class="floor-tabs-scroll" id="floor-tabs"></div>
+  </div>
   <div class="map-hint" id="map-hint">Clique em um bloco para ver detalhes →</div>
 </div>
 
@@ -257,7 +265,7 @@ const CAMPUS = {
   vi:{
     label:"Viena · UNOV",
     floors:[
-      {id:"vi-campus", label:"Vienna Int. Centre", organs:["aiea"]},
+      {id:"vi-campus", label:"Vienna Int. Centre", organs:["aiea","unodc","unoosa","unido"]},
     ]
   },
   na:{
@@ -274,248 +282,193 @@ const CAMPUS = {
   }
 };
 
-// ── SVG PLANS (one per floor id) ────────────────────────────────────────
 const PLANS = {
 
-"ny-campus": `<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" style="min-width:460px">
+"ny-campus": `<svg viewBox="0 0 820 560" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <defs>
   <pattern id="pg" patternUnits="userSpaceOnUse" width="20" height="20">
-    <path d="M20 0L0 0 0 20" fill="none" stroke="#13151b" stroke-width="0.6"/>
+    <path d="M20 0L0 0 0 20" fill="none" stroke="#16181f" stroke-width="0.6"/>
   </pattern>
 </defs>
-<rect width="800" height="600" fill="#0a0b0e"/>
-<rect width="800" height="600" fill="url(#pg)"/>
+<rect width="820" height="560" fill="#0a0b0e"/>
+<rect width="820" height="560" fill="url(#pg)"/>
+<rect x="16" y="16" width="788" height="528" fill="#0d0e13" stroke="#22283a" stroke-width="1.5" rx="3"/>
+<text x="28" y="11" fill="#405060" font-size="8.5" font-family="IBM Plex Mono,monospace" letter-spacing="1.5">CAMPUS ONU · MANHATTAN · 42nd–48th ST &amp; 1ST AVE</text>
 
-<!-- Campus boundary -->
-<rect x="20" y="20" width="760" height="560" fill="#0d0e13" stroke="#1e2535" stroke-width="1.5" rx="4"/>
-<text x="32" y="14" fill="#1e2838" font-size="8" font-family="IBM Plex Mono,monospace" letter-spacing="1.5">CAMPUS ONU · MANHATTAN · 1ST AVE &amp; 42nd–48th ST</text>
-
-<!-- ══════════════════════════════════════════
-     NORTE DO CAMPUS (y=30..220)
-     Esquerda: Biblioteca  |  Centro: Praça/Mastros  |  Direita: Secretariat
-     ══════════════════════════════════════════ -->
-
-<!-- A) Biblioteca Dag Hammarskjöld — NW -->
+<!-- ══ SECRETARIAT BUILDING (NE) — torre de vidro vertical ══ -->
 <g class="oz" onclick="S('secgeral')" data-o="secgeral" style="cursor:pointer">
-  <rect class="room" x="32" y="32" width="160" height="100" fill="#0d1420" stroke="#1e3a5a" stroke-width="1.2" rx="2"/>
-  <g fill="none" stroke="#162030" stroke-width="0.6" opacity=".7">
-    <line x1="33" y1="50" x2="191" y2="50"/><line x1="33" y1="64" x2="191" y2="64"/>
-    <line x1="33" y1="78" x2="191" y2="78"/><line x1="33" y1="92" x2="191" y2="92"/>
-    <line x1="33" y1="106" x2="191" y2="106"/>
-    <line x1="90" y1="33" x2="90" y2="131"/><line x1="140" y1="33" x2="140" y2="131"/>
+  <rect class="room" x="590" y="26" width="108" height="258" fill="#10192a" stroke="#3a6aaa" stroke-width="1.5" rx="1"/>
+  <!-- curtain wall -->
+  <g fill="none" stroke="#1e3a60" stroke-width="0.6" opacity=".85">
+    <line x1="591" y1="44" x2="697" y2="44"/><line x1="591" y1="57" x2="697" y2="57"/>
+    <line x1="591" y1="70" x2="697" y2="70"/><line x1="591" y1="83" x2="697" y2="83"/>
+    <line x1="591" y1="96" x2="697" y2="96"/><line x1="591" y1="109" x2="697" y2="109"/>
+    <line x1="591" y1="122" x2="697" y2="122"/><line x1="591" y1="135" x2="697" y2="135"/>
+    <line x1="591" y1="148" x2="697" y2="148"/><line x1="591" y1="161" x2="697" y2="161"/>
+    <line x1="591" y1="174" x2="697" y2="174"/><line x1="591" y1="187" x2="697" y2="187"/>
+    <line x1="591" y1="200" x2="697" y2="200"/><line x1="591" y1="213" x2="697" y2="213"/>
+    <line x1="591" y1="226" x2="697" y2="226"/><line x1="591" y1="239" x2="697" y2="239"/>
+    <line x1="591" y1="252" x2="697" y2="252"/>
+    <line x1="622" y1="26" x2="622" y2="284"/><line x1="654" y1="26" x2="654" y2="284"/><line x1="686" y1="26" x2="686" y2="284"/>
   </g>
-  <text class="lbl" x="112" y="72" text-anchor="middle" fill="#2a5060" font-size="9" font-family="IBM Plex Mono,monospace" font-weight="500">BIBLIOTECA</text>
-  <text class="lbl" x="112" y="85" text-anchor="middle" fill="#1e3a50" font-size="7.5" font-family="IBM Plex Mono,monospace">Dag Hammarskjöld · 1962</text>
+  <rect x="590" y="26" width="108" height="12" fill="#1a2f4a" stroke="#3a6aaa" stroke-width="0.8"/>
+  <rect x="590" y="270" width="108" height="14" fill="#1a2f4a" stroke="#3a6aaa" stroke-width="0.8"/>
+  <text class="lbl" x="644" y="152" text-anchor="middle" fill="#8ac5ee" font-size="12" font-family="IBM Plex Mono,monospace" font-weight="500">SECRETARIA</text>
+  <text class="lbl" x="644" y="168" text-anchor="middle" fill="#8ac5ee" font-size="12" font-family="IBM Plex Mono,monospace" font-weight="500">GERAL</text>
+  <text class="lbl" x="644" y="184" text-anchor="middle" fill="#4a7a9a" font-size="9" font-family="IBM Plex Mono,monospace">39 andares · vidro</text>
 </g>
 
-<!-- B) Praça / Mastros — Norte centro -->
-<rect x="204" y="32" width="260" height="100" fill="#0b0c11" stroke="#161e28" stroke-width="0.8" rx="2"/>
-<g fill="#1a2535" opacity=".55">
-  <rect x="214" y="44" width="2" height="76" rx="1"/><rect x="228" y="44" width="2" height="76" rx="1"/>
-  <rect x="242" y="44" width="2" height="76" rx="1"/><rect x="256" y="44" width="2" height="76" rx="1"/>
-  <rect x="270" y="44" width="2" height="76" rx="1"/><rect x="284" y="44" width="2" height="76" rx="1"/>
-  <rect x="298" y="44" width="2" height="76" rx="1"/><rect x="312" y="44" width="2" height="76" rx="1"/>
-  <rect x="326" y="44" width="2" height="76" rx="1"/><rect x="340" y="44" width="2" height="76" rx="1"/>
-  <rect x="354" y="44" width="2" height="76" rx="1"/><rect x="368" y="44" width="2" height="76" rx="1"/>
-  <rect x="382" y="44" width="2" height="76" rx="1"/><rect x="396" y="44" width="2" height="76" rx="1"/>
-  <rect x="410" y="44" width="2" height="76" rx="1"/><rect x="424" y="44" width="2" height="76" rx="1"/>
-  <rect x="438" y="44" width="2" height="76" rx="1"/><rect x="452" y="44" width="2" height="76" rx="1"/>
-</g>
-<text x="334" y="118" text-anchor="middle" fill="#1a2535" font-size="7" font-family="IBM Plex Mono,monospace" opacity=".9">PRAÇA PRINCIPAL · 193 MASTROS DE BANDEIRAS</text>
-
-<!-- C) Secretariat Building — NE, torre vertical -->
+<!-- ══ BIBLIOTECA NW ══ -->
 <g class="oz" onclick="S('secgeral')" data-o="secgeral" style="cursor:pointer">
-  <rect class="room" x="476" y="32" width="128" height="300" fill="#111820" stroke="#2a5080" stroke-width="1.4" rx="1"/>
-  <!-- curtain wall horizontal bands -->
-  <g fill="none" stroke="#1a3050" stroke-width="0.6" opacity=".85">
-    <line x1="477" y1="50" x2="603" y2="50"/><line x1="477" y1="63" x2="603" y2="63"/>
-    <line x1="477" y1="76" x2="603" y2="76"/><line x1="477" y1="89" x2="603" y2="89"/>
-    <line x1="477" y1="102" x2="603" y2="102"/><line x1="477" y1="115" x2="603" y2="115"/>
-    <line x1="477" y1="128" x2="603" y2="128"/><line x1="477" y1="141" x2="603" y2="141"/>
-    <line x1="477" y1="154" x2="603" y2="154"/><line x1="477" y1="167" x2="603" y2="167"/>
-    <line x1="477" y1="180" x2="603" y2="180"/><line x1="477" y1="193" x2="603" y2="193"/>
-    <line x1="477" y1="206" x2="603" y2="206"/><line x1="477" y1="219" x2="603" y2="219"/>
-    <line x1="477" y1="232" x2="603" y2="232"/><line x1="477" y1="245" x2="603" y2="245"/>
-    <line x1="477" y1="258" x2="603" y2="258"/><line x1="477" y1="271" x2="603" y2="271"/>
-    <line x1="477" y1="284" x2="603" y2="284"/><line x1="477" y1="297" x2="603" y2="297"/>
-    <!-- vertical mullions -->
-    <line x1="508" y1="32" x2="508" y2="332"/><line x1="540" y1="32" x2="540" y2="332"/>
-    <line x1="572" y1="32" x2="572" y2="332"/>
+  <rect class="room" x="26" y="26" width="148" height="86" fill="#0d1728" stroke="#2a4a7a" stroke-width="1.1" rx="1"/>
+  <g fill="none" stroke="#182840" stroke-width="0.6" opacity=".7">
+    <line x1="27" y1="44" x2="173" y2="44"/><line x1="27" y1="58" x2="173" y2="58"/>
+    <line x1="27" y1="72" x2="173" y2="72"/><line x1="27" y1="86" x2="173" y2="86"/>
   </g>
-  <!-- mechanical floors top/bottom -->
-  <rect x="476" y="32"  width="128" height="14" fill="#16243a" stroke="#2a5080" stroke-width="0.8" rx="1"/>
-  <rect x="476" y="318" width="128" height="14" fill="#16243a" stroke="#2a5080" stroke-width="0.8" rx="1"/>
-  <text class="lbl" x="540" y="178" text-anchor="middle" fill="#3a72a8" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">SECRETARIA</text>
-  <text class="lbl" x="540" y="193" text-anchor="middle" fill="#3a72a8" font-size="10" font-family="IBM Plex Mono,monospace">GERAL</text>
-  <text class="lbl" x="540" y="208" text-anchor="middle" fill="#2a5272" font-size="7.5" font-family="IBM Plex Mono,monospace">39 andares · cortina de vidro</text>
-  <text class="lbl" x="540" y="222" text-anchor="middle" fill="#2a5272" font-size="7.5" font-family="IBM Plex Mono,monospace">Niemeyer + Harrison · 1952</text>
+  <text class="lbl" x="100" y="60" text-anchor="middle" fill="#6a9acc" font-size="11" font-family="IBM Plex Mono,monospace" font-weight="500">BIBLIOTECA</text>
+  <text class="lbl" x="100" y="76" text-anchor="middle" fill="#4a6a8a" font-size="8.5" font-family="IBM Plex Mono,monospace">Dag Hammarskjöld · 1962</text>
 </g>
 
-<!-- ══════════════════════════════════════════
-     FAIXA OESTE (y=32..420) — coluna esquerda
-     Conselho de Tutela + Escritórios associados
-     ══════════════════════════════════════════ -->
-
-<!-- D) Conselho de Tutela -->
-<g class="oz" onclick="S('tc')" data-o="tc" style="cursor:pointer">
-  <rect class="room" x="32" y="148" width="160" height="80" fill="#120e16" stroke="#3a2848" stroke-width="1.1" rx="2"/>
-  <text class="lbl" x="112" y="183" text-anchor="middle" fill="#5a4870" font-size="9" font-family="IBM Plex Mono,monospace" font-weight="500">CONSELHO DE TUTELA</text>
-  <text class="lbl" x="112" y="198" text-anchor="middle" fill="#3a2848" font-size="7" font-family="IBM Plex Mono,monospace">Suspenso 1994 · Palau ind.</text>
+<!-- ══ PRAÇA / MASTROS ══ -->
+<rect x="184" y="26" width="398" height="86" fill="#0b0d12" stroke="#1a2030" stroke-width="0.8" rx="1"/>
+<g fill="#1e2d45" opacity=".6">
+  <rect x="194" y="38" width="2" height="62" rx="1"/><rect x="208" y="38" width="2" height="62" rx="1"/>
+  <rect x="222" y="38" width="2" height="62" rx="1"/><rect x="236" y="38" width="2" height="62" rx="1"/>
+  <rect x="250" y="38" width="2" height="62" rx="1"/><rect x="264" y="38" width="2" height="62" rx="1"/>
+  <rect x="278" y="38" width="2" height="62" rx="1"/><rect x="292" y="38" width="2" height="62" rx="1"/>
+  <rect x="306" y="38" width="2" height="62" rx="1"/><rect x="320" y="38" width="2" height="62" rx="1"/>
+  <rect x="334" y="38" width="2" height="62" rx="1"/><rect x="348" y="38" width="2" height="62" rx="1"/>
+  <rect x="362" y="38" width="2" height="62" rx="1"/><rect x="376" y="38" width="2" height="62" rx="1"/>
+  <rect x="390" y="38" width="2" height="62" rx="1"/><rect x="404" y="38" width="2" height="62" rx="1"/>
+  <rect x="418" y="38" width="2" height="62" rx="1"/><rect x="432" y="38" width="2" height="62" rx="1"/>
+  <rect x="446" y="38" width="2" height="62" rx="1"/><rect x="460" y="38" width="2" height="62" rx="1"/>
+  <rect x="474" y="38" width="2" height="62" rx="1"/><rect x="488" y="38" width="2" height="62" rx="1"/>
+  <rect x="502" y="38" width="2" height="62" rx="1"/><rect x="516" y="38" width="2" height="62" rx="1"/>
+  <rect x="530" y="38" width="2" height="62" rx="1"/><rect x="544" y="38" width="2" height="62" rx="1"/>
+  <rect x="558" y="38" width="2" height="62" rx="1"/>
 </g>
+<text x="383" y="104" text-anchor="middle" fill="#405060" font-size="8" font-family="IBM Plex Mono,monospace">PRAÇA · 193 MASTROS DE BANDEIRAS</text>
 
-<!-- E) Escritórios associados NY — label -->
-<text x="32" y="248" fill="#5a4820" font-size="7.5" font-family="IBM Plex Mono,monospace" letter-spacing="1">ESCRITÓRIOS ASSOCIADOS · NY</text>
-
-<!-- E1) UNICEF -->
-<g class="oz" onclick="S('unicef')" data-o="unicef" style="cursor:pointer">
-  <rect class="room" x="32" y="256" width="160" height="50" fill="#100c06" stroke="#5a3808" stroke-width="1.1" rx="2"/>
-  <text class="lbl" x="112" y="285" text-anchor="middle" fill="#8a5818" font-size="9" font-family="IBM Plex Mono,monospace" font-weight="500">UNICEF</text>
-</g>
-
-<!-- E2) PNUD -->
-<g class="oz" onclick="S('pnud')" data-o="pnud" style="cursor:pointer">
-  <rect class="room" x="32" y="316" width="160" height="50" fill="#100c06" stroke="#5a3808" stroke-width="1.1" rx="2"/>
-  <text class="lbl" x="112" y="345" text-anchor="middle" fill="#8a5818" font-size="9" font-family="IBM Plex Mono,monospace" font-weight="500">PNUD</text>
-</g>
-
-<!-- E3) FMI / Banco Mundial -->
-<g class="oz" onclick="S('fmi')" data-o="fmi" style="cursor:pointer">
-  <rect class="room" x="32" y="376" width="160" height="50" fill="#0a1210" stroke="#2a5028" stroke-width="1.1" rx="2"/>
-  <text class="lbl" x="112" y="400" text-anchor="middle" fill="#3a7038" font-size="8.5" font-family="IBM Plex Mono,monospace" font-weight="500">FMI / Banco Mundial</text>
-  <text class="lbl" x="112" y="414" text-anchor="middle" fill="#2a5020" font-size="7" font-family="IBM Plex Mono,monospace">Bretton Woods · Washington</text>
-</g>
-
-<!-- ══════════════════════════════════════════
-     CENTRO (y=148..360) — Conference Building
-     Liga CS ao Secretariat
-     ══════════════════════════════════════════ -->
-
-<!-- F) Conference Building (bloco horizontal) contém sala CS -->
+<!-- ══ CONFERENCE BUILDING (CS) — centro ══ -->
+<!-- x=184 y=122 w=398 h=150 → x2=582 y2=272 → no overlap with Secretariat x=590 ✓ -->
 <g class="oz" onclick="S('cs')" data-o="cs" style="cursor:pointer">
-  <!-- Bloco todo -->
-  <rect class="room" x="204" y="148" width="260" height="200" fill="#140e0e" stroke="#7a2020" stroke-width="1.4" rx="2"/>
-  <!-- Salas de comissão à esquerda -->
-  <rect x="214" y="160" width="90" height="56" fill="#0d1018" stroke="#1e3050" stroke-width="0.7" rx="1"/>
-  <text x="259" y="187" text-anchor="middle" fill="#253050" font-size="7.5" font-family="IBM Plex Mono,monospace">SALAS DE</text>
-  <text x="259" y="199" text-anchor="middle" fill="#253050" font-size="7.5" font-family="IBM Plex Mono,monospace">CONFERÊNCIA</text>
-  <rect x="214" y="226" width="90" height="56" fill="#0d1018" stroke="#1e3050" stroke-width="0.7" rx="1"/>
-  <text x="259" y="252" text-anchor="middle" fill="#253050" font-size="7.5" font-family="IBM Plex Mono,monospace">SALAS DE</text>
-  <text x="259" y="264" text-anchor="middle" fill="#253050" font-size="7.5" font-family="IBM Plex Mono,monospace">COMISSÃO</text>
-  <!-- CS Chamber à direita -->
-  <rect x="316" y="158" width="136" height="176" fill="none" stroke="#601010" stroke-width="1.1" rx="1"/>
-  <rect x="328" y="170" width="112" height="152" fill="#0e0808" stroke="#3a1010" stroke-width="0.8" rx="1"/>
-  <!-- Mesa em U do CS -->
-  <path d="M344,188 L424,188 L424,248 L404,248 L404,226 L364,226 L364,248 L344,248 Z"
-        fill="#100a0a" stroke="#3a1010" stroke-width="1"/>
-  <!-- P5 seats (topo da mesa) -->
-  <g fill="#601818">
-    <rect x="345" y="178" width="14" height="10" rx="1"/>
-    <rect x="363" y="178" width="14" height="10" rx="1"/>
-    <rect x="381" y="178" width="14" height="10" rx="1"/>
-    <rect x="399" y="178" width="14" height="10" rx="1"/>
-    <rect x="417" y="178" width="14" height="10" rx="1"/>
+  <rect class="room" x="184" y="122" width="398" height="150" fill="#1a0d0d" stroke="#aa2828" stroke-width="1.5" rx="1"/>
+  <!-- Salas conferência esquerda -->
+  <rect x="194" y="132" width="130" height="58" fill="#110808" stroke="#3a1010" stroke-width="0.8" rx="1"/>
+  <text x="259" y="157" text-anchor="middle" fill="#7a4040" font-size="10" font-family="IBM Plex Mono,monospace">SALAS DE</text>
+  <text x="259" y="172" text-anchor="middle" fill="#7a4040" font-size="10" font-family="IBM Plex Mono,monospace">CONFERÊNCIA</text>
+  <rect x="194" y="198" width="130" height="58" fill="#110808" stroke="#3a1010" stroke-width="0.8" rx="1"/>
+  <text x="259" y="223" text-anchor="middle" fill="#7a4040" font-size="10" font-family="IBM Plex Mono,monospace">SALAS DE</text>
+  <text x="259" y="238" text-anchor="middle" fill="#7a4040" font-size="10" font-family="IBM Plex Mono,monospace">COMISSÃO</text>
+  <!-- CS Chamber direita -->
+  <rect x="338" y="130" width="232" height="132" fill="#0e0707" stroke="#7a1818" stroke-width="1.1" rx="1"/>
+  <!-- Mesa em U -->
+  <path d="M360,152 L548,152 L548,240 L516,240 L516,208 L392,208 L392,240 L360,240 Z"
+        fill="#0c0505" stroke="#4a1010" stroke-width="1.1"/>
+  <!-- P5 seats -->
+  <g fill="#7a1818">
+    <rect x="362" y="140" width="22" height="12" rx="1"/>
+    <rect x="390" y="140" width="22" height="12" rx="1"/>
+    <rect x="418" y="140" width="22" height="12" rx="1"/>
+    <rect x="446" y="140" width="22" height="12" rx="1"/>
+    <rect x="474" y="140" width="22" height="12" rx="1"/>
   </g>
-  <!-- P5 labels -->
-  <text x="352" y="186" text-anchor="middle" fill="#c04040" font-size="5.5" font-family="IBM Plex Mono,monospace">EUA</text>
-  <text x="370" y="186" text-anchor="middle" fill="#c04040" font-size="5.5" font-family="IBM Plex Mono,monospace">RUS</text>
-  <text x="388" y="186" text-anchor="middle" fill="#c04040" font-size="5.5" font-family="IBM Plex Mono,monospace">CHN</text>
-  <text x="406" y="186" text-anchor="middle" fill="#c04040" font-size="5.5" font-family="IBM Plex Mono,monospace">FRA</text>
-  <text x="424" y="186" text-anchor="middle" fill="#c04040" font-size="5.5" font-family="IBM Plex Mono,monospace">GBR</text>
-  <!-- Non-permanent seats (lados) -->
-  <g fill="#2a1010">
-    <rect x="328" y="196" width="10" height="14" rx="1"/><rect x="328" y="214" width="10" height="14" rx="1"/>
-    <rect x="328" y="232" width="10" height="14" rx="1"/><rect x="328" y="250" width="10" height="14" rx="1"/>
-    <rect x="328" y="268" width="10" height="14" rx="1"/>
-    <rect x="430" y="196" width="10" height="14" rx="1"/><rect x="430" y="214" width="10" height="14" rx="1"/>
-    <rect x="430" y="232" width="10" height="14" rx="1"/><rect x="430" y="250" width="10" height="14" rx="1"/>
-    <rect x="430" y="268" width="10" height="14" rx="1"/>
+  <text x="373" y="149" text-anchor="middle" fill="#dd5555" font-size="7" font-family="IBM Plex Mono,monospace">EUA</text>
+  <text x="401" y="149" text-anchor="middle" fill="#dd5555" font-size="7" font-family="IBM Plex Mono,monospace">RUS</text>
+  <text x="429" y="149" text-anchor="middle" fill="#dd5555" font-size="7" font-family="IBM Plex Mono,monospace">CHN</text>
+  <text x="457" y="149" text-anchor="middle" fill="#dd5555" font-size="7" font-family="IBM Plex Mono,monospace">FRA</text>
+  <text x="485" y="149" text-anchor="middle" fill="#dd5555" font-size="7" font-family="IBM Plex Mono,monospace">GBR</text>
+  <!-- Non-perm seats -->
+  <g fill="#5a2020">
+    <rect x="340" y="160" width="12" height="16" rx="1"/><rect x="340" y="182" width="12" height="16" rx="1"/>
+    <rect x="340" y="204" width="12" height="16" rx="1"/><rect x="340" y="226" width="12" height="16" rx="1"/>
+    <rect x="340" y="248" width="12" height="16" rx="1"/>
+    <rect x="556" y="160" width="12" height="16" rx="1"/><rect x="556" y="182" width="12" height="16" rx="1"/>
+    <rect x="556" y="204" width="12" height="16" rx="1"/><rect x="556" y="226" width="12" height="16" rx="1"/>
+    <rect x="556" y="248" width="12" height="16" rx="1"/>
   </g>
-  <circle cx="384" cy="218" r="7" fill="#501010" opacity=".6"/>
+  <circle cx="454" cy="185" r="9" fill="#601010" opacity=".7"/>
   <!-- CS label -->
-  <text class="lbl" x="384" y="354" text-anchor="middle" fill="#c03030" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">CONSELHO DE SEGURANÇA</text>
-  <text class="lbl" x="384" y="368" text-anchor="middle" fill="#803030" font-size="7.5" font-family="IBM Plex Mono,monospace">15 membros · decisões Cap.VII vinculantes</text>
+  <text class="lbl" x="454" y="284" text-anchor="middle" fill="#ee6666" font-size="13" font-family="IBM Plex Mono,monospace" font-weight="500">CONSELHO DE SEGURANÇA</text>
+  <text class="lbl" x="454" y="299" text-anchor="middle" fill="#cc5555" font-size="9.5" font-family="IBM Plex Mono,monospace">15 membros · decisões Cap.VII vinculantes para todos os 193</text>
 </g>
 
-<!-- ══════════════════════════════════════════
-     ECOSOC — ala sul do bloco leste
-     ══════════════════════════════════════════ -->
+<!-- ══ ECOSOC — abaixo do Secretariat, sem sobrepor ══ -->
+<!-- Secretariat bottom = y+h = 26+258 = 284. ECOSOC y=294 ✓ -->
 <g class="oz" onclick="S('ecosoc')" data-o="ecosoc" style="cursor:pointer">
-  <rect class="room" x="476" y="348" width="128" height="80" fill="#0a1410" stroke="#2a6030" stroke-width="1.3" rx="2"/>
-  <text class="lbl" x="540" y="383" text-anchor="middle" fill="#3a8040" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">ECOSOC</text>
-  <text class="lbl" x="540" y="397" text-anchor="middle" fill="#2a6028" font-size="7.5" font-family="IBM Plex Mono,monospace">54 membros eleitos</text>
+  <rect class="room" x="590" y="294" width="108" height="76" fill="#0c1a0c" stroke="#2a7a2a" stroke-width="1.3" rx="1"/>
+  <text class="lbl" x="644" y="330" text-anchor="middle" fill="#6acc6a" font-size="12" font-family="IBM Plex Mono,monospace" font-weight="500">ECOSOC</text>
+  <text class="lbl" x="644" y="346" text-anchor="middle" fill="#4a9a4a" font-size="9" font-family="IBM Plex Mono,monospace">54 membros</text>
 </g>
 
-<!-- ══════════════════════════════════════════
-     SUL DO CAMPUS — General Assembly Hall
-     grande oval, domina a metade sul
-     ══════════════════════════════════════════ -->
+<!-- ══ TUTELA — oeste, abaixo da biblioteca ══ -->
+<!-- Biblioteca bottom = 26+86=112. Tutela y=122 ✓ -->
+<g class="oz" onclick="S('tc')" data-o="tc" style="cursor:pointer">
+  <rect class="room" x="26" y="122" width="148" height="68" fill="#130e1a" stroke="#3a2a5a" stroke-width="1.1" rx="1"/>
+  <text class="lbl" x="100" y="152" text-anchor="middle" fill="#6a4a9a" font-size="11" font-family="IBM Plex Mono,monospace" font-weight="500">CONSELHO DE</text>
+  <text class="lbl" x="100" y="167" text-anchor="middle" fill="#6a4a9a" font-size="11" font-family="IBM Plex Mono,monospace" font-weight="500">TUTELA</text>
+  <text class="lbl" x="100" y="181" text-anchor="middle" fill="#7a6a9a" font-size="8" font-family="IBM Plex Mono,monospace">suspenso 1994</text>
+</g>
+
+<!-- ══ ESCRITÓRIOS ASSOCIADOS (NY) ══ -->
+<text x="26" y="210" fill="#6a5a30" font-size="9" font-family="IBM Plex Mono,monospace" letter-spacing="1" font-weight="500">ESCRITÓRIOS ASSOCIADOS · NY</text>
+<g class="oz" onclick="S('unicef')" data-o="unicef" style="cursor:pointer">
+  <rect class="room" x="26" y="218" width="148" height="54" fill="#1a1007" stroke="#7a4a10" stroke-width="1.1" rx="1"/>
+  <text class="lbl" x="100" y="249" text-anchor="middle" fill="#eecc66" font-size="12" font-family="IBM Plex Mono,monospace" font-weight="500">UNICEF</text>
+</g>
+<g class="oz" onclick="S('pnud')" data-o="pnud" style="cursor:pointer">
+  <rect class="room" x="26" y="280" width="148" height="54" fill="#1a1007" stroke="#7a4a10" stroke-width="1.1" rx="1"/>
+  <text class="lbl" x="100" y="311" text-anchor="middle" fill="#eecc66" font-size="12" font-family="IBM Plex Mono,monospace" font-weight="500">PNUD</text>
+</g>
+<g class="oz" onclick="S('fmi')" data-o="fmi" style="cursor:pointer">
+  <rect class="room" x="26" y="342" width="148" height="46" fill="#0c1a0c" stroke="#2a6a2a" stroke-width="1.1" rx="1"/>
+  <text class="lbl" x="100" y="363" text-anchor="middle" fill="#4aaa5a" font-size="11" font-family="IBM Plex Mono,monospace" font-weight="500">FMI · Banco Mundial</text>
+  <text class="lbl" x="100" y="376" text-anchor="middle" fill="#4a8a4a" font-size="8.5" font-family="IBM Plex Mono,monospace">Washington · Bretton Woods</text>
+</g>
+
+<!-- ══ ASSEMBLEIA GERAL — sul, grande oval ══ -->
+<!-- Bottom of Conference: 122+150=272. GA top: cy-ry = 448-96=352. Gap OK ✓ -->
+<!-- Bottom of ECOSOC: 294+76=370. GA top 352 overlaps by 18 — move GA down -->
+<!-- GA cy=460 ry=88 → top=372, bottom=548. ECOSOC bottom=370. Gap=2 ✓ -->
 <g class="oz" onclick="S('ag')" data-o="ag" style="cursor:pointer">
-  <ellipse class="room" cx="280" cy="520" rx="236" ry="88" fill="#0e1520" stroke="#2a5080" stroke-width="1.6"/>
-  <ellipse cx="280" cy="520" rx="210" ry="66" fill="#0c1018" stroke="#1a3050" stroke-width="0.9"/>
+  <ellipse class="room" cx="330" cy="482" rx="292" ry="76" fill="#0e1628" stroke="#3a6aaa" stroke-width="1.6"/>
+  <ellipse cx="330" cy="482" rx="262" ry="58" fill="#0b1020" stroke="#1e3a60" stroke-width="0.9"/>
   <!-- seating arcs -->
-  <g fill="none" stroke="#1e3555" stroke-width="1">
-    <path d="M68,490 A212,58 0 0,1 492,520"/>
-    <path d="M86,490 A194,46 0 0,1 474,520"/>
-    <path d="M104,490 A176,34 0 0,1 456,520"/>
-    <path d="M122,490 A158,22 0 0,1 438,520"/>
+  <g fill="none" stroke="#1e3a60" stroke-width="1">
+    <path d="M80,460 A250,54 0 0,1 580,482"/>
+    <path d="M100,460 A230,42 0 0,1 560,482"/>
+    <path d="M120,460 A210,30 0 0,1 540,482"/>
+    <path d="M140,460 A190,18 0 0,1 520,482"/>
   </g>
   <!-- podium -->
-  <rect x="256" y="498" width="48" height="22" fill="#162030" stroke="#2a4060" stroke-width="1.1" rx="2"/>
-  <rect x="264" y="503" width="32" height="12" fill="#0e1828" rx="1"/>
+  <rect x="310" y="460" width="40" height="22" fill="#182840" stroke="#2a4a70" stroke-width="1.1" rx="2"/>
+  <rect x="318" y="466" width="24" height="10" fill="#0e1828" rx="1"/>
   <!-- delegate dots -->
-  <g fill="#1e3555">
-    <circle cx="72"  cy="522" r="3"/><circle cx="90"  cy="508" r="3"/><circle cx="110" cy="498" r="3"/>
-    <circle cx="132" cy="492" r="3"/><circle cx="155" cy="488" r="3"/><circle cx="180" cy="486" r="3"/>
-    <circle cx="206" cy="485" r="3"/><circle cx="232" cy="485" r="3"/>
-    <circle cx="328" cy="485" r="3"/><circle cx="354" cy="486" r="3"/>
-    <circle cx="379" cy="488" r="3"/><circle cx="402" cy="492" r="3"/>
-    <circle cx="424" cy="499" r="3"/><circle cx="444" cy="509" r="3"/><circle cx="460" cy="522" r="3"/>
-    <circle cx="74"  cy="536" r="3"/><circle cx="458" cy="536" r="3"/>
-    <circle cx="94"  cy="524" r="2.5"/><circle cx="440" cy="524" r="2.5"/>
+  <g fill="#4a6a8a">
+    <circle cx="83" cy="484" r="3.5"/><circle cx="103" cy="469" r="3.5"/><circle cx="125" cy="458" r="3.5"/>
+    <circle cx="150" cy="450" r="3.5"/><circle cx="177" cy="445" r="3.5"/><circle cx="205" cy="442" r="3.5"/>
+    <circle cx="234" cy="441" r="3.5"/><circle cx="263" cy="441" r="3.5"/>
+    <circle cx="397" cy="441" r="3.5"/><circle cx="426" cy="442" r="3.5"/>
+    <circle cx="454" cy="445" r="3.5"/><circle cx="481" cy="450" r="3.5"/>
+    <circle cx="507" cy="437" r="3.5"/><circle cx="529" cy="469" r="3.5"/><circle cx="549" cy="485" r="3.5"/>
+    <circle cx="85" cy="498" r="3.5"/><circle cx="547" cy="498" r="3.5"/>
   </g>
-  <text class="lbl" x="280" y="564" text-anchor="middle" fill="#3a72a8" font-size="11" font-family="IBM Plex Mono,monospace" font-weight="500">ASSEMBLEIA GERAL</text>
-  <text class="lbl" x="280" y="579" text-anchor="middle" fill="#2a5270" font-size="8" font-family="IBM Plex Mono,monospace">193 estados · 1 voto cada · sessão ordinária: setembro</text>
-  <text class="lbl" x="280" y="591" text-anchor="middle" fill="#1e3a58" font-size="7.5" font-family="IBM Plex Mono,monospace">Brasil abre o debate geral desde 1955</text>
+  <text class="lbl" x="330" y="520" text-anchor="middle" fill="#8ac5ee" font-size="14" font-family="IBM Plex Mono,monospace" font-weight="500">ASSEMBLEIA GERAL</text>
+  <text class="lbl" x="330" y="534" text-anchor="middle" fill="#5a9acc" font-size="10" font-family="IBM Plex Mono,monospace">193 estados · 1 voto cada · sessão: setembro</text>
+  <text class="lbl" x="330" y="547" text-anchor="middle" fill="#6a9acc" font-size="9.5" font-family="IBM Plex Mono,monospace">Brasil abre o debate geral desde 1955</text>
 </g>
 
-<!-- ══════════════════════════════════════════
-     RODAPÉ — dashed boxes históricos/conceituais
-     ══════════════════════════════════════════ -->
-<g class="oz" onclick="S('reforma')" data-o="reforma" style="cursor:pointer">
-  <rect class="room" x="618" y="118" width="152" height="70" fill="#100e06" stroke="#706018" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
-  <text class="lbl" x="694" y="148" text-anchor="middle" fill="#988028" font-size="8.5" font-family="IBM Plex Mono,monospace" font-weight="500">REFORMA DO CS</text>
-  <text class="lbl" x="694" y="161" text-anchor="middle" fill="#706018" font-size="7" font-family="IBM Plex Mono,monospace">G4 · Brasil · Alemanha</text>
-  <text class="lbl" x="694" y="174" text-anchor="middle" fill="#706018" font-size="7" font-family="IBM Plex Mono,monospace">Japão · Índia</text>
+<!-- Compass -->
+<g transform="translate(756,30)">
+  <circle cx="12" cy="12" r="11" fill="none" stroke="#253040" stroke-width="1"/>
+  <text x="12" y="10" text-anchor="middle" fill="#304a60" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="bold">N</text>
+  <line x1="12" y1="11" x2="12" y2="3" stroke="#4a7aaa" stroke-width="2"/>
 </g>
-<g class="oz" onclick="S('r2p')" data-o="r2p" style="cursor:pointer">
-  <rect class="room" x="618" y="204" width="152" height="70" fill="#080e10" stroke="#20505a" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
-  <text class="lbl" x="694" y="234" text-anchor="middle" fill="#307888" font-size="8.5" font-family="IBM Plex Mono,monospace" font-weight="500">R2P · RwP</text>
-  <text class="lbl" x="694" y="247" text-anchor="middle" fill="#205868" font-size="7" font-family="IBM Plex Mono,monospace">Responsabilidade de</text>
-  <text class="lbl" x="694" y="260" text-anchor="middle" fill="#205868" font-size="7" font-family="IBM Plex Mono,monospace">Proteger · 2005</text>
-</g>
-<g class="oz" onclick="S('brasil-cs')" data-o="brasil-cs" style="cursor:pointer">
-  <rect class="room" x="618" y="290" width="152" height="70" fill="#080e08" stroke="#206020" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
-  <text class="lbl" x="694" y="320" text-anchor="middle" fill="#408040" font-size="8.5" font-family="IBM Plex Mono,monospace" font-weight="500">BRASIL NO CS</text>
-  <text class="lbl" x="694" y="333" text-anchor="middle" fill="#306030" font-size="7" font-family="IBM Plex Mono,monospace">11 mandatos</text>
-  <text class="lbl" x="694" y="346" text-anchor="middle" fill="#306030" font-size="7" font-family="IBM Plex Mono,monospace">não-permanentes</text>
-</g>
-<g class="oz" onclick="S('veto')" data-o="veto" style="cursor:pointer">
-  <rect class="room" x="618" y="376" width="152" height="70" fill="#100808" stroke="#602020" stroke-width="1" rx="2" stroke-dasharray="4,3"/>
-  <text class="lbl" x="694" y="406" text-anchor="middle" fill="#a04040" font-size="8.5" font-family="IBM Plex Mono,monospace" font-weight="500">PODER DE VETO</text>
-  <text class="lbl" x="694" y="419" text-anchor="middle" fill="#803030" font-size="7" font-family="IBM Plex Mono,monospace">Art. 27(3) · P5</text>
-  <text class="lbl" x="694" y="432" text-anchor="middle" fill="#803030" font-size="7" font-family="IBM Plex Mono,monospace">Abstenção ≠ veto</text>
-</g>
-
-<!-- Compass NE -->
-<g transform="translate(756,32)">
-  <circle cx="12" cy="12" r="10" fill="none" stroke="#1e2838" stroke-width="0.9"/>
-  <text x="12" y="10" text-anchor="middle" fill="#2a3a50" font-size="9" font-family="IBM Plex Mono,monospace" font-weight="bold">N</text>
-  <line x1="12" y1="11" x2="12" y2="4" stroke="#3a6090" stroke-width="1.8"/>
-  <line x1="12" y1="22" x2="12" y2="16" stroke="#2a3050" stroke-width="1"/>
+</svg> <line x1="12" y1="11" x2="12" y2="3" stroke="#4a7aaa" stroke-width="2"/>
 </g>
 </svg>`,
 
-"ny-ag": `<svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+"ny-ag": `<svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="420" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="420" height="360" fill="url(#pg)"/>
@@ -585,7 +538,7 @@ const PLANS = {
 </g>
 </svg>`,
 
-"ny-cs": `<svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+"ny-cs": `<svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="420" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="420" height="360" fill="url(#pg)"/>
@@ -636,12 +589,12 @@ const PLANS = {
 </g>
 <g class="oz" onclick="S('brasil-cs')" data-o="brasil-cs" style="cursor:pointer">
   <rect class="room" x="210" y="288" width="150" height="44" fill="#080e06" stroke="#306020" stroke-width="0.9" rx="1"/>
-  <text class="lbl" x="285" y="307" text-anchor="middle" fill="#508040" font-size="8" font-family="IBM Plex Mono,monospace" font-weight="500">BRASIL NO CS</text>
+  <text class="lbl" x="285" y="307" text-anchor="middle" fill="#508040" font-size="8" font-family="IBM Plex Mono,monospace" font-weight="500">BRASIL NO CSNU</text>
   <text class="lbl" x="285" y="319" text-anchor="middle" fill="#406030" font-size="7" font-family="IBM Plex Mono,monospace">11 mandatos não-permanentes</text>
 </g>
 </svg>`,
 
-"ny-sec": `<svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+"ny-sec": `<svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="420" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="420" height="360" fill="url(#pg)"/>
@@ -697,7 +650,7 @@ const PLANS = {
 <text x="58" y="178" text-anchor="end" fill="#1e3050" font-size="6.5" font-family="IBM Plex Mono,monospace">38ºandar</text>
 </svg>`,
 
-"ge-campus": `<svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+"ge-campus": `<svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="500" height="380" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="500" height="380" fill="url(#pg)"/>
@@ -765,7 +718,7 @@ const PLANS = {
 </g>
 </svg>`,
 
-"ge-palais": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+"ge-palais": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="500" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="500" height="360" fill="url(#pg)"/>
@@ -806,7 +759,7 @@ const PLANS = {
 </g>
 </svg>`,
 
-"ge-oms": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+"ge-oms": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="500" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="500" height="360" fill="url(#pg)"/>
@@ -828,7 +781,7 @@ const PLANS = {
 </g>
 </svg>`,
 
-"ha-campus": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+"ha-campus": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="500" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="500" height="360" fill="url(#pg)"/>
@@ -876,36 +829,51 @@ const PLANS = {
 </g>
 </svg>`,
 
-"vi-campus": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
-<rect width="500" height="360" fill="#0c0d0f"/>
-<pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
-<rect width="500" height="360" fill="url(#pg)"/>
-<text x="250" y="14" text-anchor="middle" fill="#2a1a40" font-size="7.5" font-family="IBM Plex Mono,monospace" letter-spacing="2">VIENA INTERNATIONAL CENTRE · DONAUPARK</text>
-<!-- UNO City complex -->
+"vi-campus": `<svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+<defs><pattern id="pg" patternUnits="userSpaceOnUse" width="16" height="16"><path d="M16 0L0 0 0 16" fill="none" stroke="#14161c" stroke-width="0.5"/></pattern></defs>
+<rect width="560" height="420" fill="#0a0b0e"/><rect width="560" height="420" fill="url(#pg)"/>
+<rect x="18" y="18" width="524" height="384" fill="#0e0f14" stroke="#1e2535" stroke-width="1.5" rx="3"/>
+<text x="28" y="12" fill="#1e2838" font-size="7" font-family="IBM Plex Mono,monospace" letter-spacing="1">VIENA INTERNATIONAL CENTRE · DONAUPARK · ÁUSTRIA</text>
 <g class="oz" onclick="S('aiea')" data-o="aiea" style="cursor:pointer">
-  <!-- Main towers (VIC has cylindrical towers) -->
-  <ellipse class="room" cx="160" cy="150" rx="70" ry="100" fill="#120a18" stroke="#6a3880" stroke-width="1.3"/>
-  <ellipse cx="160" cy="150" rx="52" ry="80" fill="#0c0812" stroke="#3a1850" stroke-width="0.7"/>
-  <!-- Y-shape internal -->
-  <line x1="160" y1="80" x2="160" y2="220" stroke="#2a1040" stroke-width="1.5"/>
-  <line x1="160" y1="150" x2="100" y2="190" stroke="#2a1040" stroke-width="1.5"/>
-  <line x1="160" y1="150" x2="220" y2="190" stroke="#2a1040" stroke-width="1.5"/>
-  <ellipse class="room" cx="340" cy="150" rx="70" ry="100" fill="#120a18" stroke="#6a3880" stroke-width="1.3"/>
-  <ellipse cx="340" cy="150" rx="52" ry="80" fill="#0c0812" stroke="#3a1850" stroke-width="0.7"/>
-  <line x1="340" y1="80" x2="340" y2="220" stroke="#2a1040" stroke-width="1.5"/>
-  <line x1="340" y1="150" x2="280" y2="190" stroke="#2a1040" stroke-width="1.5"/>
-  <line x1="340" y1="150" x2="400" y2="190" stroke="#2a1040" stroke-width="1.5"/>
-  <text class="lbl" x="250" y="286" text-anchor="middle" fill="#9a58c8" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">AIEA — ENERGIA ATÔMICA</text>
-  <text class="lbl" x="250" y="299" text-anchor="middle" fill="#6a3890" font-size="7.5" font-family="IBM Plex Mono,monospace">Org. Int. Energia Atômica · Viena · 1957</text>
+  <ellipse class="room" cx="152" cy="140" rx="110" ry="98" fill="#120a18" stroke="#6a3880" stroke-width="1.5"/>
+  <ellipse cx="152" cy="140" rx="84" ry="74" fill="#0c0812" stroke="#3a1850" stroke-width="0.9"/>
+  <g fill="none" stroke="#2a1040" stroke-width="1.2"><line x1="152" y1="66" x2="152" y2="214"/><line x1="152" y1="140" x2="58" y2="202"/><line x1="152" y1="140" x2="246" y2="202"/></g>
+  <circle cx="152" cy="140" r="14" fill="#1a0a28" stroke="#6a3880" stroke-width="1"/>
+  <text class="lbl" x="152" y="250" text-anchor="middle" fill="#9a58c8" font-size="10.5" font-family="IBM Plex Mono,monospace" font-weight="500">AIEA</text>
+  <text class="lbl" x="152" y="263" text-anchor="middle" fill="#6a3890" font-size="7.5" font-family="IBM Plex Mono,monospace">Agência Int. Energia Atômica · 1957 · Nobel 2005</text>
+  <text class="lbl" x="152" y="275" text-anchor="middle" fill="#5a2880" font-size="7" font-family="IBM Plex Mono,monospace">DG: Rafael Grossi · TNP · Salvaguardas Nucleares</text>
 </g>
-<g class="oz" onclick="S('aiea')" data-o="aiea" style="cursor:pointer">
-  <rect class="room" x="100" y="316" width="300" height="36" fill="#0c0816" stroke="#4a2060" stroke-width="1" rx="1"/>
-  <text class="lbl" x="250" y="330" text-anchor="middle" fill="#7a4898" font-size="8" font-family="IBM Plex Mono,monospace" font-weight="500">Nobel da Paz 2005 · TNP · Salvaguardas Nucleares</text>
-  <text class="lbl" x="250" y="342" text-anchor="middle" fill="#5a3870" font-size="7" font-family="IBM Plex Mono,monospace">DG: Rafael Grossi (Argentina) · 178 membros</text>
+<g class="oz" onclick="S('unodc')" data-o="unodc" style="cursor:pointer">
+  <rect class="room" x="290" y="28" width="234" height="78" fill="#0e1420" stroke="#2a5a8a" stroke-width="1.3" rx="2"/>
+  <g fill="none" stroke="#1a3050" stroke-width="0.5" opacity=".8"><line x1="291" y1="46" x2="523" y2="46"/><line x1="291" y1="62" x2="523" y2="62"/><line x1="291" y1="78" x2="523" y2="78"/><line x1="380" y1="29" x2="380" y2="105"/><line x1="450" y1="29" x2="450" y2="105"/></g>
+  <text class="lbl" x="407" y="60" text-anchor="middle" fill="#3a72a8" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">UNODC</text>
+  <text class="lbl" x="407" y="73" text-anchor="middle" fill="#2a5080" font-size="7" font-family="IBM Plex Mono,monospace">Escritório NU sobre Drogas e Crime · Convenção de Palermo</text>
+  <text class="lbl" x="407" y="84" text-anchor="middle" fill="#1e3a60" font-size="6.5" font-family="IBM Plex Mono,monospace">tráfico · corrupção (UNCAC) · terrorismo · World Drug Report</text>
 </g>
+<g class="oz" onclick="S('unoosa')" data-o="unoosa" style="cursor:pointer">
+  <rect class="room" x="290" y="120" width="234" height="78" fill="#0a1410" stroke="#2a6030" stroke-width="1.3" rx="2"/>
+  <g fill="none" stroke="#183820" stroke-width="0.5" opacity=".8"><line x1="291" y1="138" x2="523" y2="138"/><line x1="291" y1="154" x2="523" y2="154"/><line x1="291" y1="170" x2="523" y2="170"/><line x1="380" y1="121" x2="380" y2="197"/><line x1="450" y1="121" x2="450" y2="197"/></g>
+  <text class="lbl" x="407" y="152" text-anchor="middle" fill="#4a9050" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">UNOOSA</text>
+  <text class="lbl" x="407" y="165" text-anchor="middle" fill="#2a6030" font-size="7" font-family="IBM Plex Mono,monospace">Escritório NU para Assuntos do Espaço Exterior</text>
+  <text class="lbl" x="407" y="176" text-anchor="middle" fill="#1e4820" font-size="6.5" font-family="IBM Plex Mono,monospace">Tratado do Espaço (1967) · Registro de Satélites</text>
+</g>
+<g class="oz" onclick="S('unido')" data-o="unido" style="cursor:pointer">
+  <rect class="room" x="290" y="212" width="234" height="78" fill="#100c06" stroke="#5a3808" stroke-width="1.3" rx="2"/>
+  <g fill="none" stroke="#3a1808" stroke-width="0.5" opacity=".8"><line x1="291" y1="230" x2="523" y2="230"/><line x1="291" y1="246" x2="523" y2="246"/><line x1="291" y1="262" x2="523" y2="262"/><line x1="380" y1="213" x2="380" y2="289"/><line x1="450" y1="213" x2="450" y2="289"/></g>
+  <text class="lbl" x="407" y="246" text-anchor="middle" fill="#c05828" font-size="10" font-family="IBM Plex Mono,monospace" font-weight="500">UNIDO</text>
+  <text class="lbl" x="407" y="259" text-anchor="middle" fill="#8a3818" font-size="7" font-family="IBM Plex Mono,monospace">Org. NU para Desenvolvimento Industrial · 170 membros</text>
+  <text class="lbl" x="407" y="270" text-anchor="middle" fill="#6a2810" font-size="6.5" font-family="IBM Plex Mono,monospace">industrialização · transferência tecnologia · ODS 9</text>
+</g>
+<rect x="30" y="310" width="500" height="84" fill="#080a0e" stroke="#1e2535" stroke-width="0.8" rx="2"/>
+<text x="280" y="326" text-anchor="middle" fill="#2a3a50" font-size="8" font-family="IBM Plex Mono,monospace" font-weight="500">VIENNA INTERNATIONAL CENTRE — inaugurado 1979</text>
+<text x="280" y="340" text-anchor="middle" fill="#1e2840" font-size="7" font-family="IBM Plex Mono,monospace">Um dos 4 principais escritórios da ONU. Abriga AIEA, UNODC, UNOOSA, UNIDO.</text>
+<text x="280" y="353" text-anchor="middle" fill="#1e2840" font-size="7" font-family="IBM Plex Mono,monospace">AIEA: único órgão de verificação nuclear · Nobel 2005 (AIEA + ElBaradei).</text>
+<text x="280" y="366" text-anchor="middle" fill="#1e2840" font-size="7" font-family="IBM Plex Mono,monospace">Convenção de Palermo (2000): principal instrumento contra crime organizado transnacional.</text>
+<text x="280" y="379" text-anchor="middle" fill="#1e2840" font-size="7" font-family="IBM Plex Mono,monospace">Tratado do Espaço (1967): espaço é patrimônio comum da humanidade.</text>
+<text x="280" y="392" text-anchor="middle" fill="#1a2038" font-size="6.5" font-family="IBM Plex Mono,monospace">Brasil: membro fundador da AIEA e UNIDO · ratificou Convenção de Palermo e UNCAC.</text>
 </svg>`,
 
-"ro-campus": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg">
+"ro-campus": `<svg viewBox="0 0 500 360" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <rect width="500" height="360" fill="#0c0d0f"/>
 <pattern id="pg" patternUnits="userSpaceOnUse" width="18" height="18"><path d="M18 0L0 0 0 18" fill="none" stroke="#161820" stroke-width="0.5"/></pattern>
 <rect width="500" height="360" fill="url(#pg)"/>
@@ -942,7 +910,7 @@ const PLANS = {
 </g>
 </svg>`,
 
-"na-campus": `<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg">
+"na-campus": `<svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
 <defs>
   <pattern id="pg" patternUnits="userSpaceOnUse" width="16" height="16">
     <path d="M16 0L0 0 0 16" fill="none" stroke="#14161c" stroke-width="0.5"/>
@@ -1036,6 +1004,9 @@ const ORGAN_LOCATION = {
   fmi:     {campus:'ny', floor:'ny-campus'},
   bird:    {campus:'ny', floor:'ny-campus'},
   aiea:    {campus:'vi', floor:'vi-campus'},
+  unodc:   {campus:'vi', floor:'vi-campus'},
+  unoosa:  {campus:'vi', floor:'vi-campus'},
+  unido:   {campus:'vi', floor:'vi-campus'},
   pnuma:   {campus:'na', floor:'na-campus'},
   acnur:   {campus:'na', floor:'na-campus'},
 };
@@ -1065,7 +1036,13 @@ function setFloor(fid) {
     <rect width="400" height="300" fill="#0c0d0f"/>
     <text x="200" y="150" text-anchor="middle" fill="#2a3040" font-size="12" font-family="IBM Plex Mono,monospace">Planta em construção</text>
   </svg>`;
-  document.getElementById('mapwrap').innerHTML = svg;
+  const el = document.getElementById('mapwrap');
+  el.innerHTML = svg;
+  const s = el.querySelector('svg');
+  if (s) {
+    s.style.cssText = 'width:100%;height:100%;display:block;';
+    s.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  }
   // Re-highlight current organ if it belongs here
   if (currentOrgan) highlightOrgan(currentOrgan);
 }
@@ -1075,15 +1052,47 @@ function highlightOrgan(id) {
 }
 
 const D={
-liga:{e:"Antecessora · 1919–1946",t:"Liga das Nações",b:["l:Liga","xx:Genebra 1919–1946","xx:Extinta"],tabs:["Visão Geral","Estrutura","Fracasso"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">Tratado de Versalhes, 28 jun. 1919</div></div><div class="dm"><div class="dml">Dissolução</div><div class="dmv">18 abr. 1946 (ONU já criada)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Genebra — Palácio das Nações</div></div><div class="dm"><div class="dml">Membros máx.</div><div class="dmv">58 países (1934–35)</div></div></div><div class="st2">Contexto</div><div class="sb2">Proposta pelo presidente americano <strong>Woodrow Wilson</strong> nos 14 Pontos (jan. 1918). Primeiro organismo de segurança coletiva permanente da história. Contradição fundamental: os EUA nunca aderiram — o Senado rejeitou o Pacto (nov. 1919). <em>Precursores</em>: Cruz Vermelha (1864), UPU (1874), Haia (1899).</div><div class="st2">Conquistas</div><div class="sb2">Mandatos sobre territórios ex-alemães/ex-otomanos; criação da <strong>OIT</strong> (única agência sobrevivente); TPJI (precursor da CIJ); resolução de conflitos menores (Åland 1921, Grécia-Bulgária 1925); combate ao tráfico de pessoas. O Pacto Briand-Kellogg (1928) — condenando a guerra — foi paralelo à Liga.</div>`,"Estrutura":`<div class="st2">Órgãos</div><div class="sb2"><strong>Assembleia</strong> — todos os membros, 1 voto por país, decisões por unanimidade (paralisante). <strong>Conselho</strong> — permanentes (UK, FR, IT, JP; EUA nunca entrou) + rotativos; precursor do CS. <strong>Secretariado</strong> — Genebra. <strong>TPJI</strong> — 15 juízes. <strong>OIT</strong> — tripartite, única sobrevivente.</div><div class="st2">Sistema de Mandatos</div><div class="sb2">Territórios das potências derrotadas em <strong>Classe A</strong> (próximos à independência: Síria, Palestina, Iraque), <strong>Classe B</strong> (África Central) e <strong>Classe C</strong> (SW África, Pacífico Sul). Na prática, colônias com supervisão formal da Liga.</div>`,"Fracasso":`<div class="st2">Por que a Liga fracassou?</div><div class="sb2"><strong>1.</strong> Ausência dos EUA — credibilidade comprometida.<br><strong>2.</strong> Regra da unanimidade — qualquer membro bloqueava.<br><strong>3.</strong> Sem força militar própria.<br><strong>4.</strong> Grandes potências ignoraram sanções — Japão (Manchúria 1931), Itália (Etiópia 1935), Alemanha (rearmamento 1935–38).</div><div class="al">Etiópia (1935): Itália invadiu; Liga votou sanções sem incluir petróleo. UK e França fizeram acordo secreto com Mussolini (Pacto Hoare-Laval). A Liga foi publicamente humilhada.</div><div class="st2">Legado para a ONU</div><div class="sb2">Os redatores de 1945 estudaram cada defeito: criaram o CS com poder coercitivo real, substituíram unanimidade pelo veto do P5, tornaram as decisões vinculantes. O Palácio das Nações em Genebra abriga hoje o UNOG.</div>`}},
+liga:{e:"Antecessora · 1919–1946",t:"Liga das Nações",b:["l:Liga","xx:Genebra 1919–1946","xx:Extinta"],tabs:["Visão Geral","Estrutura","Fracasso"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">Tratado de Versalhes, 28 jun. 1919</div></div><div class="dm"><div class="dml">Dissolução</div><div class="dmv">18 abr. 1946 (ONU já criada)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Genebra — Palácio das Nações</div></div><div class="dm"><div class="dml">Membros máx.</div><div class="dmv">58 países (1934–35)</div></div></div><div class="st2">Contexto</div><div class="sb2">Proposta pelo presidente americano <strong>Woodrow Wilson</strong> nos 14 Pontos (jan. 1918). Primeiro organismo de segurança coletiva permanente da história. Contradição fundamental: os EUA nunca aderiram — o Senado rejeitou o Pacto (nov. 1919). <em>Precursores</em>: Cruz Vermelha (1864), UPU (1874), Haia (1899).</div><div class="st2">Conquistas</div><div class="sb2">Mandatos sobre territórios ex-alemães/ex-otomanos; criação da <strong>OIT</strong> (única agência sobrevivente); TPJI (precursor da CIJ); resolução de conflitos menores (Åland 1921, Grécia-Bulgária 1925); combate ao tráfico de pessoas. O Pacto Briand-Kellogg (1928) — condenando a guerra — foi paralelo à Liga.</div>`,"Estrutura":`<div class="st2">Órgãos</div><div class="sb2"><strong>Assembleia</strong> — todos os membros, 1 voto por país, decisões por unanimidade (paralisante). <strong>Conselho</strong> — permanentes (UK, FR, IT, JP; EUA nunca entrou) + rotativos; precursor do CSNU. <strong>Secretariado</strong> — Genebra. <strong>TPJI</strong> — 15 juízes. <strong>OIT</strong> — tripartite, única sobrevivente.</div><div class="st2">Sistema de Mandatos</div><div class="sb2">Territórios das potências derrotadas em <strong>Classe A</strong> (próximos à independência: Síria, Palestina, Iraque), <strong>Classe B</strong> (África Central) e <strong>Classe C</strong> (SW África, Pacífico Sul). Na prática, colônias com supervisão formal da Liga.</div>`,"Fracasso":`<div class="st2">Por que a Liga fracassou?</div><div class="sb2"><strong>1.</strong> Ausência dos EUA — credibilidade comprometida.<br><strong>2.</strong> Regra da unanimidade — qualquer membro bloqueava.<br><strong>3.</strong> Sem força militar própria.<br><strong>4.</strong> Grandes potências ignoraram sanções — Japão (Manchúria 1931), Itália (Etiópia 1935), Alemanha (rearmamento 1935–38).</div><div class="al">Etiópia (1935): Itália invadiu; Liga votou sanções sem incluir petróleo. UK e França fizeram acordo secreto com Mussolini (Pacto Hoare-Laval). A Liga foi publicamente humilhada.</div><div class="st2">Legado para a ONU</div><div class="sb2">Os redatores de 1945 estudaram cada defeito: criaram o CSNU com poder coercitivo real, substituíram unanimidade pelo veto do P5, tornaram as decisões vinculantes. O Palácio das Nações em Genebra abriga hoje o UNOG.</div>`}},
 "brasil-liga":{e:"PEB · Liga das Nações",t:"Brasil na Liga das Nações",b:["l:Liga","br:Brasil","xx:1919–1926 / 1934–46"],tabs:["Participação","Crise de 1926"],c:{"Participação":`<div class="st2">Membro Fundador</div><div class="sb2">Brasil foi membro fundador (1919) e único representante sul-americano com presença constante no Conselho até 1926. Almejava assento <em>permanente</em> no Conselho — ambição que ressurge no século XXI. Rui Barbosa participou da Conferência de Paris (1919).</div>`,"Crise de 1926":`<div class="st2">A Saída de 1926</div><div class="sb2">Em 1926, o Brasil saiu da Liga após ser preterido em favor da Alemanha para membro permanente do Conselho. A delegação votou contra a entrada alemã e se retirou.</div><div class="al">Única saída voluntária de membro fundador na história da Liga. O episódio simboliza a ambição histórica brasileira por assento permanente em órgãos de segurança. Brasil retornou em 1934 (Vargas) e permaneceu até 1946.</div>`}},
-carta:{e:"Documento Fundador · 1945",t:"Carta das Nações Unidas",b:["p:Principal","ok:Em vigor","ok:São Francisco"],tabs:["Origens","Capítulos","Princípios"],c:{"Origens":`<div class="dgr"><div class="dm"><div class="dml">Assinatura</div><div class="dmv">26 jun. 1945 — São Francisco</div></div><div class="dm"><div class="dml">Vigor</div><div class="dmv">24 out. 1945 — Dia da ONU</div></div><div class="dm"><div class="dml">Membros originais</div><div class="dmv">51 Estados</div></div><div class="dm"><div class="dml">Emendas</div><div class="dmv">Apenas 5 (Arts. 23, 27, 61, 109)</div></div></div><div class="st2">Processo de Criação</div><div class="sb2"><strong>1941</strong> — Carta do Atlântico (Roosevelt + Churchill). <strong>1942</strong> — Declaração das Nações Unidas (26 países anti-Eixo). <strong>1944</strong> — Dumbarton Oaks (EUA, UK, URSS, China): esboço da ONU. <strong>Fev. 1945</strong> — Yalta: Roosevelt, Churchill, Stalin definem o veto do P5. <strong>Jun. 1945</strong> — São Francisco: 50 países assinam.</div>`,"Capítulos":`<div class="st2">Estrutura da Carta</div><div class="sb2"><strong>Cap. I (Arts. 1–2)</strong> — Propósitos e princípios.<br><strong>Cap. IV</strong> — Assembleia Geral.<br><strong>Cap. V–VII</strong> — Conselho de Segurança: Cap. VI (solução pacífica), <em>Cap. VII (ação coercitiva)</em> — base legal para sanções e uso da força.<br><strong>Cap. XIV</strong> — CIJ.</div><div class="st2">Capítulo VII</div><div class="sb2"><strong>Art. 41</strong> — Medidas não militares (sanções, embargo, ruptura diplomática). <strong>Art. 42</strong> — Uso da força quando Art. 41 insuficiente. Toda intervenção legítima da ONU precisa de resolução do CS sob Cap. VII.</div><div class="nt"><strong>Art. 103:</strong> Em caso de conflito entre obrigações da Carta e qualquer outro tratado internacional, <em>prevalecem as obrigações da Carta</em>. Hierarquia supratratado.</div>`,"Princípios":`<div class="st2">Art. 2 — 7 Princípios</div><div class="sb2"><strong>§1</strong> Igualdade soberana · <strong>§2</strong> Boa-fé · <strong>§3</strong> Solução pacífica · <strong>§4</strong> <em>Proibição da ameaça ou uso da força</em> · <strong>§5</strong> Assistência à ONU · <strong>§6</strong> Não-membros devem agir em conformidade · <strong>§7</strong> <em>Não intervenção em assuntos domésticos</em></div><div class="al"><strong>Tensão central:</strong> Art. 2§7 (soberania) vs. Cap. VII (coerção) e Art. 1§3 (direitos humanos). A R2P (2005) tenta equacionar — sem consenso pleno.</div><div class="al"><strong>Art. 2§4 vs. Art. 51:</strong> O Art. 51 permite legítima defesa individual ou coletiva até o CS agir. Debate: legítima defesa preventiva é permitida? (Doutrina Bush 2002).</div>`}},
+carta:{e:"Documento Fundador · 1945",t:"Carta das Nações Unidas",b:["p:Principal","ok:Em vigor","ok:São Francisco"],tabs:["Origens","Capítulos","Princípios"],c:{"Origens":`<div class="dgr"><div class="dm"><div class="dml">Assinatura</div><div class="dmv">26 jun. 1945 — São Francisco</div></div><div class="dm"><div class="dml">Vigor</div><div class="dmv">24 out. 1945 — Dia da ONU</div></div><div class="dm"><div class="dml">Membros originais</div><div class="dmv">51 Estados</div></div><div class="dm"><div class="dml">Emendas</div><div class="dmv">Apenas 5 (Arts. 23, 27, 61, 109)</div></div></div><div class="st2">Processo de Criação</div><div class="sb2"><strong>1941</strong> — Carta do Atlântico (Roosevelt + Churchill). <strong>1942</strong> — Declaração das Nações Unidas (26 países anti-Eixo). <strong>1944</strong> — Dumbarton Oaks (EUA, UK, URSS, China): esboço da ONU. <strong>Fev. 1945</strong> — Yalta: Roosevelt, Churchill, Stalin definem o veto do P5. <strong>Jun. 1945</strong> — São Francisco: 50 países assinam.</div>`,"Capítulos":`<div class="st2">Estrutura da Carta</div><div class="sb2"><strong>Cap. I (Arts. 1–2)</strong> — Propósitos e princípios.<br><strong>Cap. IV</strong> — Assembleia Geral.<br><strong>Cap. V–VII</strong> — Conselho de Segurança: Cap. VI (solução pacífica), <em>Cap. VII (ação coercitiva)</em> — base legal para sanções e uso da força.<br><strong>Cap. XIV</strong> — CIJ.</div><div class="st2">Capítulo VII</div><div class="sb2"><strong>Art. 41</strong> — Medidas não militares (sanções, embargo, ruptura diplomática). <strong>Art. 42</strong> — Uso da força quando Art. 41 insuficiente. Toda intervenção legítima da ONU precisa de resolução do CSNU sob Cap. VII.</div><div class="nt"><strong>Art. 103:</strong> Em caso de conflito entre obrigações da Carta e qualquer outro tratado internacional, <em>prevalecem as obrigações da Carta</em>. Hierarquia supratratado.</div>`,"Princípios":`<div class="st2">Art. 2 — 7 Princípios</div><div class="sb2"><strong>§1</strong> Igualdade soberana · <strong>§2</strong> Boa-fé · <strong>§3</strong> Solução pacífica · <strong>§4</strong> <em>Proibição da ameaça ou uso da força</em> · <strong>§5</strong> Assistência à ONU · <strong>§6</strong> Não-membros devem agir em conformidade · <strong>§7</strong> <em>Não intervenção em assuntos domésticos</em></div><div class="al"><strong>Tensão central:</strong> Art. 2§7 (soberania) vs. Cap. VII (coerção) e Art. 1§3 (direitos humanos). A R2P (2005) tenta equacionar — sem consenso pleno.</div><div class="al"><strong>Art. 2§4 vs. Art. 51:</strong> O Art. 51 permite legítima defesa individual ou coletiva até o CSNU agir. Debate: legítima defesa preventiva é permitida? (Doutrina Bush 2002).</div>`}},
 principios:{e:"Carta da ONU · Arts. 1–2",t:"Propósitos e Princípios",b:["p:Principal","ok:Fundamento Jurídico"],tabs:["Propósitos","Princípios"],c:{"Propósitos":`<div class="st2">Art. 1 — 4 Propósitos</div><div class="sb2"><strong>1.</strong> Manter a paz e segurança internacionais.<br><strong>2.</strong> Desenvolver relações amistosas entre nações (autodeterminação dos povos).<br><strong>3.</strong> Conseguir cooperação para resolver problemas econômicos, sociais, culturais e humanitários + promover direitos humanos.<br><strong>4.</strong> Ser um centro harmonizador das ações das nações.</div>`,"Princípios":`<div class="st2">Art. 2 — 7 Princípios</div><div class="sb2"><strong>§1</strong> Igualdade soberana de todos os membros<br><strong>§2</strong> Cumprimento de boa-fé das obrigações<br><strong>§3</strong> Solução pacífica de controvérsias<br><strong>§4</strong> <em>Proibição da ameaça ou uso da força</em> contra integridade territorial ou independência política<br><strong>§5</strong> Assistência à ONU; abstenção de auxiliar Estado sob ação preventiva<br><strong>§6</strong> Assegurar que não-membros ajam em conformidade<br><strong>§7</strong> <em>Não intervenção em assuntos essencialmente domésticos</em></div>`}},
-ag:{e:"Órgão Principal · Arts. 9–22",t:"Assembleia Geral da ONU",b:["p:Principal","ok:193 membros","ok:Ativo"],tabs:["Funcionamento","Poderes","Votação","Polêmicas","Brasil"],c:{"Funcionamento":`<div class="dgr"><div class="dm"><div class="dml">Membros</div><div class="dmv">193 Estados (todos os membros)</div></div><div class="dm"><div class="dml">Sessão ordinária</div><div class="dmv">3ª terça-feira de setembro</div></div><div class="dm"><div class="dml">Presidente</div><div class="dmv">Eleito a cada sessão (1 ano)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">NY — General Assembly Hall</div></div></div><div class="st2">Como funciona</div><div class="sb2">Principal órgão deliberativo e representativo. <strong>1 país = 1 voto</strong> — independente de tamanho, população ou PIB. O debate geral (1ª semana) reúne chefes de Estado. <em>Brasil abre o debate geral desde 1955</em> — os EUA falam em segundo.</div><div class="st2">As 6 Comissões</div><div class="sb2"><strong>1ª</strong> Desarmamento e Segurança · <strong>2ª</strong> Econômica e Financeira · <strong>3ª</strong> Social, Humanitária e Cultural · <strong>4ª</strong> Política Especial e Descolonização · <strong>5ª</strong> Administrativa e Orçamentária · <strong>6ª</strong> Jurídica</div>`,"Poderes":`<div class="st2">O que a AGONU pode</div><div class="sb2">Discutir qualquer questão da Carta; fazer recomendações (não vinculantes) a Estados e ao CS; aprovar o orçamento (por 2/3); eleger membros não-permanentes do CS; admitir novos membros; eleger juízes da CIJ; criar organismos subsidiários (PNUD, UNICEF, ACNUR).</div><div class="al"><strong>O que NÃO PODE:</strong> Fazer recomendações sobre situação que o CS esteja examinando (Art. 12). Emitir decisões obrigatórias em paz e segurança. Suas resoluções são politicamente importantes mas juridicamente NÃO vinculantes.</div><div class="nt"><strong>Res. 377 — Uniting for Peace (1950):</strong> Se o CS estiver paralisado por veto, a AGONU pode se reunir em sessão especial de emergência (24h) e fazer recomendações sobre uso coletivo da força. Usada: Coreia 1950, Suez 1956, Afeganistão 1980, Ucrânia 2022.</div>`,"Votação":`<div class="st2">Regras — Art. 18</div><div class="sb2"><strong>Questões importantes:</strong> 2/3 dos presentes e votantes — paz e segurança, eleição de membros, admissão/expulsão, orçamento.<br><strong>Outras questões:</strong> maioria simples.</div><div class="st2">Distribuição por Grupos Regionais</div><div class="vb"><div class="vs" style="background:#4a5870;width:28%">África 54</div><div class="vs" style="background:#3a4f66;width:27%">Ásia 53</div><div class="vs" style="background:#2a4558;width:17%">AL&amp;C 33</div><div class="vs" style="background:#1e3a4a;width:14%">EU 28</div><div class="vs" style="background:#162e3c;width:7%">WEOG 13</div><div class="vs" style="background:#0e2030;width:7%">Out 12</div></div><div class="sb2">O Sul Global forma maioria esmagadora. Usa a AGONU para pressionar pautas como NOEI (1974), descolonização e reforma do CS — temas bloqueados no CS pelo P5.</div>`,"Polêmicas":`<div class="al"><strong>Res. 3379 (1975):</strong> AGONU equiparou sionismo ao racismo. Revogada em 1991 (Res. 46/86) — único caso de revogação de resolução na história da AGONU.</div><div class="al"><strong>Res. 68/262 (2014):</strong> Declarou nulo o referendo de anexação da Crimeia — 100 votos a 11, 58 abstenções. Sem efeito coercitivo mas politicamente relevante.</div><div class="al"><strong>Res. ES-11 (2022):</strong> Sessão especial de emergência — 141 votos exigindo retirada russa da Ucrânia. Brasil votou a favor.</div><div class="sb2"><strong>Financiamento:</strong> EUA pagam ~22% do orçamento regular. Retenções de contribuições americanas (anos 1980, 2017–19) causam crises financeiras graves na ONU.</div>`,"Brasil":`<div class="st2">Tradição na AGONU</div><div class="sb2">Brasil abre o debate geral desde <strong>1955</strong> — João Carlos Muniz se voluntariou quando ninguém queria falar primeiro. O discurso do chanceler (ou presidente) é o principal ato de política externa multilateral do ano. Osvaldo Aranha presidiu a <strong>1ª sessão da AGONU</strong> (1947).</div><div class="nt">Nas votações, o Brasil costuma votar com o G77 em questões econômicas e com o Ocidente em direitos humanos — postura de equilíbrio da PEB. A abstenção nas votações sobre Ucrânia em 2022 foi exceção que gerou debate.</div>`}},
-cs:{e:"Órgão Principal · Cap. V–VII",t:"Conselho de Segurança",b:["p:Principal","ok:15 membros","ok:Ativo"],tabs:["Composição","Poderes","Veto","Eleições","Casos"],c:{"Composição":`<div class="dgr"><div class="dm"><div class="dml">Membros permanentes (P5)</div><div class="dmv">EUA, Rússia, China, França, Reino Unido</div></div><div class="dm"><div class="dml">Membros não-permanentes</div><div class="dmv">10 (AGONU elege, mandato 2 anos)</div></div><div class="dm"><div class="dml">Presidência</div><div class="dmv">Rotativa mensal (ordem alfabética em inglês)</div></div><div class="dm"><div class="dml">Aprovação</div><div class="dmv">9/15 votos + nenhum veto do P5</div></div></div><div class="st2">P5 — Membros Permanentes</div><div class="mg"><span class="mb p5">🇺🇸 EUA</span><span class="mb p5">🇷🇺 Rússia</span><span class="mb p5">🇨🇳 China</span><span class="mb p5">🇫🇷 França</span><span class="mb p5">🇬🇧 Reino Unido</span></div><div class="st2">Grupos Regionais (não-permanentes)</div><div class="sb2">África (3) · Ásia-Pacífico (2) · América Latina e Caribe (2) · Europa Oriental (1) · Europa Ocidental e outros (2). Mandato de 2 anos, sem reeleição imediata.</div>`,"Poderes":`<div class="st2">Responsabilidade Principal — Art. 24</div><div class="sb2">O CS tem <em>responsabilidade primária pela manutenção da paz e segurança internacionais</em>. Suas resoluções aprovadas sob Cap. VII são <strong>juridicamente vinculantes</strong> para todos os membros (Art. 25) — diferença fundamental com a AGONU.</div><div class="st2">Instrumentos do Cap. VII</div><div class="sb2"><strong>Art. 40</strong> — Medidas provisórias (cessar-fogo)<br><strong>Art. 41</strong> — Medidas não militares: sanções, embargo, ruptura diplomática<br><strong>Art. 42</strong> — Uso da força quando Art. 41 insuficiente<br><strong>Art. 43</strong> — Acordos de contingente militar (previsto, nunca implementado)</div><div class="nt"><strong>Operações de Paz ("Cap. VI½"):</strong> Criadas na prática por Dag Hammarskjöld. Princípios: consentimento, imparcialidade, não uso da força exceto em legítima defesa ou proteção de civis.</div>`,"Veto":`<div class="st2">Art. 27(3) — Poder de Veto</div><div class="sb2">Um voto negativo de qualquer P5 bloqueia qualquer resolução substantiva. <strong>Abstenção ≠ veto:</strong> Precedente Coreia (1950) — URSS boicotava; Res. 83 aprovada.</div><div class="vb" style="height:32px"><div class="vs" style="background:var(--red);width:32%">🇷🇺 ~130</div><div class="vs" style="background:#3a5070;width:26%">🇺🇸 ~90</div><div class="vs" style="background:#806040;width:9%">🇬🇧 ~32</div><div class="vs" style="background:#605038;width:6%">🇫🇷 ~18</div><div class="vs" style="background:#304840;width:6%">🇨🇳 ~20</div></div><div class="al">EUA vetaram resoluções críticas a Israel 40+ vezes desde 1972. Rússia+China vetaram intervenções na Síria 17+ vezes desde 2011 — os casos mais emblemáticos de paralisia do CS.</div><div class="nt"><strong>Res. 76/262 (2022 — "Iniciativa ACT"):</strong> Toda vez que um P5 usar o veto, a AGONU é automaticamente convocada em 10 dias para debater. Aprovada por 143 votos. Aumenta o custo político do veto sem eliminá-lo.</div>`,"Eleições":`<div class="st2">Como são eleitos os não-permanentes</div><div class="sb2">Eleição na AGONU exigindo <strong>2/3 dos votos</strong>. Campanhas duram anos — países constroem coalizões, abrem embaixadas, fazem concessões diplomáticas. O custo pode chegar a dezenas de milhões de dólares.</div><div class="st2">Brasil no CS</div><div class="sb2">Brasil foi eleito <strong>11 vezes</strong> — recorde na América Latina.</div><div class="mg"><span class="mb br">🇧🇷 1946–47 · 1951–52 · 1954–55 · 1963–64 · 1967–68</span><span class="mb br">🇧🇷 1988–89 · 1993–94 · 1998–99 · 2004–05 · 2010–11 · 2022–23</span></div>`,"Casos":`<div class="st2">Casos Históricos Emblemáticos</div><div class="sb2"><strong>Coreia (1950):</strong> Aprovado por ausência soviética — abstenção não é veto.<br><strong>Kuwait (1990–91):</strong> Consenso P5; Res. 678 autorizou a força.<br><strong>Kosovo (1999):</strong> NATO agiu sem CS (Rússia teria vetado) — legalidade vs. legitimidade.<br><strong>Iraque (2003):</strong> EUA invadiram sem autorização — maior contestação ao CS.<br><strong>Líbia (2011):</strong> Res. 1973 = "zona de exclusão aérea"; aliados interpretaram como licença para troca de regime.<br><strong>Síria (2011–):</strong> 17+ vetos russo-chineses; 500 mil mortos; paralisia total.</div>`}},
-ecosoc:{e:"Órgão Principal · Arts. 61–72",t:"ECOSOC",b:["p:Principal","ok:54 membros"],tabs:["Visão Geral","Comissões"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Membros</div><div class="dmv">54 (AGONU elege, mandato 3 anos)</div></div><div class="dm"><div class="dml">Sessão principal</div><div class="dmv">Julho (NY) + segmentos em Genebra</div></div><div class="dm"><div class="dml">Supervisiona</div><div class="dmv">15 agências + fundos/programas</div></div><div class="dm"><div class="dml">Criação</div><div class="dmv">Carta da ONU, 1945</div></div></div><div class="st2">Papel</div><div class="sb2">Coordena o trabalho econômico e social da ONU e de suas agências. Faz recomendações sobre <em>desenvolvimento econômico, direitos humanos, questões sociais</em>. Atua como elo entre agências (OMS, FAO, OIT) e a AGONU.</div>`,"Comissões":`<div class="st2">Comissões Funcionais</div><div class="sb2">Estatística · Desenvolvimento Social · <strong>Condição da Mulher (CSW)</strong> · Narcóticos · Prevenção ao Crime · Ciência e Tecnologia · Populações e Desenvolvimento · Floresta.</div><div class="nt"><strong>Reforma 2006:</strong> Comissão de Direitos Humanos substituída pelo <strong>Conselho de Direitos Humanos</strong> (47 membros, AGONU, Genebra) com Revisão Periódica Universal (RPU) de todos os países.</div><div class="st2">Comissões Regionais</div><div class="sb2"><strong>CEPAL</strong> (América Latina, Santiago) · CEA (África) · CESAP (Ásia-Pacífico) · CEE (Europa) · CEAO (Ásia Ocidental). A CEPAL é de enorme relevância para o Brasil — berço do estruturalismo latino-americano (Prebisch, Furtado).</div>`}},
-cij:{e:"Órgão Principal · Arts. 92–96",t:"Corte Internacional de Justiça",b:["p:Principal","ok:15 juízes","ok:Haia"],tabs:["Funcionamento","Jurisdição","Casos","Polêmicas"],c:{"Funcionamento":`<div class="dgr"><div class="dm"><div class="dml">Sede</div><div class="dmv">Palácio da Paz, Haia, Países Baixos</div></div><div class="dm"><div class="dml">Composição</div><div class="dmv">15 juízes — AGONU + CS elegem</div></div><div class="dm"><div class="dml">Mandato</div><div class="dmv">9 anos, renovável. Eleições a cada 3 anos (5 vagas)</div></div><div class="dm"><div class="dml">Idiomas</div><div class="dmv">Francês e Inglês (oficiais)</div></div></div><div class="st2">Órgão Judicial Principal</div><div class="sb2">Sucessora do TPJI da Liga das Nações. Dois tipos de competência: <strong>contenciosa</strong> (decide disputas entre Estados) e <strong>consultiva</strong> (emite opiniões jurídicas a pedido da ONU). <em>Apenas Estados podem ser partes</em> — indivíduos vão ao TPI.</div>`,"Jurisdição":`<div class="st2">Jurisdição Contenciosa</div><div class="sb2">É <em>consensual</em>: ambos os Estados devem aceitar — via cláusula compromissória em tratados, declaração de aceitação geral (Art. 36§2 — cláusula facultativa) ou acordo especial (compromis).</div><div class="al"><strong>Problema do cumprimento:</strong> Decisões são obrigatórias, mas execução depende do CS (Art. 94). Se um P5 for parte perdedora, pode vetar a execução. Ex: Nicarágua c. EUA (1986) — CIJ condenou; EUA retiraram-se e ignoraram.</div><div class="st2">Opiniões Consultivas Relevantes</div><div class="sb2">Legalidade de armas nucleares (1996) · Muro israelense na Cisjordânia (2004) · Independência do Kosovo (2010) · Separação de Chagos (2019) · Obrigações climáticas (2024)</div>`,"Casos":`<div class="st2">Casos Recentes Emblemáticos</div><div class="al"><strong>África do Sul c. Israel (2024):</strong> Genocídio em Gaza. CIJ emitiu medidas cautelares determinando proteção de civis sem ordenar cessar-fogo explícito. Caso ainda em andamento.</div><div class="al"><strong>Ucrânia c. Rússia (2022):</strong> Liminar ordenando suspensão da operação militar. Rússia ignorou — demonstra o limite da CIJ sem enforcement independente.</div>`,"Polêmicas":`<div class="al">O P5 tem presença "tradicional" na CIJ por influência política — embora os juízes devam ser independentes. Na prática, nenhuma grande potência ficou sem representação por décadas.</div><div class="sb2"><strong>Brasil na CIJ:</strong> Nunca foi réu em caso contencioso. Participou como terceiro interveniente (Art. 62) no caso Nicarágua c. Colômbia. O Brasil usa predominantemente a OMC para disputas comerciais e o CIRDI para disputas de investimentos.</div>`}},
-secgeral:{e:"Órgão Principal · Arts. 97–101",t:"Secretaria-Geral da ONU",b:["p:Principal","ok:Nova York"],tabs:["O SG","Lista de SGs","Funções","Sérgio Vieira de Mello"],c:{"O SG":`<div class="dgr"><div class="dm"><div class="dml">Eleição</div><div class="dmv">CS recomenda → AGONU aprova</div></div><div class="dm"><div class="dml">Mandato</div><div class="dmv">5 anos, renovável uma vez (convenção)</div></div><div class="dm"><div class="dml">Atual</div><div class="dmv">António Guterres (Portugal) desde 2017</div></div><div class="dm"><div class="dml">Staff</div><div class="dmv">~44.000 funcionários internacionais</div></div></div><div class="st2">O "Servidor do Mundo"</div><div class="sb2">O SG é simultaneamente chefe administrativo (Art. 97) e ator político (Art. 99 — pode chamar atenção do CS para qualquer ameaça à paz). Dag Hammarskjöld expandiu dramaticamente o papel político do cargo. Por convenção: nunca é nacional de um P5 e a escolha rotaciona por região.</div>`,"Lista de SGs":`<div class="st2">Todos os Secretários-Gerais</div><div class="sb2"><strong>1. Trygve Lie</strong> (Noruega, 1946–53) — Primeiro SG; renunciou sob pressão soviética após apoiar intervenção na Coreia.<br><br><strong>2. Dag Hammarskjöld</strong> (Suécia, 1953–61) — Morreu em acidente aéreo no Congo. Nobel póstumo. Criou as operações de paz.<br><br><strong>3. U Thant</strong> (Birmânia, 1961–71) — Primeiro não-europeu. Mediação na Crise dos Mísseis de Cuba (1962).<br><br><strong>4. Kurt Waldheim</strong> (Áustria, 1972–81) — Passado nazista revelado décadas depois.<br><br><strong>5. Javier Pérez de Cuéllar</strong> (Peru, 1982–91) — Resolveu Malvinas e Irã-Iraque.<br><br><strong>6. Boutros Boutros-Ghali</strong> (Egito, 1992–96) — Único SG com mandato único; vetado pelos EUA para o 2º mandato.<br><br><strong>7. Kofi Annan</strong> (Gana, 1997–2006) — Nobel 2001. Criou R2P e ODS. Escândalo Petróleo por Alimento.<br><br><strong>8. Ban Ki-moon</strong> (Coreia do Sul, 2007–16) — Foco em clima e ODS.<br><br><strong>9. António Guterres</strong> (Portugal, 2017–presente) — Ex-PM e ex-Alto Comissário para Refugiados.</div>`,"Funções":`<div class="st2">Art. 99 — Poder Político</div><div class="sb2">O SG pode levar ao CS qualquer questão que ameace a paz — raramente usado formalmente, mas enormemente influente via bons ofícios, mediação e relatórios. Nomeia Enviados Especiais e Representantes para crises específicas.</div><div class="nt">O SG produz Relatório Anual sobre a Atividade da Organização para a AGONU — principal documento de prestação de contas da ONU.</div>`,"Sérgio Vieira de Mello":`<div class="st2">Sérgio Vieira de Mello (1948–2003)</div><div class="sb2">Diplomata brasileiro, o funcionário da ONU mais bem-sucedido da história. Alto Comissário da ONU para Direitos Humanos (2002–03). Serviu no Congo, Moçambique, Camboja, Bósnia, Kosovo e Timor-Leste. Negociava com grupos extremistas quando necessário para salvar vidas.</div><div class="al">Morto em 19 ago. 2003 no ataque com caminhão-bomba à sede da ONU em Bagdá, Iraque. 22 funcionários mortos no maior ataque contra a ONU da história.</div><div class="sb2">Filme: <em>"Sérgio"</em> (Netflix, 2020). Livro: <em>"Chasing the Flame"</em> — Samantha Power. Símbolo máximo do compromisso brasileiro com o multilateralismo.</div>`}},
+ag:{e:"Órgão Principal · Arts. 9–22",t:"Assembleia Geral da ONU",b:["p:Principal","ok:193 membros","ok:Ativo"],tabs:["Funcionamento","Poderes","Votação","Polêmicas","Brasil"],c:{"Funcionamento":`<div class="dgr"><div class="dm"><div class="dml">Membros</div><div class="dmv">193 Estados (todos os membros)</div></div><div class="dm"><div class="dml">Sessão ordinária</div><div class="dmv">3ª terça-feira de setembro</div></div><div class="dm"><div class="dml">Presidente</div><div class="dmv">Eleito a cada sessão (1 ano)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">NY — General Assembly Hall</div></div></div><div class="st2">Como funciona</div><div class="sb2">Principal órgão deliberativo e representativo. <strong>1 país = 1 voto</strong> — independente de tamanho, população ou PIB. O debate geral (1ª semana) reúne chefes de Estado. <em>Brasil abre o debate geral desde 1955</em> — os EUA falam em segundo.</div><div class="st2">As 6 Comissões</div><div class="sb2"><strong>1ª</strong> Desarmamento e Segurança · <strong>2ª</strong> Econômica e Financeira · <strong>3ª</strong> Social, Humanitária e Cultural · <strong>4ª</strong> Política Especial e Descolonização · <strong>5ª</strong> Administrativa e Orçamentária · <strong>6ª</strong> Jurídica</div>`,"Poderes":`<div class="st2">O que a AGNU pode</div><div class="sb2">Discutir qualquer questão da Carta; fazer recomendações (não vinculantes) a Estados e ao CSNU; aprovar o orçamento (por 2/3); eleger membros não-permanentes do CSNU; admitir novos membros; eleger juízes da CIJ; criar organismos subsidiários (PNUD, UNICEF, ACNUR).</div><div class="al"><strong>O que NÃO PODE:</strong> Fazer recomendações sobre situação que o CSNU esteja examinando (Art. 12). Emitir decisões obrigatórias em paz e segurança. Suas resoluções são politicamente importantes mas juridicamente NÃO vinculantes.</div><div class="nt"><strong>Res. 377 — Uniting for Peace (1950):</strong> Se o CSNU estiver paralisado por veto, a AGNU pode se reunir em sessão especial de emergência (24h) e fazer recomendações sobre uso coletivo da força. Usada: Coreia 1950, Suez 1956, Afeganistão 1980, Ucrânia 2022.</div>`,"Votação":`<div class="st2">Regras — Art. 18</div><div class="sb2"><strong>Questões importantes:</strong> 2/3 dos presentes e votantes — paz e segurança, eleição de membros, admissão/expulsão, orçamento.<br><strong>Outras questões:</strong> maioria simples.</div><div class="st2">Distribuição por Grupos Regionais</div><div class="vb"><div class="vs" style="background:#4a5870;width:28%">África 54</div><div class="vs" style="background:#3a4f66;width:27%">Ásia 53</div><div class="vs" style="background:#2a4558;width:17%">AL&amp;C 33</div><div class="vs" style="background:#1e3a4a;width:14%">EU 28</div><div class="vs" style="background:#162e3c;width:7%">WEOG 13</div><div class="vs" style="background:#0e2030;width:7%">Out 12</div></div><div class="sb2">O Sul Global forma maioria esmagadora. Usa a AGNU para pressionar pautas como NOEI (1974), descolonização e reforma do CSNU — temas bloqueados no CSNU pelo P5.</div>`,"Polêmicas":`<div class="al"><strong>Res. 3379 (1975):</strong> AGNU equiparou sionismo ao racismo. Revogada em 1991 (Res. 46/86) — único caso de revogação de resolução na história da AGNU.</div><div class="al"><strong>Res. 68/262 (2014):</strong> Declarou nulo o referendo de anexação da Crimeia — 100 votos a 11, 58 abstenções. Sem efeito coercitivo mas politicamente relevante.</div><div class="al"><strong>Res. ES-11 (2022):</strong> Sessão especial de emergência — 141 votos exigindo retirada russa da Ucrânia. Brasil votou a favor.</div><div class="sb2"><strong>Financiamento:</strong> EUA pagam ~22% do orçamento regular. Retenções de contribuições americanas (anos 1980, 2017–19) causam crises financeiras graves na ONU.</div>`,"Brasil":`<div class="st2">Tradição na AGNU</div><div class="sb2">Brasil abre o debate geral desde <strong>1955</strong> — João Carlos Muniz se voluntariou quando ninguém queria falar primeiro. O discurso do chanceler (ou presidente) é o principal ato de política externa multilateral do ano. Osvaldo Aranha presidiu a <strong>1ª sessão da AGNU</strong> (1947).</div><div class="nt">Nas votações, o Brasil costuma votar com o G77 em questões econômicas e com o Ocidente em direitos humanos — postura de equilíbrio da PEB. A abstenção nas votações sobre Ucrânia em 2022 foi exceção que gerou debate.</div>`}},
+cs:{e:"Órgão Principal · Cap. V–VII",t:"Conselho de Segurança",b:["p:Principal","ok:15 membros","ok:Ativo"],tabs:["Composição","Poderes","Veto","Eleições","Casos","Operações de Paz","Reforma dos Assentos"],c:{"Composição":`<div class="dgr"><div class="dm"><div class="dml">Membros permanentes (P5)</div><div class="dmv">EUA, Rússia, China, França, Reino Unido</div></div><div class="dm"><div class="dml">Membros não-permanentes</div><div class="dmv">10 (AGNU elege, mandato 2 anos)</div></div><div class="dm"><div class="dml">Presidência</div><div class="dmv">Rotativa mensal (ordem alfabética em inglês)</div></div><div class="dm"><div class="dml">Aprovação</div><div class="dmv">9/15 votos + nenhum veto do P5</div></div></div><div class="st2">P5 — Membros Permanentes</div><div class="mg"><span class="mb p5">🇺🇸 EUA</span><span class="mb p5">🇷🇺 Rússia</span><span class="mb p5">🇨🇳 China</span><span class="mb p5">🇫🇷 França</span><span class="mb p5">🇬🇧 Reino Unido</span></div><div class="st2">Grupos Regionais (não-permanentes)</div><div class="sb2">África (3) · Ásia-Pacífico (2) · América Latina e Caribe (2) · Europa Oriental (1) · Europa Ocidental e outros (2). Mandato de 2 anos, sem reeleição imediata.</div>`,"Poderes":`<div class="st2">Responsabilidade Principal — Art. 24</div><div class="sb2">O CSNU tem <em>responsabilidade primária pela manutenção da paz e segurança internacionais</em>. Suas resoluções aprovadas sob Cap. VII são <strong>juridicamente vinculantes</strong> para todos os membros (Art. 25) — diferença fundamental com a AGNU.</div><div class="st2">Instrumentos do Cap. VII</div><div class="sb2"><strong>Art. 40</strong> — Medidas provisórias (cessar-fogo)<br><strong>Art. 41</strong> — Medidas não militares: sanções, embargo, ruptura diplomática<br><strong>Art. 42</strong> — Uso da força quando Art. 41 insuficiente<br><strong>Art. 43</strong> — Acordos de contingente militar (previsto, nunca implementado)</div><div class="nt"><strong>Operações de Paz ("Cap. VI½"):</strong> Criadas na prática por Dag Hammarskjöld. Princípios: consentimento, imparcialidade, não uso da força exceto em legítima defesa ou proteção de civis.</div>`,"Veto":`<div class="st2">Art. 27(3) — Poder de Veto</div><div class="sb2">Um voto negativo de qualquer P5 bloqueia qualquer resolução substantiva. <strong>Abstenção ≠ veto:</strong> Precedente Coreia (1950) — URSS boicotava; Res. 83 aprovada.</div><div class="vb" style="height:32px"><div class="vs" style="background:var(--red);width:32%">🇷🇺 ~130</div><div class="vs" style="background:#3a5070;width:26%">🇺🇸 ~90</div><div class="vs" style="background:#806040;width:9%">🇬🇧 ~32</div><div class="vs" style="background:#605038;width:6%">🇫🇷 ~18</div><div class="vs" style="background:#304840;width:6%">🇨🇳 ~20</div></div><div class="al">EUA vetaram resoluções críticas a Israel 40+ vezes desde 1972. Rússia+China vetaram intervenções na Síria 17+ vezes desde 2011 — os casos mais emblemáticos de paralisia do CSNU.</div><div class="nt"><strong>Res. 76/262 (2022 — "Iniciativa ACT"):</strong> Toda vez que um P5 usar o veto, a AGNU é automaticamente convocada em 10 dias para debater. Aprovada por 143 votos. Aumenta o custo político do veto sem eliminá-lo.</div>`,"Eleições":`<div class="st2">Como são eleitos os não-permanentes</div><div class="sb2">Eleição na AGNU exigindo <strong>2/3 dos votos</strong>. Campanhas duram anos — países constroem coalizões, abrem embaixadas, fazem concessões diplomáticas. O custo pode chegar a dezenas de milhões de dólares.</div><div class="st2">Brasil no CSNU</div><div class="sb2">Brasil foi eleito <strong>11 vezes</strong> — recorde na América Latina.</div><div class="mg"><span class="mb br">🇧🇷 1946–47 · 1951–52 · 1954–55 · 1963–64 · 1967–68</span><span class="mb br">🇧🇷 1988–89 · 1993–94 · 1998–99 · 2004–05 · 2010–11 · 2022–23</span></div>`,"Casos":`<div class="st2">Casos Históricos Emblemáticos</div><div class="sb2"><strong>Coreia (1950):</strong> Aprovado por ausência soviética — abstenção não é veto.<br><strong>Kuwait (1990–91):</strong> Consenso P5; Res. 678 autorizou a força.<br><strong>Kosovo (1999):</strong> NATO agiu sem CSNU (Rússia teria vetado) — legalidade vs. legitimidade.<br><strong>Iraque (2003):</strong> EUA invadiram sem autorização — maior contestação ao CSNU.<br><strong>Líbia (2011):</strong> Res. 1973 = "zona de exclusão aérea"; aliados interpretaram como licença para troca de regime.<br><strong>Síria (2011–):</strong> 17+ vetos russo-chineses; 500 mil mortos; paralisia total.</div>`,
+"Operações de Paz":`<div class="st2">O que são as Operações de Paz</div><div class="sb2">Criadas por Dag Hammarskjöld durante a Crise de Suez (1956). Não previstas explicitamente na Carta — chamadas <em>"Capítulo VI½"</em>. Princípios clássicos: <strong>consentimento das partes, imparcialidade, não uso da força</strong> salvo em legítima defesa.</div><div class="st2">Principais Operações</div><div class="dgr"><div class="dm"><div class="dml">MONUSCO · Congo</div><div class="dmv">1999–presente · Maior missão ativa · +13.000 tropas · Brigada de Intervenção (2013)</div></div><div class="dm"><div class="dml">UNIFIL · Líbano</div><div class="dmv">1978–presente · Fronteira Israel-Líbano · Expandida após 2006</div></div><div class="dm"><div class="dml">UNPROFOR · Bósnia</div><div class="dmv">1992–1995 · Falhou em Srebrenica · Impulsionou a R2P</div></div><div class="dm"><div class="dml">MINUSTAH · Haiti</div><div class="dmv">2004–2017 · <strong>Brasil liderou</strong> o componente militar · Encerrada após estabilização</div></div><div class="dm"><div class="dml">UNTAC · Camboja</div><div class="dmv">1992–1993 · Eleições pós-conflito · Sérgio Vieira de Mello atuou</div></div><div class="dm"><div class="dml">UNMISS · Sudão do Sul</div><div class="dmv">2011–presente · Proteção de civis · Crise humanitária grave</div></div></div><div class="st2">Brasil nas Operações de Paz</div><div class="sb2">O Brasil participou de mais de <strong>50 operações</strong> desde 1948. Ponto alto: liderança da MINUSTAH no Haiti (2004–2017), a maior projeção de força da história brasileira. A participação brasileira reflete o Art. 4º da CF/1988 e o compromisso histórico com o multilateralismo.</div><div class="nt">Após Srebrenica (1995): reformas exigiram mandatos mais robustos. Agenda <strong>Mulheres, Paz e Segurança</strong> (Res. 1325/2000): Brasil lançou I PNA (2017) e II PNA (2023). Meta: 15% de militares e 20% de policiais femininas nas missões.</div>`,
+"Reforma dos Assentos":`<div class="st2">Por que reformar o CSNU?</div>
+<div class="sb2">O CSNU reflete a correlação de forças de 1945. Alemanha e Japão — inimigos derrotados — são economias do G7 sem assento permanente. A África (54 países) e a América Latina não têm P5. A Índia tem 1,4 bilhão de pessoas. A legitimidade do Conselho é crescentemente questionada pelo Sul Global.</div>
+
+<div class="st2">1 · G4 — Brasil, Alemanha, Japão, Índia</div>
+<div class="sb2"><strong>Proposta:</strong> 6 novos assentos permanentes (2 África, 2 Ásia-Pacífico, 1 AL&amp;C, 1 Europa Ocidental) + 4 novos não-permanentes. Cada membro do G4 candidato ao próprio assento.<br><strong>Veto:</strong> pode aceitar assento permanente sem veto inicial ou com veto limitado (postura brasileira de pragmatismo).<br><strong>Apoio:</strong> EUA e UK (vago), França (explícito). China e Rússia resistem.</div>
+
+<div class="st2">2 · Uniting for Consensus (UFC)</div>
+<div class="sb2"><strong>Liderado por:</strong> Itália, Paquistão, México, Argentina, Coreia do Sul, Espanha.<br><strong>Proposta:</strong> Expansão <em>apenas</em> dos membros não-permanentes — sem novos P5. Mandatos mais longos com possibilidade de reeleição.<br><strong>Motivação:</strong> Oposição à candidatura dos países do G4 (Paquistão bloqueia Índia; Argentina e México bloqueiam Brasil; Itália bloqueia Alemanha).</div>
+<div class="al">O UFC é o principal obstáculo político ao G4: sem consenso regional, nenhum país consegue articular os 2/3 necessários na AGNU.</div>
+
+<div class="st2">3 · Consenso de Ezulwini — União Africana</div>
+<div class="sb2"><strong>Adotado em 2005.</strong> A UA reivindica: 2 assentos permanentes africanos <strong>com direito a veto</strong> + 5 assentos não-permanentes para a África. Lema: "nada sobre a África sem a África".<br><strong>Disputas internas:</strong> Egito, Nigéria e África do Sul brigam pela vaga permanente — o que fragmenta a posição africana na prática.</div>
+
+<div class="st2">4 · Grupo L.69</div>
+<div class="sb2">Coalizão de países em desenvolvimento (África, Ásia, AL, Pacífico) que defende expansão em ambas as categorias — permanentes e não-permanentes — com foco na maior representatividade do Sul Global. O Brasil integra esse grupo em paralelo ao G4.</div>
+
+<div class="st2">5 · Modelo de Assentos Semipermanentes</div>
+<div class="sb2">Proposta intermediária: criação de assentos com mandatos mais longos (8–10 anos), reelegíveis, mas sem direito a veto. Buscaria conciliar a demanda por maior representatividade (G4/África) com a resistência ao veto (UFC). Não teve proposta formal consolidada até hoje.</div>
+
+<div class="st2">6 · Reforma do Veto</div>
+<div class="sb2"><strong>Abolição:</strong> defendida por vários países do Sul Global, mas politicamente inviável (exigiria o próprio P5 ratificar).<br><strong>Restrição:</strong> proposta francesa/mexicana (2013): P5 se absteria voluntariamente em casos de genocídio e crimes em massa. 100+ países apoiam; EUA, Rússia e China recusam.<br><strong>Código de conduta (ACT):</strong> Res. 76/262 (2022) — todo uso de veto convoca a AGNU em 10 dias. Aprovada por 143 votos. Aumenta o custo político sem eliminar o veto.</div>
+
+<div class="st2">7 · IGN — Negociações Intergovernamentais</div>
+<div class="sb2">Processo formal criado pela AGNU em 2009 para negociar a reforma do CSNU. Reúne todos os 193 membros. Cinco clusters temáticos: categorias de membros, veto, representação regional, relação AGNU-CSNU, tamanho e métodos de trabalho.<br><strong>Problema:</strong> 15+ anos de negociações sem proposta única consolidada. O IGN funciona sem texto de negociação formal — cada grupo apresenta suas posições sem que nenhuma avance para votação.</div>
+<div class="al">Entrave estrutural: qualquer emenda à Carta exige aprovação por 2/3 da AGNU e ratificação por 2/3 dos membros, <em>incluindo todos os P5</em>. Os próprios detentores do veto precisam ratificar sua limitação — paradoxo que torna a reforma quase impossível.</div>
+
+<div class="st2">8 · Reforma Histórica de 1965</div>
+<div class="sb2">A única reforma bem-sucedida do CSNU até hoje: expansão de 6 para <strong>10 membros não-permanentes</strong> (EC ao Art. 23 da Carta). Aprovada em 1963, em vigor em 1965 — contexto da descolonização e aumento do número de membros da ONU.</div>
+
+<div class="st2">Brasil e a Reforma</div>
+<div class="sb2">Ambição histórica rastreável até 1926 (saída da Liga por não obter assento permanente). O Brasil integra o G4 e o L.69. Argumentos: maior país da América do Sul; 10ª maior contribuição ao orçamento da ONU; democracia estável; líder em operações de paz; prestígio no Sul Global. Aceita assento permanente sem veto para viabilizar negociação.</div>`}},
+ecosoc:{e:"Órgão Principal · Arts. 61–72",t:"ECOSOC",b:["p:Principal","ok:54 membros"],tabs:["Visão Geral","Comissões"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Membros</div><div class="dmv">54 (AGNU elege, mandato 3 anos)</div></div><div class="dm"><div class="dml">Sessão principal</div><div class="dmv">Julho (NY) + segmentos em Genebra</div></div><div class="dm"><div class="dml">Supervisiona</div><div class="dmv">15 agências + fundos/programas</div></div><div class="dm"><div class="dml">Criação</div><div class="dmv">Carta da ONU, 1945</div></div></div><div class="st2">Papel</div><div class="sb2">Coordena o trabalho econômico e social da ONU e de suas agências. Faz recomendações sobre <em>desenvolvimento econômico, direitos humanos, questões sociais</em>. Atua como elo entre agências (OMS, FAO, OIT) e a AGNU.</div>`,"Comissões":`<div class="st2">Comissões Funcionais</div><div class="sb2">Estatística · Desenvolvimento Social · <strong>Condição da Mulher (CSW)</strong> · Narcóticos · Prevenção ao Crime · Ciência e Tecnologia · Populações e Desenvolvimento · Floresta.</div><div class="nt"><strong>Reforma 2006:</strong> Comissão de Direitos Humanos substituída pelo <strong>Conselho de Direitos Humanos</strong> (47 membros, AGNU, Genebra) com Revisão Periódica Universal (RPU) de todos os países.</div><div class="st2">Comissões Regionais</div><div class="sb2"><strong>CEPAL</strong> (América Latina, Santiago) · CEA (África) · CESAP (Ásia-Pacífico) · CEE (Europa) · CEAO (Ásia Ocidental). A CEPAL é de enorme relevância para o Brasil — berço do estruturalismo latino-americano (Prebisch, Furtado).</div>`}},
+cij:{e:"Órgão Principal · Arts. 92–96",t:"Corte Internacional de Justiça",b:["p:Principal","ok:15 juízes","ok:Haia"],tabs:["Funcionamento","Jurisdição","Casos","Polêmicas"],c:{"Funcionamento":`<div class="dgr"><div class="dm"><div class="dml">Sede</div><div class="dmv">Palácio da Paz, Haia, Países Baixos</div></div><div class="dm"><div class="dml">Composição</div><div class="dmv">15 juízes — AGNU + CSNU elegem</div></div><div class="dm"><div class="dml">Mandato</div><div class="dmv">9 anos, renovável. Eleições a cada 3 anos (5 vagas)</div></div><div class="dm"><div class="dml">Idiomas</div><div class="dmv">Francês e Inglês (oficiais)</div></div></div><div class="st2">Órgão Judicial Principal</div><div class="sb2">Sucessora do TPJI da Liga das Nações. Dois tipos de competência: <strong>contenciosa</strong> (decide disputas entre Estados) e <strong>consultiva</strong> (emite opiniões jurídicas a pedido da ONU). <em>Apenas Estados podem ser partes</em> — indivíduos vão ao TPI.</div>`,"Jurisdição":`<div class="st2">Jurisdição Contenciosa</div><div class="sb2">É <em>consensual</em>: ambos os Estados devem aceitar — via cláusula compromissória em tratados, declaração de aceitação geral (Art. 36§2 — cláusula facultativa) ou acordo especial (compromis).</div><div class="al"><strong>Problema do cumprimento:</strong> Decisões são obrigatórias, mas execução depende do CSNU (Art. 94). Se um P5 for parte perdedora, pode vetar a execução. Ex: Nicarágua c. EUA (1986) — CIJ condenou; EUA retiraram-se e ignoraram.</div><div class="st2">Opiniões Consultivas Relevantes</div><div class="sb2">Legalidade de armas nucleares (1996) · Muro israelense na Cisjordânia (2004) · Independência do Kosovo (2010) · Separação de Chagos (2019) · Obrigações climáticas (2024)</div>`,"Casos":`<div class="st2">Casos Recentes Emblemáticos</div><div class="al"><strong>África do Sul c. Israel (2024):</strong> Genocídio em Gaza. CIJ emitiu medidas cautelares determinando proteção de civis sem ordenar cessar-fogo explícito. Caso ainda em andamento.</div><div class="al"><strong>Ucrânia c. Rússia (2022):</strong> Liminar ordenando suspensão da operação militar. Rússia ignorou — demonstra o limite da CIJ sem enforcement independente.</div>`,"Polêmicas":`<div class="al">O P5 tem presença "tradicional" na CIJ por influência política — embora os juízes devam ser independentes. Na prática, nenhuma grande potência ficou sem representação por décadas.</div><div class="sb2"><strong>Brasil na CIJ:</strong> Nunca foi réu em caso contencioso. Participou como terceiro interveniente (Art. 62) no caso Nicarágua c. Colômbia. O Brasil usa predominantemente a OMC para disputas comerciais e o CIRDI para disputas de investimentos.</div>`}},
+secgeral:{e:"Órgão Principal · Arts. 97–101",t:"Secretaria-Geral da ONU",b:["p:Principal","ok:Nova York"],tabs:["O SG","Lista de SGs","Funções","Sérgio Vieira de Mello"],c:{"O SG":`<div class="dgr"><div class="dm"><div class="dml">Eleição</div><div class="dmv">CSNU recomenda → AGNU aprova</div></div><div class="dm"><div class="dml">Mandato</div><div class="dmv">5 anos, renovável uma vez (convenção)</div></div><div class="dm"><div class="dml">Atual</div><div class="dmv">António Guterres (Portugal) desde 2017</div></div><div class="dm"><div class="dml">Staff</div><div class="dmv">~44.000 funcionários internacionais</div></div></div><div class="st2">O "Servidor do Mundo"</div><div class="sb2">O SG é simultaneamente chefe administrativo (Art. 97) e ator político (Art. 99 — pode chamar atenção do CSNU para qualquer ameaça à paz). Dag Hammarskjöld expandiu dramaticamente o papel político do cargo. Por convenção: nunca é nacional de um P5 e a escolha rotaciona por região.</div>`,"Lista de SGs":`<div class="st2">Todos os Secretários-Gerais</div><div class="sb2"><strong>1. Trygve Lie</strong> (Noruega, 1946–53) — Primeiro SG; renunciou sob pressão soviética após apoiar intervenção na Coreia.<br><br><strong>2. Dag Hammarskjöld</strong> (Suécia, 1953–61) — Morreu em acidente aéreo no Congo. Nobel póstumo. Criou as operações de paz.<br><br><strong>3. U Thant</strong> (Birmânia, 1961–71) — Primeiro não-europeu. Mediação na Crise dos Mísseis de Cuba (1962).<br><br><strong>4. Kurt Waldheim</strong> (Áustria, 1972–81) — Passado nazista revelado décadas depois.<br><br><strong>5. Javier Pérez de Cuéllar</strong> (Peru, 1982–91) — Resolveu Malvinas e Irã-Iraque.<br><br><strong>6. Boutros Boutros-Ghali</strong> (Egito, 1992–96) — Único SG com mandato único; vetado pelos EUA para o 2º mandato.<br><br><strong>7. Kofi Annan</strong> (Gana, 1997–2006) — Nobel 2001. Criou R2P e ODS. Escândalo Petróleo por Alimento.<br><br><strong>8. Ban Ki-moon</strong> (Coreia do Sul, 2007–16) — Foco em clima e ODS.<br><br><strong>9. António Guterres</strong> (Portugal, 2017–presente) — Ex-PM e ex-Alto Comissário para Refugiados.</div>`,"Funções":`<div class="st2">Art. 99 — Poder Político</div><div class="sb2">O SG pode levar ao CSNU qualquer questão que ameace a paz — raramente usado formalmente, mas enormemente influente via bons ofícios, mediação e relatórios. Nomeia Enviados Especiais e Representantes para crises específicas.</div><div class="nt">O SG produz Relatório Anual sobre a Atividade da Organização para a AGNU — principal documento de prestação de contas da ONU.</div>`,"Sérgio Vieira de Mello":`<div class="st2">Sérgio Vieira de Mello (1948–2003)</div><div class="sb2">Diplomata brasileiro, o funcionário da ONU mais bem-sucedido da história. Alto Comissário da ONU para Direitos Humanos (2002–03). Serviu no Congo, Moçambique, Camboja, Bósnia, Kosovo e Timor-Leste. Negociava com grupos extremistas quando necessário para salvar vidas.</div><div class="al">Morto em 19 ago. 2003 no ataque com caminhão-bomba à sede da ONU em Bagdá, Iraque. 22 funcionários mortos no maior ataque contra a ONU da história.</div><div class="sb2">Filme: <em>"Sérgio"</em> (Netflix, 2020). Livro: <em>"Chasing the Flame"</em> — Samantha Power. Símbolo máximo do compromisso brasileiro com o multilateralismo.</div>`}},
 tc:{e:"Órgão Principal · Arts. 86–91",t:"Conselho de Tutela",b:["p:Principal","xx:Suspenso 1994"],tabs:["Visão Geral"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1945 — Carta da ONU</div></div><div class="dm"><div class="dml">Status atual</div><div class="dmv">Suspenso em 1994 (Palau independente)</div></div></div><div class="st2">O que foi</div><div class="sb2">Supervisionava territórios sem governo próprio — herdados dos mandatos da Liga das Nações e das potências derrotadas na 2ª Guerra. Composto pelos P5 + países administradores.</div><div class="sb2">Trabalho concluído em 1994 quando <strong>Palau</strong> (último território sob tutela, administrado pelos EUA) tornou-se independente. Existe hoje apenas no papel.</div><div class="nt">Proposta de reformular o Conselho para tratar de "bens comuns globais" (oceanos, atmosfera, espaço, Antártica) — nunca avançou substantivamente.</div>`}},
 oms:{e:"Agência Especializada",t:"OMS — Org. Mundial da Saúde",b:["ag:Agência","ok:194 membros","ok:Genebra 1948"],tabs:["Visão Geral","Governança","Polêmicas"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">7 abr. 1948 — Dia Mundial da Saúde</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Genebra, Suíça</div></div><div class="dm"><div class="dml">DG atual</div><div class="dmv">Tedros Adhanom (Etiópia), desde 2017</div></div><div class="dm"><div class="dml">Orçamento</div><div class="dmv">~US$ 6 bi/biênio (metade voluntário)</div></div></div><div class="st2">Mandato</div><div class="sb2">Autoridade diretiva em saúde no sistema ONU. Responsabilidades: normas internacionais de saúde; resposta a emergências (ESPII); Regulamento Sanitário Internacional (RSI, 2005); assistência técnica; dados globais.</div>`,"Governança":`<div class="st2">Estrutura</div><div class="sb2"><strong>Assembleia Mundial da Saúde</strong> (maio, Genebra) — máximo órgão, 1 Estado = 1 voto. <strong>Conselho Executivo</strong> — 34 membros técnicos. <strong>Secretariado</strong> — DG eleito.</div><div class="st2">ESPII e RSI</div><div class="sb2">O RSI obriga Estados a notificar eventos que possam constituir Emergência de Saúde Pública de Importância Internacional. ESPIIs desde 2005: H1N1 (2009), Ebola (2014, 2018), Zika (2016), COVID-19 (2020–23), Mpox (2022, 2024).</div>`,"Polêmicas":`<div class="al"><strong>COVID-19 (2020):</strong> OMS criticada por atrasar declaração de ESPII e pelos elogios à resposta chinesa. Trump retirou os EUA em jul. 2020; Biden reverteu em jan. 2021.</div><div class="al"><strong>Financiamento privado:</strong> Bill &amp; Melinda Gates Foundation é a 2ª maior financiadora — críticas sobre influência de fundações privadas em saúde pública global.</div><div class="nt">Tratado Global de Pandemias: negociado desde 2021. Prazo de mai. 2024 não cumprido; prorrogado. Debate: soberania vs. coordenação global.</div>`}},
 oit:{e:"Agência Especializada · 1919",t:"OIT — Org. Internacional do Trabalho",b:["ag:Agência","ok:187 membros","ok:Genebra","ok:Nobel 1969"],tabs:["Visão Geral","Tripartismo","Convenções"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">1919 — Tratado de Versalhes</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Genebra</div></div><div class="dm"><div class="dml">Nobel da Paz</div><div class="dmv">1969 (50 anos)</div></div><div class="dm"><div class="dml">Origem</div><div class="dmv">Única agência da Liga das Nações ativa</div></div></div><div class="st2">Mandato</div><div class="sb2">Promove direitos no trabalho, emprego decente, proteção social e diálogo social. Publica <strong>Convenções</strong> (obrigatórias quando ratificadas) e <strong>Recomendações</strong> (não vinculantes). Única agência criada com a Liga das Nações ainda em funcionamento.</div>`,"Tripartismo":`<div class="st2">Estrutura Única no Sistema ONU</div><div class="sb2">A OIT é a única agência com estrutura <strong>tripartite</strong>: governos, empregadores e trabalhadores têm representação e votam separadamente. Cada Estado tem 4 delegados: 2 governamentais + 1 patronal + 1 trabalhista. Isso diferencia a OIT de todos os outros organismos internacionais.</div>`,"Convenções":`<div class="st2">8 Convenções Fundamentais</div><div class="sb2">Trabalho forçado (n.29 e 105) · Trabalho infantil (n.138 e 182) · Discriminação (n.111) · Liberdade sindical (n.87 e 98) · Remuneração igual (n.100)</div><div class="nt">Brasil ratificou todas as 8. A CLT (1943) foi influenciada pelas convenções da OIT. A OIT produz relatórios especiais sobre trabalho análogo à escravidão no Brasil.</div>`}},
@@ -1092,17 +1101,30 @@ unesco:{e:"Agência Especializada",t:"UNESCO",b:["ag:Agência","ok:193 membros",
 fmi:{e:"Inst. de Bretton Woods",t:"FMI — Fundo Monetário Internacional",b:["ag:Agência","ok:190 membros","ok:Washington 1945"],tabs:["Visão Geral","Governança","Polêmicas","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">Bretton Woods, jul. 1944 — vigor dez. 1945</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Washington D.C.</div></div><div class="dm"><div class="dml">DG atual</div><div class="dmv">Kristalina Georgieva (Bulgária) desde 2019</div></div><div class="dm"><div class="dml">Recursos</div><div class="dmv">~US$ 943 bi em DES (SDR)</div></div></div><div class="st2">Mandato</div><div class="sb2">Criado em Bretton Woods junto com o Banco Mundial para dar estabilidade ao sistema monetário internacional pós-guerra. Missões: <em>supervisão macroeconômica</em> (Consultas do Art. IV), <em>assistência financeira</em> a países em dificuldades de balanço de pagamentos, <em>assistência técnica</em>.</div>`,"Governança":`<div class="st2">Sistema de Cotas e Votos</div><div class="sb2">Voto ponderado por cotas. EUA: ~17% — único com poder de veto de facto (decisões importantes exigem 85%). Reforma de 2010 (implementada 2016) ampliou cotas de China, Índia, Brasil e Rússia. Por convenção: DG sempre europeu; presidente do Banco Mundial, americano.</div>`,"Polêmicas":`<div class="al">Condicionalidades dos anos 1980–90 (Consenso de Washington): austeridade, privatizações, liberalização como condição para empréstimos — aprofundaram crises (Argentina 1998–2001, Ásia 1997–98). O FMI reconheceu parcialmente os erros em publicações dos anos 2010.</div>`,"Brasil":`<div class="st2">Brasil e o FMI</div><div class="sb2">Brasil recorreu ao FMI várias vezes: 1998 (blindagem), 2001–02 (empréstimo US$ 30 bi). Em 2005, Lula quitou antecipadamente a dívida (US$ 15,5 bi), declarando "independência financeira". Brasil participa do G-20 financeiro e tem cota relevante no FMI.</div>`}},
 bird:{e:"Inst. de Bretton Woods",t:"Banco Mundial (BIRD)",b:["ag:Agência","ok:189 membros","ok:Washington 1944"],tabs:["Visão Geral","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">Bretton Woods, 1944</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Washington D.C.</div></div><div class="dm"><div class="dml">Presidente</div><div class="dmv">Ajay Banga (Índia/EUA) desde 2023</div></div><div class="dm"><div class="dml">Missão</div><div class="dmv">Redução da pobreza extrema</div></div></div><div class="st2">Grupo do Banco Mundial</div><div class="sb2"><strong>BIRD</strong> — empréstimos a países de renda média · <strong>AID</strong> — crédito concessionário aos mais pobres · <strong>IFC</strong> — setor privado · <strong>MIGA</strong> — garantia de investimentos · <strong>CIRDI</strong> — resolução de disputas de investimentos.</div>`,"Brasil":`<div class="st2">Brasil e o Banco Mundial</div><div class="sb2">Brasil é um dos maiores tomadores históricos. Com o desenvolvimento brasileiro, migrou do BIRD para a IFC (setor privado). Participa dos debates sobre reforma da governança.</div>`}},
 aiea:{e:"Agência Especializada",t:"AIEA — Energia Atômica",b:["ag:Agência","ok:178 membros","ok:Viena 1957","ok:Nobel 2005"],tabs:["Visão Geral","TNP","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Fundação</div><div class="dmv">29 jul. 1957 — "Átomos para a Paz"</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Viena, Áustria</div></div><div class="dm"><div class="dml">Nobel da Paz</div><div class="dmv">2005 (AIEA + ElBaradei)</div></div><div class="dm"><div class="dml">DG atual</div><div class="dmv">Rafael Grossi (Argentina)</div></div></div><div class="st2">Mandato Dual</div><div class="sb2"><em>Promover o uso pacífico da energia nuclear</em> E <em>verificar que não seja desviada para fins militares</em> (salvaguardas nucleares). É o "cão de guarda nuclear" da ONU — inspeciona instalações e certifica conformidade com o TNP.</div>`,"TNP":`<div class="st2">Tratado de Não-Proliferação Nuclear</div><div class="sb2">O TNP (1968, vigor 1970) divide o mundo em: <strong>Estados com armas nucleares</strong> (os P5) — comprometem-se com desarmamento progressivo — e <strong>Estados sem armas nucleares</strong> — não desenvolvem em troca de acesso à tecnologia civil.</div><div class="al">Fora do TNP: Índia, Paquistão, Israel (nunca aderiram) e Coreia do Norte (saiu em 2003). Israel pratica "ambiguidade nuclear". O TNP está sob tensão crescente: os P5 não desarmaram.</div>`,"Brasil":`<div class="st2">Brasil, AIEA e o tema nuclear</div><div class="sb2">Brasil tem um dos maiores programas de enriquecimento de urânio do mundo (Resende, RJ) e reservas gigantescas. A Constituição de 1988 proíbe armas nucleares. Brasil é signatário do TNP e do Tratado de Tlatelolco (América Latina nuclearmente livre). O <strong>ABACC</strong> (Agência Brasil-Argentina de Contabilidade e Controle) é mecanismo bilateral único de verificação.</div>`}},
+unodc:{e:"Escritório das NU · Viena",t:"UNODC — Drogas e Crime",b:["p:Principal","ok:Viena 1997","ok:190+ membros"],tabs:["Visão Geral","Convenção de Palermo","Brasil"],c:{
+"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1997 (fusão UNDCP + CICP)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Viena</div></div><div class="dm"><div class="dml">Mandato</div><div class="dmv">Crime transnacional, drogas, terrorismo, corrupção</div></div><div class="dm"><div class="dml">DG</div><div class="dmv">Ghada Waly (Egito) desde 2020</div></div></div><div class="st2">Funções</div><div class="sb2">O UNODC assessora Estados no combate ao crime organizado transnacional, tráfico de drogas e terrorismo. Publica o <em>World Drug Report</em> anualmente. Administra os tratados internacionais sobre drogas e crime.</div>`,
+"Convenção de Palermo":`<div class="st2">Convenção de Palermo (2000)</div><div class="sb2">Convenção das NU contra o Crime Organizado Transnacional. Em vigor desde 2003. <strong>Principal instrumento</strong> contra o crime organizado. Complementada por 3 protocolos.</div><div class="dgr"><div class="dm"><div class="dml">Protocolo 1</div><div class="dmv">Tráfico de pessoas — Protocolo de Palermo</div></div><div class="dm"><div class="dml">Protocolo 2</div><div class="dmv">Tráfico de migrantes</div></div><div class="dm"><div class="dml">UNCAC (2003)</div><div class="dmv">Convenção das NU contra a Corrupção · 190+ partes</div></div><div class="dm"><div class="dml">Brasil</div><div class="dmv">Ratificou a Convenção e os Protocolos</div></div></div>`,
+"Brasil":`<div class="st2">Brasil e o UNODC</div><div class="sb2">O Brasil trabalha com o UNODC no combate ao crime organizado transnacional, tráfico de drogas e de pessoas. Ratificou a Convenção de Palermo e a UNCAC. O tráfico que atravessa o Brasil — especialmente via Paraguai e Bolívia — é monitorado pelo UNODC.</div>`}},
+unoosa:{e:"Escritório das NU · Viena",t:"UNOOSA — Espaço Exterior",b:["p:Principal","ok:Viena","ok:Tratado do Espaço 1967"],tabs:["Visão Geral","Tratado do Espaço","Debate Atual"],c:{
+"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1958 (unidade), escritório desde 1993</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Viena</div></div><div class="dm"><div class="dml">Mandato</div><div class="dmv">Uso pacífico do espaço exterior</div></div></div><div class="st2">Funções</div><div class="sb2">Promove cooperação no uso pacífico do espaço. Mantém o Registro de Objetos Lançados. Administra os 5 tratados espaciais internacionais. Apoia países em desenvolvimento no acesso ao espaço.</div>`,
+"Tratado do Espaço":`<div class="st2">Tratado do Espaço Exterior (1967)</div><div class="sb2">Pedra angular do direito espacial. Princípios: <strong>espaço é patrimônio comum da humanidade</strong>, não sujeito à soberania; veda armas nucleares no espaço; proíbe bases militares na Lua.</div><div class="al">Corrida espacial privada e mineração lunar criam tensões com o princípio do patrimônio comum. EUA, Luxemburgo e Emirados autorizaram propriedade privada de recursos espaciais — contestado por muitos países.</div><div class="nt">Acordos de Artemis (2020): EUA lideram cooperação para exploração lunar — alternativa ao regime do Tratado da Lua (1979), pouco ratificado.</div>`,
+"Debate Atual":`<div class="st2">Governança Espacial Contemporânea</div><div class="sb2">Proliferação de satélites (Starlink: +6.000), debris espaciais e militarização criam pressões sobre o regime de 1967. O UNOOSA trabalha em diretrizes de sustentabilidade de longo prazo.</div><div class="al">EUA, China, Rússia e Índia testaram armas anti-satélite (ASAT). AGNU aprovou resolução em 2022 pedindo moratória nos testes. EUA, UK e Canadá comprometeram-se; Rússia e China recusaram.</div>`}},
+unido:{e:"Agência Especializada · Viena",t:"UNIDO — Desenvolvimento Industrial",b:["ag:Agência","ok:Viena 1985","ok:170 membros"],tabs:["Visão Geral","Mandato"],c:{
+"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1966 (AGNU) → ag. especializada 1985</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Viena</div></div><div class="dm"><div class="dml">Membros</div><div class="dmv">~170 Estados</div></div><div class="dm"><div class="dml">DG</div><div class="dmv">Gerd Müller (Alemanha) desde 2021</div></div></div><div class="st2">Mandato</div><div class="sb2">Promove o desenvolvimento industrial inclusivo e sustentável. Apoia países em desenvolvimento na industrialização, transferência de tecnologia, investimento e comércio. Alinha-se ao ODS 9 da Agenda 2030.</div>`,
+"Mandato":`<div class="st2">Industrialização como vetor de desenvolvimento</div><div class="sb2">A UNIDO defende que industrialização é essencial para o desenvolvimento econômico, especialmente dos países africanos. Atua em energias renováveis, eficiência energética e padrões industriais.</div><div class="nt">Brasil é membro fundador. EUA e UK saíram nos anos 1990, questionando eficiência. O debate sobre industrialização na UNIDO é relevante para a agenda Sul-Sul brasileira.</div>`}},
+
 unicef:{e:"Fundo das Nações Unidas",t:"UNICEF",b:["fd:Fundo","ok:Nova York 1946","ok:Nobel 1965"],tabs:["Visão Geral","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Nome completo</div><div class="dmv">Fundo das Nações Unidas para a Infância</div></div><div class="dm"><div class="dml">Fundação</div><div class="dmv">11 dez. 1946 (pós-2ª Guerra)</div></div><div class="dm"><div class="dml">Nobel da Paz</div><div class="dmv">1965</div></div><div class="dm"><div class="dml">Financiamento</div><div class="dmv">100% voluntário (governos + privado)</div></div></div><div class="st2">Mandato</div><div class="sb2">Criado para ajudar crianças europeias devastadas pela guerra; tornou-se permanente em 1953 com mandato global: <em>promoção dos direitos da criança</em>, saúde infantil, nutrição, educação, proteção contra violência e exploração. Implementa a Convenção sobre os Direitos da Criança (1989 — mais ratificada da história: 196 países).</div>`,"Brasil":`<div class="st2">UNICEF no Brasil</div><div class="sb2">Um dos maiores escritórios do UNICEF. Atua em mortalidade infantil, violência, educação em regiões vulneráveis (Semiárido, Amazônia). O <strong>Selo UNICEF</strong> certifica municípios que melhoram indicadores da infância.</div>`}},
 pnud:{e:"Programa das Nações Unidas",t:"PNUD + IDH",b:["fd:Programa","ok:170 países","ok:Nova York"],tabs:["Visão Geral","IDH","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1965 (fusão EPTA + Fundo Especial)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Nova York</div></div><div class="dm"><div class="dml">Administrador atual</div><div class="dmv">Achim Steiner (Alemanha/Brasil)</div></div><div class="dm"><div class="dml">Presença</div><div class="dmv">170 países e territórios</div></div></div><div class="st2">Mandato</div><div class="sb2">Rede global de desenvolvimento da ONU. Apoia países na erradicação da pobreza, redução de desigualdades e construção da resiliência. Coordena a implementação dos <strong>ODS</strong> e publica o Relatório de Desenvolvimento Humano anual.</div>`,"IDH":`<div class="st2">Índice de Desenvolvimento Humano</div><div class="sb2">Criado por <strong>Mahbub ul Haq</strong> (com Amartya Sen), publicado pelo PNUD desde 1990. Combina três dimensões: <em>saúde</em> (expectativa de vida), <em>educação</em> (anos de escolaridade) e <em>renda</em> (RNB per capita PPC). Principal indicador alternativo ao PIB per capita.</div><div class="nt">Variantes: IDH ajustado à desigualdade (IDHAD), IDH de Gênero, Índice de Desigualdade de Gênero, Índice de Pobreza Multidimensional. O Brasil tem IDH "muito alto" mas gap enorme entre IDH bruto e IDHAD — revela alta desigualdade.</div>`,"Brasil":`<div class="st2">PNUD e Brasil</div><div class="sb2">Um dos maiores escritórios do PNUD. Achim Steiner tem raízes brasileiras. Brasil historicamente oscila entre IDH "alto" e "muito alto" (~posição 84/193 em 2023). O gap entre IDH bruto e IDHAD (ajustado pela desigualdade) é um dos maiores do mundo.</div>`}},
-acnur:{e:"Alto Comissariado da ONU",t:"ACNUR — Refugiados",b:["fd:Alto Comissariado","ok:Genebra 1950","ok:Nobel 1954 e 1981"],tabs:["Visão Geral","Convenção 1951","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">14 dez. 1950 (mandato da AGONU)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Genebra</div></div><div class="dm"><div class="dml">Nobel da Paz</div><div class="dmv">1954 e 1981</div></div><div class="dm"><div class="dml">Pessoas assistidas</div><div class="dmv">+114 milhões (2023)</div></div></div><div class="st2">Mandato</div><div class="sb2">Protege e apoia refugiados, solicitantes de asilo, deslocados internos e apátridas. Implementa a Convenção de 1951 e o Protocolo de 1967. Princípio fundamental: <em>non-refoulement</em> — nenhum refugiado pode ser devolvido a país onde sofra perseguição.</div>`,"Convenção 1951":`<div class="st2">Convenção de 1951 sobre Refugiados</div><div class="sb2">Define refugiado como pessoa que <em>tem fundado temor de perseguição</em> por motivo de raça, religião, nacionalidade, grupo social ou opinião política, e está fora de seu país. Originalmente limitada à Europa e a 1951 — o Protocolo de 1967 removeu essas restrições.</div><div class="al">145 países são signatários. Debate atual: refugiados climáticos (sem proteção formal), migrantes econômicos (fora da definição), crescente fechamento de fronteiras nos países desenvolvidos.</div>`,"Brasil":`<div class="st2">Brasil e Refugiados</div><div class="sb2">Brasil é signatário da Convenção de 1951 e tem legislação progressista (Lei 9474/1997 e Lei de Migração 13445/2017). Recebeu haitianos (pós-2010), sírios e venezuelanos. O CONARE é modelo de governança. Sérgio Vieira de Mello foi Alto Comissário substituto antes de sua morte em Bagdá (2003).</div>`}},
+acnur:{e:"Alto Comissariado da ONU",t:"ACNUR — Refugiados",b:["fd:Alto Comissariado","ok:Genebra 1950","ok:Nobel 1954 e 1981"],tabs:["Visão Geral","Convenção 1951","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">14 dez. 1950 (mandato da AGNU)</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Genebra</div></div><div class="dm"><div class="dml">Nobel da Paz</div><div class="dmv">1954 e 1981</div></div><div class="dm"><div class="dml">Pessoas assistidas</div><div class="dmv">+114 milhões (2023)</div></div></div><div class="st2">Mandato</div><div class="sb2">Protege e apoia refugiados, solicitantes de asilo, deslocados internos e apátridas. Implementa a Convenção de 1951 e o Protocolo de 1967. Princípio fundamental: <em>non-refoulement</em> — nenhum refugiado pode ser devolvido a país onde sofra perseguição.</div>`,"Convenção 1951":`<div class="st2">Convenção de 1951 sobre Refugiados</div><div class="sb2">Define refugiado como pessoa que <em>tem fundado temor de perseguição</em> por motivo de raça, religião, nacionalidade, grupo social ou opinião política, e está fora de seu país. Originalmente limitada à Europa e a 1951 — o Protocolo de 1967 removeu essas restrições.</div><div class="al">145 países são signatários. Debate atual: refugiados climáticos (sem proteção formal), migrantes econômicos (fora da definição), crescente fechamento de fronteiras nos países desenvolvidos.</div>`,"Brasil":`<div class="st2">Brasil e Refugiados</div><div class="sb2">Brasil é signatário da Convenção de 1951 e tem legislação progressista (Lei 9474/1997 e Lei de Migração 13445/2017). Recebeu haitianos (pós-2010), sírios e venezuelanos. O CONARE é modelo de governança. Sérgio Vieira de Mello foi Alto Comissário substituto antes de sua morte em Bagdá (2003).</div>`}},
 pnuma:{e:"Programa das Nações Unidas",t:"PNUMA — Meio Ambiente",b:["fd:Programa","ok:Nairobi 1972"],tabs:["Visão Geral","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1972 — Conferência de Estocolmo</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Nairobi, Quênia (único órgão ONU em país em desenvolvimento)</div></div></div><div class="st2">Mandato</div><div class="sb2">Coordena atividades ambientais na ONU. Administra tratados como o Protocolo de Montreal (ozônio), Convenção de Basileia (resíduos perigosos) e Convenção sobre Diversidade Biológica. Publica o <em>Global Environment Outlook</em>.</div>`,"Brasil":`<div class="st2">Brasil e PNUMA</div><div class="sb2">Brasil sediou a <strong>ECO-92</strong> (Rio, 1992) — maior evento da ONU até então: Agenda 21, UNFCCC (Convenção do Clima), Convenção da Biodiversidade. Rio+20 (2012) também no Brasil. A <strong>COP30</strong> de clima está prevista para <strong>Belém, novembro de 2025</strong>.</div>`}},
 pam:{e:"Programa das Nações Unidas",t:"PAM — Programa Alimentar Mundial",b:["fd:Programa","ok:Roma 1961","ok:Nobel 2020"],tabs:["Visão Geral"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Criação</div><div class="dmv">1961 (experimental); permanente 1965</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Roma</div></div><div class="dm"><div class="dml">Nobel da Paz</div><div class="dmv">2020</div></div><div class="dm"><div class="dml">Alcance</div><div class="dmv">~150 milhões de pessoas/ano</div></div></div><div class="st2">Mandato</div><div class="sb2">Maior organização humanitária do mundo. Fornece assistência alimentar em emergências e apoia sistemas alimentares sustentáveis. Atua em zonas de conflito, desastres e crises prolongadas. Ganhou o Nobel "pelos esforços para combater a fome, pela contribuição à paz em áreas de conflito e como força motriz nos esforços de prevenir o uso da fome como arma" (2020).</div>`}},
 tpi:{e:"Tribunal Internacional",t:"TPI — Tribunal Penal Internacional",b:["ok:Haia 2002","ok:123 membros"],tabs:["Visão Geral","Polêmicas","Brasil"],c:{"Visão Geral":`<div class="dgr"><div class="dm"><div class="dml">Estatuto de Roma</div><div class="dmv">Adotado 17 jul. 1998; vigor 1 jul. 2002</div></div><div class="dm"><div class="dml">Sede</div><div class="dmv">Haia, Países Baixos</div></div><div class="dm"><div class="dml">Jurisdição</div><div class="dmv">Genocídio, crimes de guerra, crimes contra a humanidade, agressão</div></div><div class="dm"><div class="dml">Membros</div><div class="dmv">123 (EUA, China, Rússia, Índia: não-membros)</div></div></div><div class="st2">Diferença com a CIJ</div><div class="sb2">A CIJ julga <em>Estados</em>; o TPI julga <em>indivíduos</em>. O TPI é complementar às jurisdições nacionais — só atua quando o Estado não pode ou não quer julgar. Pode emitir mandados de prisão para chefes de Estado.</div>`,"Polêmicas":`<div class="al">EUA assinaram o Estatuto de Roma em 2000 (Clinton) mas nunca ratificaram; retiraram a assinatura em 2002 (Bush). Negociaram Acordos de Não-Entrega (BIA) com países para proteger cidadãos americanos.</div><div class="al">Rússia retirou assinatura em 2016 após o TPI qualificar como "ocupação" a anexação da Crimeia. Mandado de prisão contra Putin (2023, por deportação ilegal de crianças ucranianas) — Rússia ignorou.</div><div class="al">A União Africana acusou o TPI de perseguir desproporcionalmente líderes africanos. Burundi saiu em 2017.</div>`,"Brasil":`<div class="st2">Brasil e o TPI</div><div class="sb2">Brasil foi o <strong>1º país a ratificar o Estatuto de Roma</strong> no hemisfério ocidental (2002). A Constituição foi emendada (EC 45/2004) para permitir a submissão ao TPI — antes havia conflito com a vedação à prisão perpétua.</div><div class="al">A decisão do STF de 2025 determinando que Bolsonaro não pode deixar o Brasil enquanto responde a processos foi questionada por ele com base em argumentos que tangenciam a jurisdição do TPI — caso ainda em desenvolvimento.</div>`}},
-veto:{e:"Mecanismo do CS",t:"O Poder de Veto",b:["p:CS","ok:Art. 27","ok:P5"],tabs:["Como Funciona","Histórico","Reforma"],c:{"Como Funciona":`<div class="st2">Art. 27(3) da Carta</div><div class="sb2">Decisões substantivas do CS requerem 9 votos afirmativos dos 15 membros, <em>incluindo os votos concorrentes dos 5 membros permanentes</em>. Um único voto negativo de qualquer P5 impede a adoção, independentemente dos outros 14 votos.</div><div class="nt"><strong>Abstenção não é veto:</strong> Precedente Coreia (1950) — URSS boicotava o CS; Res. 83 aprovada mesmo assim. A abstenção ou ausência de um P5 não bloqueia a resolução — interpretação consolidada.</div><div class="nt"><strong>Double veto:</strong> Um P5 pode vetar a própria decisão de se uma questão é processual ou substantiva — ferramenta raramente usada.</div>`,"Histórico":`<div class="st2">Vetômetro Histórico</div><div class="vb" style="height:36px"><div class="vs" style="background:var(--red);width:33%">🇷🇺 URSS+Rússia ~130</div><div class="vs" style="background:#3a5070;width:26%">🇺🇸 EUA ~90</div><div class="vs" style="background:#806040;width:9%">🇬🇧 ~32</div><div class="vs" style="background:#605038;width:6%">🇫🇷 ~18</div><div class="vs" style="background:#304840;width:6%">🇨🇳 ~20</div></div><div class="sb2"><strong>Rússia/URSS (~130):</strong> Maioria na Guerra Fria; pós-2011: vetos sírios (17+); 2022: Ucrânia.<br><strong>EUA (~90):</strong> Principalmente resoluções críticas a Israel (40+).<br><strong>China (~20):</strong> Cresce pós-1971 (substituiu Taiwan). Myanmar, Belize, Guatemala.<br><strong>UK (~32) e França (~18):</strong> Concentrados nos anos 1940–60, questões coloniais.</div>`,"Reforma":`<div class="st2">Propostas de Reforma do Veto</div><div class="sb2"><strong>Proposta francesa/mexicana (2013):</strong> P5 deveriam se abster voluntariamente em casos de atrocidades em massa. Apoiada por 100+ países mas não pelos EUA, Rússia ou China.</div><div class="nt"><strong>Res. 76/262 (2022 — "Iniciativa ACT"):</strong> Toda vez que um P5 usar o veto, a AGONU é convocada automaticamente em 10 dias para debater. Aprovada 143 votos. Não elimina o veto mas aumenta seu custo político.</div><div class="al">O paradoxo da reforma: qualquer emenda à Carta que elimine ou restrinja o veto precisa ser aprovada pelos próprios detentores do veto. Os P5 nunca concordarão em abrir mão de seu privilégio estrutural.</div>`}},
-reforma:{e:"Debate Contemporâneo",t:"Reforma do CS da ONU + G4",b:["ok:Em debate","br:Interesse Brasil","ok:G4"],tabs:["Por que reformar","G4","Obstáculos"],c:{"Por que reformar":`<div class="st2">O CS de 1945 ≠ o mundo de hoje</div><div class="sb2">Alemanha e Japão (inimigos de 1945) são economias gigantes sem assento permanente. A África tem 54 países e nenhum membro permanente. A Índia tem 1,4 bilhão de pessoas sem assento permanente. A legitimidade do CS é questionada constantemente.</div><div class="st2">Propostas em debate</div><div class="sb2"><strong>G4</strong> (Brasil, Alemanha, Japão, Índia) — ampliação com novos membros permanentes incluindo eles próprios.<br><strong>UFC (Uniting for Consensus)</strong>, liderado por Itália, Paquistão, Coreia do Sul, Argentina — se opõe ao G4, prefere só ampliação de não-permanentes.<br><strong>P5</strong> — EUA e UK apoiam vagamente o G4; China e Rússia resistem; França apoia.</div><div class="al">Reformar a Carta exige 2/3 da AGONU + ratificação por 2/3 dos membros, <em>incluindo todos os P5</em>. Qualquer P5 pode bloquear — paradoxo estrutural.</div>`,"G4":`<div class="st2">Proposta do G4</div><div class="sb2">Ampliar o CS de 15 para 25 membros: criar 6 novos assentos permanentes (2 África, 2 Ásia, 1 AL, 1 Europa Ocidental) + 4 novos não-permanentes.</div><div class="mg"><span class="mb br">🇧🇷 Brasil</span><span class="mb p5" style="border-color:rgba(150,150,200,.3);color:#9898d8">🇩🇪 Alemanha</span><span class="mb p5" style="border-color:rgba(150,150,200,.3);color:#9898d8">🇯🇵 Japão</span><span class="mb p5" style="border-color:rgba(150,150,200,.3);color:#9898d8">🇮🇳 Índia</span></div>`,"Obstáculos":`<div class="al"><strong>Argentina e México</strong> não apoiam o Brasil formalmente, preferindo uma vaga rotativa entre os países da AL. Isso fragmenta a aliança regional brasileira.</div><div class="al"><strong>Paquistão</strong> bloqueia a Índia. <strong>China</strong> é ambígua em relação ao Japão. <strong>Itália, Espanha e Argentina</strong> lideram o UFC contra o G4. Sem consenso regional, a reforma fica paralisada.</div><div class="nt">O Itamaraty sinaliza que o Brasil pode aceitar assento permanente sem veto ou com veto limitado para facilitar a negociação — demonstra pragmatismo diplomático.</div>`}},
-"brasil-cs":{e:"Política Externa Brasileira",t:"Brasil no Conselho de Segurança",b:["br:Brasil","ok:11 mandatos","ok:G4"],tabs:["Histórico","Mandato 2022–23","Candidatura"],c:{"Histórico":`<div class="st2">11 Mandatos como Não-Permanente</div><div class="mg"><span class="mb br">1946–47</span><span class="mb br">1951–52</span><span class="mb br">1954–55</span><span class="mb br">1963–64</span><span class="mb br">1967–68</span><span class="mb br">1988–89</span><span class="mb br">1993–94</span><span class="mb br">1998–99</span><span class="mb br">2004–05</span><span class="mb br">2010–11</span><span class="mb br">2022–23</span></div><div class="st2">Postura Tradicional</div><div class="sb2">O Brasil no CS costuma: valorizar o direito internacional e a Carta da ONU; privilegiar solução diplomática; ser cauteloso com uso da força sem autorização do CS; defender representação do Sul Global; apoiar operações de paz (Brasil liderou a MINUSTAH no Haiti, 2004–17).</div>`,"Mandato 2022–23":`<div class="st2">Mandato 2022–23</div><div class="sb2">Brasil tomou posse em jan. 2022 ainda sob Bolsonaro e passou a jan. 2023 sob Lula. O mandato coincidiu com a invasão russa da Ucrânia (fev. 2022).</div><div class="al">Posição brasileira: <strong>abstenção</strong> na resolução da AGONU que condenou a Rússia (mas votou a favor na sessão especial ES-11). Postura criticada pelo Ocidente e vista como equilíbrio por países do Sul Global. Lula buscou posição de potencial mediador.</div>`,"Candidatura":`<div class="st2">A Candidatura Permanente</div><div class="sb2">Ambição central da PEB rastreável até 1926 (Liga das Nações). Argumentos brasileiros: maior país da América do Sul; 10ª maior contribuição ao orçamento da ONU; democracia estável; líder em operações de paz; prestígio no Sul Global.</div><div class="al">Obstáculo principal: Argentina e México não apoiam. Paquistão bloqueia a Índia (enfraquecendo o G4). China ambígua quanto ao Japão. Sem apoio coeso do G4, a reforma permanece paralisada.</div>`}},
-r2p:{e:"Doutrina Contemporânea",t:"R2P e a RwP Brasileira",b:["ok:2005","br:RwP Brasileira"],tabs:["R2P","RwP","Casos"],c:{"R2P":`<div class="st2">Responsabilidade de Proteger (R2P)</div><div class="sb2">Adotada na Cúpula Mundial de 2005 (Documento Final, §§138–139). Três pilares:<br><br><strong>Pilar 1:</strong> Cada Estado tem responsabilidade de proteger sua população contra genocídio, crimes de guerra, limpeza étnica e crimes contra a humanidade.<br><br><strong>Pilar 2:</strong> A comunidade internacional deve ajudar Estados a cumprir essa responsabilidade.<br><br><strong>Pilar 3:</strong> Se um Estado falha manifestamente, a comunidade pode agir — através do CS.</div><div class="al"><strong>Tensão com a soberania:</strong> A R2P representa a maior erosão do princípio de não intervenção desde a Carta. É invocada de forma seletiva — críticos apontam que potências ocidentais usam quando têm interesse e ignoram quando não têm (ex.: Gaza vs. Líbia).</div>`,"RwP":`<div class="st2">Responsabilidade ao Proteger (RwP) — Brasil 2011</div><div class="sb2">Reação brasileira ao uso distorcido da R2P na Líbia. Proposta pela presidenta Dilma Rousseff na AGONU (2011) e desenvolvida pelo embaixador Antonio de Aguiar Patriota.</div><div class="nt"><strong>Princípios da RwP:</strong> A intervenção deve ser último recurso; meios pacíficos devem ser esgotados; a ação deve ser proporcional; deve minimizar vítimas civis; quem intervém presta contas ao CS durante e após a operação; critério de "danos menores que a inação".</div><div class="sb2">A RwP não foi formalmente adotada pela ONU mas influenciou os debates sobre intervenção. Representa a posição brasileira típica: multilateralismo ativo com deferência à soberania e ao CS.</div>`,"Casos":`<div class="st2">R2P em Prática</div><div class="sb2"><strong>Líbia (2011):</strong> Primeiro uso explícito da R2P como base para intervenção. Res. 1973 autorizou "zona de exclusão aérea"; aliados derrubaram Gaddafi. Rússia e China se arrependeram da abstenção — nunca mais votaram assim.</div><div class="al">A deturpação da R2P na Líbia resultou em anos de guerra civil. A Rússia passou a usar esse caso como argumento para vetar qualquer intervenção — incluindo na Síria, onde atrocidades muito maiores ocorreram sem resposta.</div><div class="sb2"><strong>Srebrenica (1995):</strong> O fracasso em Srebrenica foi o principal motivo para criar a R2P — 8 mil bósnios muçulmanos massacrados sob os olhos de tropas holandesas da ONU.</div>`}}
+veto:{e:"Mecanismo do CSNU",t:"O Poder de Veto",b:["p:CSNU","ok:Art. 27","ok:P5"],tabs:["Como Funciona","Histórico","Reforma"],c:{"Como Funciona":`<div class="st2">Art. 27(3) da Carta</div><div class="sb2">Decisões substantivas do CSNU requerem 9 votos afirmativos dos 15 membros, <em>incluindo os votos concorrentes dos 5 membros permanentes</em>. Um único voto negativo de qualquer P5 impede a adoção, independentemente dos outros 14 votos.</div><div class="nt"><strong>Abstenção não é veto:</strong> Precedente Coreia (1950) — URSS boicotava o CSNU; Res. 83 aprovada mesmo assim. A abstenção ou ausência de um P5 não bloqueia a resolução — interpretação consolidada.</div><div class="nt"><strong>Double veto:</strong> Um P5 pode vetar a própria decisão de se uma questão é processual ou substantiva — ferramenta raramente usada.</div>`,"Histórico":`<div class="st2">Vetômetro Histórico</div><div class="vb" style="height:36px"><div class="vs" style="background:var(--red);width:33%">🇷🇺 URSS+Rússia ~130</div><div class="vs" style="background:#3a5070;width:26%">🇺🇸 EUA ~90</div><div class="vs" style="background:#806040;width:9%">🇬🇧 ~32</div><div class="vs" style="background:#605038;width:6%">🇫🇷 ~18</div><div class="vs" style="background:#304840;width:6%">🇨🇳 ~20</div></div><div class="sb2"><strong>Rússia/URSS (~130):</strong> Maioria na Guerra Fria; pós-2011: vetos sírios (17+); 2022: Ucrânia.<br><strong>EUA (~90):</strong> Principalmente resoluções críticas a Israel (40+).<br><strong>China (~20):</strong> Cresce pós-1971 (substituiu Taiwan). Myanmar, Belize, Guatemala.<br><strong>UK (~32) e França (~18):</strong> Concentrados nos anos 1940–60, questões coloniais.</div>`,"Reforma":`<div class="st2">Propostas de Reforma do Veto</div><div class="sb2"><strong>Proposta francesa/mexicana (2013):</strong> P5 deveriam se abster voluntariamente em casos de atrocidades em massa. Apoiada por 100+ países mas não pelos EUA, Rússia ou China.</div><div class="nt"><strong>Res. 76/262 (2022 — "Iniciativa ACT"):</strong> Toda vez que um P5 usar o veto, a AGNU é convocada automaticamente em 10 dias para debater. Aprovada 143 votos. Não elimina o veto mas aumenta seu custo político.</div><div class="al">O paradoxo da reforma: qualquer emenda à Carta que elimine ou restrinja o veto precisa ser aprovada pelos próprios detentores do veto. Os P5 nunca concordarão em abrir mão de seu privilégio estrutural.</div>`}},
+reforma:{e:"Debate Contemporâneo",t:"Reforma do CSNU da ONU + G4",b:["ok:Em debate","br:Interesse Brasil","ok:G4"],tabs:["Por que reformar","G4","Obstáculos"],c:{"Por que reformar":`<div class="st2">O CSNU de 1945 ≠ o mundo de hoje</div><div class="sb2">Alemanha e Japão (inimigos de 1945) são economias gigantes sem assento permanente. A África tem 54 países e nenhum membro permanente. A Índia tem 1,4 bilhão de pessoas sem assento permanente. A legitimidade do CSNU é questionada constantemente.</div><div class="st2">Propostas em debate</div><div class="sb2"><strong>G4</strong> (Brasil, Alemanha, Japão, Índia) — ampliação com novos membros permanentes incluindo eles próprios.<br><strong>UFC (Uniting for Consensus)</strong>, liderado por Itália, Paquistão, Coreia do Sul, Argentina — se opõe ao G4, prefere só ampliação de não-permanentes.<br><strong>P5</strong> — EUA e UK apoiam vagamente o G4; China e Rússia resistem; França apoia.</div><div class="al">Reformar a Carta exige 2/3 da AGNU + ratificação por 2/3 dos membros, <em>incluindo todos os P5</em>. Qualquer P5 pode bloquear — paradoxo estrutural.</div>`,"G4":`<div class="st2">Proposta do G4</div><div class="sb2">Ampliar o CSNU de 15 para 25 membros: criar 6 novos assentos permanentes (2 África, 2 Ásia, 1 AL, 1 Europa Ocidental) + 4 novos não-permanentes.</div><div class="mg"><span class="mb br">🇧🇷 Brasil</span><span class="mb p5" style="border-color:rgba(150,150,200,.3);color:#9898d8">🇩🇪 Alemanha</span><span class="mb p5" style="border-color:rgba(150,150,200,.3);color:#9898d8">🇯🇵 Japão</span><span class="mb p5" style="border-color:rgba(150,150,200,.3);color:#9898d8">🇮🇳 Índia</span></div>`,"Obstáculos":`<div class="al"><strong>Argentina e México</strong> não apoiam o Brasil formalmente, preferindo uma vaga rotativa entre os países da AL. Isso fragmenta a aliança regional brasileira.</div><div class="al"><strong>Paquistão</strong> bloqueia a Índia. <strong>China</strong> é ambígua em relação ao Japão. <strong>Itália, Espanha e Argentina</strong> lideram o UFC contra o G4. Sem consenso regional, a reforma fica paralisada.</div><div class="nt">O Itamaraty sinaliza que o Brasil pode aceitar assento permanente sem veto ou com veto limitado para facilitar a negociação — demonstra pragmatismo diplomático.</div>`}},
+"brasil-cs":{e:"Política Externa Brasileira",t:"Brasil no Conselho de Segurança",b:["br:Brasil","ok:11 mandatos","ok:G4"],tabs:["Histórico","Mandato 2022–23","Candidatura"],c:{"Histórico":`<div class="st2">11 Mandatos como Não-Permanente</div><div class="mg"><span class="mb br">1946–47</span><span class="mb br">1951–52</span><span class="mb br">1954–55</span><span class="mb br">1963–64</span><span class="mb br">1967–68</span><span class="mb br">1988–89</span><span class="mb br">1993–94</span><span class="mb br">1998–99</span><span class="mb br">2004–05</span><span class="mb br">2010–11</span><span class="mb br">2022–23</span></div><div class="st2">Postura Tradicional</div><div class="sb2">O Brasil no CSNU costuma: valorizar o direito internacional e a Carta da ONU; privilegiar solução diplomática; ser cauteloso com uso da força sem autorização do CSNU; defender representação do Sul Global; apoiar operações de paz (Brasil liderou a MINUSTAH no Haiti, 2004–17).</div>`,"Mandato 2022–23":`<div class="st2">Mandato 2022–23</div><div class="sb2">Brasil tomou posse em jan. 2022 ainda sob Bolsonaro e passou a jan. 2023 sob Lula. O mandato coincidiu com a invasão russa da Ucrânia (fev. 2022).</div><div class="al">Posição brasileira: <strong>abstenção</strong> na resolução da AGNU que condenou a Rússia (mas votou a favor na sessão especial ES-11). Postura criticada pelo Ocidente e vista como equilíbrio por países do Sul Global. Lula buscou posição de potencial mediador.</div>`,"Candidatura":`<div class="st2">A Candidatura Permanente</div><div class="sb2">Ambição central da PEB rastreável até 1926 (Liga das Nações). Argumentos brasileiros: maior país da América do Sul; 10ª maior contribuição ao orçamento da ONU; democracia estável; líder em operações de paz; prestígio no Sul Global.</div><div class="al">Obstáculo principal: Argentina e México não apoiam. Paquistão bloqueia a Índia (enfraquecendo o G4). China ambígua quanto ao Japão. Sem apoio coeso do G4, a reforma permanece paralisada.</div>`}},
+r2p:{e:"Doutrina Contemporânea",t:"R2P e a RwP Brasileira",b:["ok:2005","br:RwP Brasileira"],tabs:["R2P","RwP","Casos"],c:{"R2P":`<div class="st2">Responsabilidade de Proteger (R2P)</div><div class="sb2">Adotada na Cúpula Mundial de 2005 (Documento Final, §§138–139). Três pilares:<br><br><strong>Pilar 1:</strong> Cada Estado tem responsabilidade de proteger sua população contra genocídio, crimes de guerra, limpeza étnica e crimes contra a humanidade.<br><br><strong>Pilar 2:</strong> A comunidade internacional deve ajudar Estados a cumprir essa responsabilidade.<br><br><strong>Pilar 3:</strong> Se um Estado falha manifestamente, a comunidade pode agir — através do CSNU.</div><div class="al"><strong>Tensão com a soberania:</strong> A R2P representa a maior erosão do princípio de não intervenção desde a Carta. É invocada de forma seletiva — críticos apontam que potências ocidentais usam quando têm interesse e ignoram quando não têm (ex.: Gaza vs. Líbia).</div>`,"RwP":`<div class="st2">Responsabilidade ao Proteger (RwP) — Brasil 2011</div><div class="sb2">Reação brasileira ao uso distorcido da R2P na Líbia. Proposta pela presidenta Dilma Rousseff na AGNU (2011) e desenvolvida pelo embaixador Antonio de Aguiar Patriota.</div><div class="nt"><strong>Princípios da RwP:</strong> A intervenção deve ser último recurso; meios pacíficos devem ser esgotados; a ação deve ser proporcional; deve minimizar vítimas civis; quem intervém presta contas ao CSNU durante e após a operação; critério de "danos menores que a inação".</div><div class="sb2">A RwP não foi formalmente adotada pela ONU mas influenciou os debates sobre intervenção. Representa a posição brasileira típica: multilateralismo ativo com deferência à soberania e ao CSNU.</div>`,"Casos":`<div class="st2">R2P em Prática</div><div class="sb2"><strong>Líbia (2011):</strong> Primeiro uso explícito da R2P como base para intervenção. Res. 1973 autorizou "zona de exclusão aérea"; aliados derrubaram Gaddafi. Rússia e China se arrependeram da abstenção — nunca mais votaram assim.</div><div class="al">A deturpação da R2P na Líbia resultou em anos de guerra civil. A Rússia passou a usar esse caso como argumento para vetar qualquer intervenção — incluindo na Síria, onde atrocidades muito maiores ocorreram sem resposta.</div><div class="sb2"><strong>Srebrenica (1995):</strong> O fracasso em Srebrenica foi o principal motivo para criar a R2P — 8 mil bósnios muçulmanos massacrados sob os olhos de tropas holandesas da ONU.</div>`}}
 };
+
 
 function S(id) {
   const d = D[id]; if (!d) return;
@@ -1201,27 +1223,32 @@ const TREATIES = {
     sub: "Arts. 9–22 da Carta da ONU. Órgão deliberativo universal: 193 membros, 1 voto cada.",
     link: "https://www.un.org/en/about-us/un-charter/full-text",
     link_label: "Carta da ONU — texto integral",
-    tabs: ["Artigos-Chave","Poderes e Limites","Resoluções Históricas"],
+    tabs: ["Artigos-Chave","Poderes e Limites","Resoluções Históricas","Brasil"],
     content: {
       "Artigos-Chave": [
         {num:"Art. 9", label:"Composição", type:"k", text:"Todos os membros das Nações Unidas são membros da Assembleia Geral. Cada Estado tem <strong>1 representante e 1 voto</strong>, independentemente de tamanho, população ou PIB."},
-        {num:"Art. 12", label:"Relação com o CS", type:"p", text:"<em>Enquanto o Conselho de Segurança estiver examinando uma questão</em>, a AGONU não poderá fazer recomendações sobre a mesma matéria, salvo se o CS o solicitar. Cria hierarquia CS > AG em paz e segurança."},
-        {num:"Art. 13", label:"Funções gerais", type:"k", text:"A AGONU iniciará estudos e fará recomendações destinados a promover cooperação internacional, desenvolvimento do DI, auxílio para a realização dos direitos humanos e liberdades fundamentais."},
+        {num:"Art. 12", label:"Relação com o CS", type:"p", text:"<em>Enquanto o Conselho de Segurança estiver examinando uma questão</em>, a AGNU não poderá fazer recomendações sobre a mesma matéria, salvo se o CS o solicitar. Cria hierarquia CS > AG em paz e segurança."},
+        {num:"Art. 13", label:"Funções gerais", type:"k", text:"A AGNU iniciará estudos e fará recomendações destinados a promover cooperação internacional, desenvolvimento do DI, auxílio para a realização dos direitos humanos e liberdades fundamentais."},
         {num:"Art. 18", label:"Votação", type:"k", text:"Questões <strong>importantes</strong>: 2/3 dos presentes e votantes (paz e segurança, eleições, orçamento, admissão/expulsão de membros). Outras questões: maioria simples."},
-        {num:"Art. 19", label:"Inadimplência", type:"p", text:"Estado que estiver em atraso no pagamento de suas contribuições financeiras não terá direito a voto na AGONU se a soma dos atrasados for igual ou superior às contribuições dos dois anos anteriores. <em>Polêmica: EUA retiveram contribuições nos anos 1980 e 2017–19.</em>"},
-        {num:"Res. 377 (1950)", label:"Uniting for Peace", type:"b", text:"Se o CS estiver paralisado por veto, a AGONU pode se reunir em sessão especial de emergência (convocada em 24h) e fazer recomendações sobre uso coletivo da força. Criada durante a Coreia. Usada em Suez (1956), Gaza (1997), Ucrânia (2022)."}
+        {num:"Art. 19", label:"Inadimplência", type:"p", text:"Estado que estiver em atraso no pagamento de suas contribuições financeiras não terá direito a voto na AGNU se a soma dos atrasados for igual ou superior às contribuições dos dois anos anteriores. <em>Polêmica: EUA retiveram contribuições nos anos 1980 e 2017–19.</em>"},
+        {num:"Res. 377 (1950)", label:"Uniting for Peace", type:"b", text:"Se o CS estiver paralisado por veto, a AGNU pode se reunir em sessão especial de emergência (convocada em 24h) e fazer recomendações sobre uso coletivo da força. Criada durante a Coreia. Usada em Suez (1956), Gaza (1997), Ucrânia (2022)."}
       ],
       "Poderes e Limites": [
-        {num:"Pode", label:"Funções da AGONU", type:"k", text:"Discutir qualquer questão da Carta · Fazer <strong>recomendações</strong> (não vinculantes) a Estados e ao CS · Aprovar o orçamento · Eleger membros não-permanentes do CS · Admitir novos membros · Eleger juízes da CIJ · Criar organismos subsidiários (PNUD, UNICEF, ACNUR foram criados por resoluções da AGONU)."},
+        {num:"Pode", label:"Funções da AGNU", type:"k", text:"Discutir qualquer questão da Carta · Fazer <strong>recomendações</strong> (não vinculantes) a Estados e ao CS · Aprovar o orçamento · Eleger membros não-permanentes do CS · Admitir novos membros · Eleger juízes da CIJ · Criar organismos subsidiários (PNUD, UNICEF, ACNUR foram criados por resoluções da AGNU)."},
         {num:"Não pode", label:"Limitações", type:"p", text:"Não pode fazer recomendações sobre situação que o CS esteja examinando (Art. 12). <strong>Não emite decisões obrigatórias</strong> em paz e segurança. Suas resoluções são 'soft law' — relevância política enorme, força jurídica limitada."},
-        {num:"Orçamento", label:"Financiamento", type:"b", text:"O orçamento regular da ONU é aprovado pela AGONU por <strong>2/3 dos votos</strong>. EUA pagam ~22% · Japão ~8% · China ~15% · Alemanha ~6% · Brasil ~2,9%. Retenções de contribuições americanas causam crises financeiras graves."}
+        {num:"Orçamento", label:"Financiamento", type:"b", text:"O orçamento regular da ONU é aprovado pela AGNU por <strong>2/3 dos votos</strong>. EUA pagam ~22% · Japão ~8% · China ~15% · Alemanha ~6% · Brasil ~2,9%. Retenções de contribuições americanas causam crises financeiras graves."}
       ],
       "Resoluções Históricas": [
         {num:"Res. 181 (1947)", label:"Partilha da Palestina", type:"p", text:"Propôs a partilha da Palestina em dois Estados. Israel declarou independência em 1948. Nunca implementada integralmente. Base de décadas de conflito."},
         {num:"Res. 2758 (1971)", label:"China na ONU", type:"k", text:"Reconheceu a RPC como única representante legítima da China na ONU, expulsando Taiwan. Votação: 76×35 (17 abstenções). <em>Marco da diplomacia chinesa.</em>"},
-        {num:"Res. 3379 (1975)", label:"Sionismo = racismo", type:"p", text:"Equiparou sionismo ao racismo — revogada em 1991 (Res. 46/86). <strong>Único caso de revogação de resolução na história da AGONU.</strong>"},
+        {num:"Res. 3379 (1975)", label:"Sionismo = racismo", type:"p", text:"Equiparou sionismo ao racismo — revogada em 1991 (Res. 46/86). <strong>Único caso de revogação de resolução na história da AGNU.</strong>"},
         {num:"Res. ES-11 (2022)", label:"Ucrânia", type:"b", text:"Sessão especial de emergência sobre invasão russa. 141 votos exigindo retirada. Brasil votou a favor. Rússia e Belarus votaram contra. Sem força coercitiva mas sinal político claro."},
-        {num:"Res. 76/262 (2022)", label:"Iniciativa ACT — Veto", type:"b", text:"Toda vez que um P5 usar o veto no CS, a AGONU é convocada automaticamente em 10 dias. Proposta por Liechtenstein. 143 votos. Aumenta o custo político do veto. <em>Iniciativa apoiada pelo Brasil.</em>"}
+        {num:"Res. 76/262 (2022)", label:"Iniciativa ACT — Veto", type:"b", text:"Toda vez que um P5 usar o veto no CS, a AGNU é convocada automaticamente em 10 dias. Proposta por Liechtenstein. 143 votos. Aumenta o custo político do veto. <em>Iniciativa apoiada pelo Brasil.</em>"}
+      ],
+      "Brasil": [
+        {num:"Tradição histórica", label:"Debate geral", type:"b", text:"Brasil abre o debate geral da AGNU desde <strong>1955</strong>. O chanceler ou presidente discursa primeiro, sinalizando prioridades da PEB. <em>Osvaldo Aranha</em> presidiu a 1ª sessão em 1947."},
+        {num:"DUDH 1948", label:"Participação ativa", type:"b", text:"Delegado brasileiro apresentou o projeto final da DUDH à III Comissão (1948). <strong>Bertha Lutz</strong> garantiu referência à igualdade de gênero na Carta (1945)."},
+        {num:"6 mandatos CDH", label:"Conselho DH", type:"b", text:"Eleito para 6 mandatos no CDH (2006-08, 2009-11, 2013-15, 2017-19, 2020-22, 2024-26). Propôs o mecanismo de Revisão Periódica Universal (RPU). Defende universalidade, objetividade e não seletividade."}
       ]
     }
   },
@@ -1232,20 +1259,20 @@ const TREATIES = {
     sub: "15 membros (5 permanentes + 10 eleitos). Responsabilidade primária pela manutenção da paz e segurança internacionais. Decisões vinculantes para todos os 193 membros.",
     link: "https://www.un.org/en/about-us/un-charter/chapter-5",
     link_label: "Carta da ONU — Cap. V–VII",
-    tabs: ["Artigos Essenciais","O Veto (Art. 27)","Capítulo VII"],
+    tabs: ["Artigos Essenciais","O Veto (Art. 27)","Capítulo VII","Brasil"],
     content: {
       "Artigos Essenciais": [
         {num:"Art. 24", label:"Responsabilidade principal", type:"k", text:"Os membros conferem ao CS <strong>responsabilidade primária pela manutenção da paz e segurança internacionais</strong> e concordam em que, no cumprimento dos deveres impostos por essa responsabilidade, o CS aja em nome deles."},
-        {num:"Art. 25", label:"Obrigatoriedade", type:"k", text:"Os membros das NU <em>concordam em aceitar e executar as decisões do CS</em> de acordo com a Carta. Diferença fundamental com a AGONU: decisões do CS são juridicamente vinculantes para todos os 193."},
+        {num:"Art. 25", label:"Obrigatoriedade", type:"k", text:"Os membros das NU <em>concordam em aceitar e executar as decisões do CS</em> de acordo com a Carta. Diferença fundamental com a AGNU: decisões do CS são juridicamente vinculantes para todos os 193."},
         {num:"Art. 27", label:"Votação e Veto", type:"p", text:"Decisões sobre questões processuais: 9 votos. Decisões sobre outras questões: 9 votos afirmativos, <strong>incluindo os votos concorrentes dos 5 membros permanentes</strong> — o poder de veto."},
-        {num:"Art. 23", label:"Composição (emendado 1965)", type:"k", text:"O CS é composto de 15 membros: 5 permanentes (EUA, Rússia, China, França, Reino Unido) + 10 não-permanentes eleitos pela AGONU por 2 anos. Presidência rotativa mensal."},
+        {num:"Art. 23", label:"Composição (emendado 1965)", type:"k", text:"O CS é composto de 15 membros: 5 permanentes (EUA, Rússia, China, França, Reino Unido) + 10 não-permanentes eleitos pela AGNU por 2 anos. Presidência rotativa mensal."},
         {num:"Art. 51", label:"Legítima defesa", type:"k", text:"Nenhuma disposição da Carta prejudicará o direito inerente de legítima defesa <strong>individual ou coletiva</strong>, no caso de ataque armado, até que o CS tome as medidas necessárias. Base jurídica de alianças defensivas como a OTAN."}
       ],
       "O Veto (Art. 27)": [
         {num:"Mecânica", label:"Como funciona", type:"k", text:"Um único voto negativo de qualquer P5 bloqueia qualquer resolução substantiva, independentemente dos outros 14 votos. <strong>Abstenção ≠ veto:</strong> precedente Coreia (1950) — URSS estava ausente; Res. 83 aprovada."},
         {num:"~130 vetos", label:"Rússia / URSS", type:"p", text:"Maioria na Guerra Fria bloqueando ações ocidentais. Pós-2011: <strong>17+ vetos na Síria</strong> (junto com China), bloqueando qualquer intervenção. 2022: veto à condenação da invasão da Ucrânia."},
         {num:"~90 vetos", label:"Estados Unidos", type:"p", text:"Principalmente vetando resoluções críticas a Israel (<strong>mais de 40 vezes desde 1972</strong>). Também vetou resoluções sobre Nicarágua, Granada, intervenções no Caribe."},
-        {num:"Res. 76/262", label:"Iniciativa ACT (2022)", type:"b", text:"Aprovada por 143 votos: cada uso de veto gera convocação automática da AGONU em 10 dias. Não elimina o veto mas cria custo político. <em>Apoiada pelo Brasil.</em>"},
+        {num:"Res. 76/262", label:"Iniciativa ACT (2022)", type:"b", text:"Aprovada por 143 votos: cada uso de veto gera convocação automática da AGNU em 10 dias. Não elimina o veto mas cria custo político. <em>Apoiada pelo Brasil.</em>"},
         {num:"Proposta FR/MX", label:"Auto-restrição voluntária", type:"b", text:"França e México propuseram em 2013 que P5 se abstenham voluntariamente em casos de atrocidades em massa. 100+ países apoiam. EUA, Rússia e China bloqueiam."}
       ],
       "Capítulo VII": [
@@ -1254,6 +1281,11 @@ const TREATIES = {
         {num:"Art. 42", label:"Uso da força", type:"p", text:"Se as medidas do Art. 41 forem inadequadas, o CS poderá <strong>levar a efeito, por meio de forças aéreas, navais ou terrestres, a ação que julgar necessária</strong> para manter ou restabelecer a paz e a segurança internacionais."},
         {num:"Art. 43", label:"Acordos militares", type:"p", text:"Previa acordos entre membros e o CS para fornecer contingentes militares. <strong>Nunca foi implementado.</strong> Por isso as 'operações de paz' (cap. VI½) operam com contribuições voluntárias."},
         {num:"Kosovo 1999", label:"Caso paradigmático", type:"p", text:"A NATO agiu sem autorização do CS (Rússia teria vetado). Gerou o debate legalidade vs. legitimidade. Relatório Annan: 'Intervenção ilegal mas legítima'. Antecedeu o desenvolvimento da R2P."}
+      ],
+      "Brasil": [
+        {num:"11 mandatos", label:"Recorde na AL", type:"b", text:"Brasil eleito <strong>11 vezes</strong> membro não-permanente do CSNU — recorde na América Latina. Último mandato: 2022-2023."},
+        {num:"MINUSTAH", label:"Haiti 2004-2017", type:"b", text:"Brasil liderou o componente militar da MINUSTAH. Mais de <strong>37.000 militares</strong> brasileiros serviram no Haiti."},
+        {num:"G4", label:"Candidatura permanente", type:"b", text:"Brasil integra o G4 pela criação de 6 novos assentos permanentes. Aceita assento <strong>sem veto</strong> para facilitar negociação. Argentina e México não apoiam dentro da AL."}
       ]
     }
   },
@@ -1294,7 +1326,7 @@ const TREATIES = {
     sub: "111 artigos em 19 capítulos. Assinada em 26 jun. 1945 em São Francisco; em vigor em 24 out. 1945. Constituição do direito internacional contemporâneo.",
     link: "https://www.un.org/en/about-us/un-charter/full-text",
     link_label: "Carta da ONU — texto integral (ONU)",
-    tabs: ["Arts. 1–2 (Propósitos)", "Cap. VI–VII (Paz)", "Arts. 103–104 (Supremacia)"],
+    tabs: ["Arts. 1–2 (Propósitos)", "Cap. VI–VII (Paz)", "Arts. 103–104 (Supremacia)", "Brasil"],
     content: {
       "Arts. 1–2 (Propósitos)": [
         {num:"Art. 1(1)", label:"Paz e segurança", type:"k", text:"Manter a paz e a segurança internacionais, e para esse fim <em>tomar, coletivamente, medidas efetivas para evitar ameaças à paz</em> e reprimir os atos de agressão ou outra qualquer ruptura da paz."},
@@ -1302,7 +1334,7 @@ const TREATIES = {
         {num:"Art. 1(3)", label:"Cooperação", type:"k", text:"Conseguir uma cooperação internacional para resolver os problemas internacionais de caráter econômico, social, cultural ou humanitário, e para <strong>promover e estimular o respeito aos direitos humanos</strong>."},
         {num:"Art. 2(4)", label:"Proibição da força", type:"k", text:"Todos os membros <em>deverão evitar em suas relações internacionais a ameaça ou o uso da força</em> contra a integridade territorial ou a independência política de qualquer Estado. Pilar do direito internacional moderno."},
         {num:"Art. 2(7)", label:"Não intervenção", type:"p", text:"Nenhum dispositivo da Carta autorizará as NU a intervirem em assuntos que dependam <strong>essencialmente da jurisdição de qualquer Estado</strong>. Tensão permanente com Cap. VII e com a R2P."},
-        {num:"Art. 2(1)", label:"Igualdade soberana", type:"k", text:"A Organização é baseada no princípio da <strong>igualdade soberana</strong> de todos os seus membros. Fundamento do sistema de 1 Estado = 1 voto na AGONU."}
+        {num:"Art. 2(1)", label:"Igualdade soberana", type:"k", text:"A Organização é baseada no princípio da <strong>igualdade soberana</strong> de todos os seus membros. Fundamento do sistema de 1 Estado = 1 voto na AGNU."}
       ],
       "Cap. VI–VII (Paz)": [
         {num:"Art. 33 (Cap.VI)", label:"Solução pacífica", type:"k", text:"As partes em uma controvérsia deverão procurar, antes de tudo, <strong>solução por negociação, inquérito, mediação, conciliação, arbitragem, solução judicial</strong>, ou outros meios pacíficos."},
@@ -1314,7 +1346,12 @@ const TREATIES = {
       "Arts. 103–104 (Supremacia)": [
         {num:"Art. 103", label:"Supremacia da Carta", type:"k", text:"No caso de conflito entre as obrigações dos membros em virtude da Carta das Nações Unidas e as obrigações resultantes de qualquer outro acordo internacional, <strong>prevalecerão as obrigações impostas pela Carta.</strong>"},
         {num:"Art. 104", label:"Capacidade jurídica", type:"k", text:"A Organização gozará, no território de cada membro, da <strong>capacidade jurídica necessária ao exercício de suas funções</strong> e à realização de seus propósitos. Fundamenta imunidades diplomáticas da ONU."},
-        {num:"Emendas", label:"Arts. 108–109", type:"p", text:"Emendas entram em vigor quando adotadas por <strong>2/3 da AGONU e ratificadas por 2/3 dos membros, incluindo todos os P5</strong>. Paradoxo da reforma: qualquer P5 pode bloquear. Apenas 5 emendas em 80 anos."}
+        {num:"Emendas", label:"Arts. 108–109", type:"p", text:"Emendas entram em vigor quando adotadas por <strong>2/3 da AGNU e ratificadas por 2/3 dos membros, incluindo todos os P5</strong>. Paradoxo da reforma: qualquer P5 pode bloquear. Apenas 5 emendas em 80 anos."}
+      ],
+      "Brasil": [
+        {num:"São Francisco 1945", label:"Membro fundador", type:"b", text:"Brasil foi membro fundador da ONU. <strong>Bertha Lutz</strong> incluiu igualdade de gênero na Carta. Osvaldo Aranha presidiu a 1ª AGNU (1947)."},
+        {num:"Art. 4º CF/88", label:"Constituição", type:"b", text:"A CF/1988 elege como princípios das relações internacionais: prevalência dos DH, autodeterminação, defesa da paz, repúdio ao racismo e ao terrorismo, concessão de asilo político."},
+        {num:"Contribuição", label:"2,9% do orçamento", type:"b", text:"O Brasil contribui com ~2,9% do orçamento regular da ONU — uma das maiores contribuições entre os países em desenvolvimento."}
       ]
     }
   },
@@ -1325,7 +1362,7 @@ const TREATIES = {
     sub: "70 artigos. Órgão judicial principal das Nações Unidas. Haia, Países Baixos. Sucessora do Tribunal Permanente de Justiça Internacional da Liga das Nações.",
     link: "https://www.icj-cij.org/statute",
     link_label: "Estatuto da CIJ — texto integral",
-    tabs: ["Jurisdição","Casos Paradigmáticos"],
+    tabs: ["Jurisdição","Casos Paradigmáticos","Brasil"],
     content: {
       "Jurisdição": [
         {num:"Art. 34", label:"Apenas Estados", type:"k", text:"<strong>Só os Estados poderão ser partes em casos perante a Corte.</strong> Indivíduos, empresas, ONGs não têm acesso à CIJ — para indivíduos, existe o TPI (crimes internacionais) e tribunais regionais de DH."},
@@ -1337,9 +1374,14 @@ const TREATIES = {
       "Casos Paradigmáticos": [
         {num:"Nicarágua c. EUA (1984)", label:"O caso mais famoso", type:"p", text:"CIJ condenou os EUA por minas nos portos nicaraguenses e apoio aos Contras. EUA retiraram-se e ignoraram a sentença. Demonstrou o limite da CIJ na ausência de enforcement independente."},
         {num:"Muro (2004)", label:"Opinião consultiva", type:"k", text:"CIJ declarou que a construção do muro israelense na Cisjordânia viola o direito internacional. Opinião consultiva não vinculante — Israel ignorou. <em>Mas estabeleceu precedentes normativos importantes.</em>"},
-        {num:"Chagos (2019)", label:"Descolonização", type:"k", text:"CIJ opinou que o Reino Unido deveria encerrar administração de Chagos. AGONU aprovou resolução 116×6. Demonstrou poder normativo das opiniões consultivas mesmo sem force majeure."},
+        {num:"Chagos (2019)", label:"Descolonização", type:"k", text:"CIJ opinou que o Reino Unido deveria encerrar administração de Chagos. AGNU aprovou resolução 116×6. Demonstrou poder normativo das opiniões consultivas mesmo sem force majeure."},
         {num:"África do Sul c. Israel (2024)", label:"Caso em andamento", type:"p", text:"África do Sul ajuizou caso de genocídio em Gaza. CIJ emitiu medidas cautelares determinando proteção de civis. Caso ainda em andamento — potencialmente o mais importante da história recente da corte."},
         {num:"Brasil na CIJ", label:"Participação", type:"b", text:"Brasil nunca foi réu em caso contencioso. Participou como terceiro interveniente (Art. 62) no caso Nicarágua c. Colômbia. Apoiou ativamente as opiniões consultivas sobre clima (2024) e Chagos."}
+      ],
+      "Brasil": [
+        {num:"Nunca foi réu", label:"Histórico limpo", type:"b", text:"Brasil nunca foi réu em caso contencioso na CIJ. Participou como terceiro interveniente (Art. 62) no caso Nicarágua c. Colômbia."},
+        {num:"Aceitação 1998", label:"Jurisdição obrigatória", type:"b", text:"Brasil depositou declaração de aceitação da competência obrigatória da CIJ em 1998 (sob reserva de reciprocidade e para fatos posteriores à declaração)."},
+        {num:"Clima 2024", label:"Opinião consultiva", type:"b", text:"Brasil apoiou a opinião consultiva sobre obrigações climáticas dos Estados (2024) — inédita, relevante para a COP30 em Belém."}
       ]
     }
   },
@@ -1350,7 +1392,7 @@ const TREATIES = {
     sub: "Constituição adotada em 22 jul. 1946 em NY; em vigor 7 abr. 1948 (Dia Mundial da Saúde). 82 artigos + regulamentos de saúde internacional.",
     link: "https://www.who.int/governance/eb/constitution/en",
     link_label: "Constituição da OMS — texto integral",
-    tabs: ["Preâmbulo e Base","RSI (2005)","Polêmicas"],
+    tabs: ["Preâmbulo e Base","RSI (2005)","Polêmicas","Brasil"],
     content: {
       "Preâmbulo e Base": [
         {num:"Preâmbulo", label:"Definição de saúde", type:"k", text:"<em>Saúde é um estado de completo bem-estar físico, mental e social, e não apenas a ausência de doença ou enfermidade.</em> Uma das definições mais citadas e debatidas da história — algumas a criticam como utópica."},
@@ -1367,6 +1409,13 @@ const TREATIES = {
         {num:"EUA e OMS", label:"Entradas e saídas", type:"p", text:"EUA saíram em 2020 (Trump), voltaram em 2021 (Biden). Maior financiador único (~15%). Quando os EUA retêm contribuições, a OMS entra em crise. <em>Vulnerabilidade estrutural da OMS à política americana.</em>"},
         {num:"Gates Foundation", label:"Influência privada", type:"p", text:"Bill & Melinda Gates Foundation é o 2º maior financiador da OMS (~10%). Crítica: organização pública de saúde global influenciada por agenda de fundação privada."},
         {num:"Tratado Pandêmico", label:"Negociação 2021–", type:"b", text:"Desde 2021, Estados negociam novo Tratado Global de Pandemias para corrigir falhas do RSI. Prazo de maio 2024 não cumprido. Debate: soberania nacional vs. autoridade supranacional da OMS."}
+      ],
+      "Brasil": [
+        {num:"Marcolino Candau", label:"DG 1953-1973", type:"b", text:"O médico brasileiro <strong>Marcolino Gomes Candau</strong> dirigiu a OMS por 20 anos — o mandato mais longo na história da organização."},
+        {num:"Jarbas Barbosa", label:"OPAS 2023-2028", type:"b", text:"<strong>Jarbas Barbosa</strong> assumiu a direção da OPAS em 2023. Segundo brasileiro no cargo (o primeiro foi Carlyle Guerra de Macedo, 1983-1995)."},
+        {num:"TRIPS · Doha 2001", label:"Acesso a medicamentos", type:"b", text:"Brasil liderou a negociação da Declaração de Doha sobre TRIPS e Saúde Pública (2001), assegurando licenciamento compulsório de patentes para países em desenvolvimento."},
+        {num:"Tabaco 2003", label:"Primeiro tratado de saúde", type:"b", text:"Brasil liderou a Convenção-Quadro para o Controle do Tabaco (2003) — o <strong>primeiro tratado internacional em saúde pública</strong> da história da OMS."},
+        {num:"Acordo de Pandemias 2025", label:"Negociação", type:"b", text:"Brasil atuou como representante das Américas no órgão coordenador das negociações (INB). O Acordo de Pandemias foi adotado pela AMS em 2025."}
       ]
     }
   },
@@ -1400,6 +1449,61 @@ const TREATIES = {
     }
   }
 };
+
+function openTreaty(id) {
+  const t = TREATIES[id];
+  if (!t) return;
+
+  const tabs = t.tabs.map((tab,i) =>
+    `<div class="modal-tab${i===0?' active':''}" onclick="modalTab(this,'mt-${tab.replace(/[^a-z0-9]/gi,'-')}')">${tab}</div>`
+  ).join('');
+
+  const panels = t.tabs.map((tab,i) => {
+    const cards = (t.content[tab]||[]).map(a => `
+      <div class="art-card ${a.type==='k'?'highlight':a.type==='p'?'polemica':'brasil'}">
+        <div class="art-header">
+          <span class="art-num">${a.num}</span>
+          <span class="art-label">${a.label}</span>
+          <span class="art-badge ${a.type==='k'?'k':a.type==='p'?'p':'b'}">${a.type==='k'?'Fundamental':a.type==='p'?'Polêmica':'Brasil'}</span>
+        </div>
+        <div class="art-body">${a.text}</div>
+      </div>`).join('');
+    return `<div class="modal-tp${i===0?' active':''}" id="mt-${tab.replace(/[^a-z0-9]/gi,'-')}">${cards}</div>`;
+  }).join('');
+
+  document.getElementById('modal-content').innerHTML = `
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()">✕ fechar</button>
+      <div class="modal-eyebrow">${t.eyebrow}</div>
+      <div class="modal-title">${t.title}</div>
+      <div class="modal-sub">${t.sub}</div>
+      <a class="modal-link" href="${t.link}" target="_blank" rel="noopener">📄 ${t.link_label}</a>
+    </div>
+    <div class="modal-tabs">${tabs}</div>
+    <div class="modal-body">${panels}</div>
+  `;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function modalTab(el, panelId) {
+  const modal = el.closest('.modal');
+  modal.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  modal.querySelectorAll('.modal-tp').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const p = modal.querySelector('#'+panelId);
+  if (p) p.classList.add('active');
+}
+
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+
+document.addEventListener('DOMContentLoaded', () => {
+  setCampus('ny');
+});
+
 
 function openTreaty(id) {
   const t = TREATIES[id];
